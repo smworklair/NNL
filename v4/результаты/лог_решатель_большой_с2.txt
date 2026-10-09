@@ -1,0 +1,14 @@
+параметров 5894144, обучающих 74471, dev 1398
+C:\����-����\v4\��������\�������_��������.py:242: UserWarning: Converting a tensor with requires_grad=True to a scalar may lead to unexpected behavior.
+Consider using tensor.detach() first. (Triggered internally at C:\actions-runner\_work\pytorch\pytorch\torch\csrc\autograd\generated\python_variable_methods.cpp:821.)
+  log.append({"���": step, "loss": round(float(loss), 4), "dev": round(dl, 4), "���": round((time.time() - t0) / 60, 1)})
+шаг 200/1622 loss 0.7840 dev 2.6954  17.7 мин
+шаг 400/1622 loss 0.2602 dev 2.1751  34.6 мин
+шаг 600/1622 loss 0.0296 dev 1.8839  51.7 мин
+шаг 800/1622 loss 1.8825 dev 1.7723  68.1 мин
+шаг 1000/1622 loss 0.0252 dev 1.6506  83.3 мин
+шаг 1200/1622 loss 0.0139 dev 1.5846  116.1 мин
+шаг 1400/1622 loss 2.4769 dev 1.5457  132.9 мин
+шаг 1600/1622 loss 2.7109 dev 1.5359  149.9 мин
+шаг 1622/1622 loss 0.0200 dev 1.5359  151.9 мин
+записан блоки_задачи/задачи_большой_с2 чисел 5894144 лучший dev 1.5359

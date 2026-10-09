@@ -1,0 +1,239 @@
+{
+ "набор": "военкомат_v3",
+ "версия": 1,
+ "назначение": "Типы v3 (C:\\ЯДРО-ОПЫТ\u000b3\\типы\\типы.json, sha256 4a07b5fe78cd8f362c02f09d2710a007c01aa1405e369b9fe3b74b430c59c14c), переписанные схемой v4. Нужны, чтобы блоки v3 работали на ядре v4 без переобучения.",
+ "перечисления": {
+  "Область": [
+   "здоровье",
+   "право"
+  ],
+  "Ответы": {
+   "здоровье": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33",
+    "34",
+    "35",
+    "36",
+    "37",
+    "38",
+    "39",
+    "40",
+    "41",
+    "42",
+    "43",
+    "44",
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60",
+    "61",
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "67",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "75",
+    "76",
+    "77",
+    "78",
+    "79",
+    "80",
+    "81",
+    "82",
+    "83",
+    "84",
+    "85",
+    "86",
+    "87",
+    "88"
+   ],
+   "право": [
+    "fz53_uchet_gde_sostoyat_chto_soobshchat",
+    "fz53_zapret_vyezda_povestka",
+    "fz53_proverit_elektronnuyu_povestku",
+    "fz53_kto_prizyvaetsya_vozrast_sroki",
+    "fz53_osvobozhdenie_ot_prizyva",
+    "fz53_otsrochka_ucheba",
+    "fz53_otsrochka_semeynye_obstoyatelstva",
+    "fz53_otsrochka_ukaz_it_sluzhba_prochie",
+    "fz53_rabota_ucheba_na_vremya_yavki",
+    "fz53_periody_otpravki",
+    "fz53_obyazannost_yavki",
+    "fz53_prizyvnaya_komissiya_resheniya",
+    "pp663_otsrochka_podtverzhdenie",
+    "fz53_reshenie_o_prizyve_srok_otmena",
+    "pp663_raspredelenie_otpravka",
+    "fz53_srok_sluzhby_uvolnenie",
+    "fz53_kontrakt_vo_vremya_sluzhby",
+    "fz53_ne_sluzhil_do_30_zaklyuchenie",
+    "pp565_analizy_pered_medkomissiey",
+    "pp565_invalidnost_zaochnoe",
+    "pp565_nezavisimaya_vve",
+    "pp565_medosmotr_pered_otpravkoy",
+    "pp565_pereosvidetelstvovanie_kategoriya_v",
+    "pp719_kto_obyazan_sostoyat_na_uchete",
+    "pp719_pereezd_i_vyezd",
+    "kas_srok_podachi_iska_i_propusk",
+    "kas_priostanovlenie_prizyva_pri_obzhalovanii",
+    "kas_soderzhanie_administrativnogo_iska",
+    "kas_rassmotrenie_dela_srok_dokazyvanie",
+    "kas_reshenie_suda_posledstviya",
+    "koap_nesoobshchenie_izmeneniy_pereezd",
+    "koap_uklonenie_ot_medobsledovaniya",
+    "ukrf_uklonenie_ot_prizyva",
+    "fz59_srok_otveta_i_net_otveta",
+    "pripiska_17_let",
+    "neyavka_po_povestke",
+    "kategorii_godnosti",
+    "napravlenie_na_obsledovanie",
+    "nesoglasie_s_kategoriey",
+    "povestka_vruchenie",
+    "kak_prohodit_medkomissiya",
+    "obzhalovanie_resheniya_komissii",
+    "kak_napisat_zhalobu",
+    "utrata_dokumentov"
+   ]
+  },
+  "Словарь": {
+   "файл": "словарь.txt",
+   "sha256": "278095b286f297b298f0e86416302302968c1ded53fb0da6e000ca3d33c79883"
+  }
+ },
+ "типы": {
+  "Текст": {
+   "вид": "строка",
+   "запрос": true
+  },
+  "Разбор": {
+   "вид": "запись",
+   "поля": {
+    "область": {
+     "вид": "перечисление",
+     "из": "Область"
+    },
+    "p_область": {
+     "вид": "вероятности",
+     "ключи": "Область"
+    },
+    "основы": {
+     "вид": "список",
+     "элемент": {
+      "вид": "перечисление",
+      "из": "Словарь"
+     }
+    },
+    "замены": {
+     "вид": "список",
+     "необязательно": true,
+     "элемент": {
+      "вид": "кортеж",
+      "элементы": [
+       {
+        "вид": "строка"
+       },
+       {
+        "вид": "перечисление",
+        "из": "Словарь"
+       },
+       {
+        "вид": "число",
+        "от": 0.0,
+        "до": 1.0
+       }
+      ]
+     }
+    }
+   }
+  },
+  "Ответ": {
+   "вид": "запись",
+   "конечный": true,
+   "поля": {
+    "область": {
+     "вид": "перечисление",
+     "из": "Область"
+    },
+    "id": {
+     "вид": "перечисление",
+     "из": "Ответы",
+     "по_полю": "область"
+    },
+    "p": {
+     "вид": "число",
+     "от": 0.0,
+     "до": 1.0
+    },
+    "кандидаты": {
+     "вид": "список",
+     "необязательно": true,
+     "элемент": {
+      "вид": "кортеж",
+      "элементы": [
+       {
+        "вид": "перечисление",
+        "из": "Ответы",
+        "по_полю": "область"
+       },
+       {
+        "вид": "число",
+        "от": 0.0,
+        "до": 1.0
+       }
+      ]
+     }
+    }
+   }
+  }
+ }
+}

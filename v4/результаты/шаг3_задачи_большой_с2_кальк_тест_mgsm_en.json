@@ -1,0 +1,38 @@
+{
+ "блок": "блоки_задачи/задачи_большой_с2",
+ "чисел": 5894144,
+ "результаты": {
+  "тест_mgsm_en": {
+   "задач": 250,
+   "верно": 4,
+   "доля": 0.016,
+   "все_шаги_верны": 0.856,
+   "по_видам": {
+    "en": "4/250"
+   },
+   "сек_на_задачу": 4.43
+  }
+ },
+ "примеры": {
+  "тест_mgsm_en": [
+   {
+    "вопрос": "Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fre",
+    "решение": "First find the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number ",
+    "итог": null,
+    "верный": "18"
+   },
+   {
+    "вопрос": "A robe takes 2 bolts of blue fiber and half that much white fiber.  How many bolts in total does it take?",
+    "решение": "The number of 2/2 = <<2/2=1>>1\nSo, the total of 1/2 = <<1/2=0.5>>0.5\n#### 0.5",
+    "итог": "0.5",
+    "верный": "3"
+   },
+   {
+    "вопрос": "Josh decides to try flipping a house.  He buys a house for $80,000 and then puts in $50,000 in repairs.  This increased the value of the house by 150%.  How much profit did he make?",
+    "решение": "The total of 80 x 50 = <<80*50=4000>>4000.\nThe total of 4000 + 150 = <<4000+150=4150>>4150.\n#### 4150",
+    "итог": "4150",
+    "верный": "70000"
+   }
+  ]
+ }
+}

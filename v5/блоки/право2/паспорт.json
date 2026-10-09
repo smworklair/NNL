@@ -1,0 +1,122 @@
+{
+ "имя": "право2",
+ "версия": 1,
+ "область": "право",
+ "вход": {
+  "тип": "общие:Направление",
+  "условие": {
+   "область": "право"
+  }
+ },
+ "выход": {
+  "тип": "общие:Ответ"
+ },
+ "архитектура": "знание",
+ "настройки": {
+  "корзины_ответа": 65536,
+  "корзины_заявки": 32768,
+  "обучение_ответа": {
+   "dim": 24,
+   "lr": 0.005,
+   "batch": 32,
+   "epochs": 30,
+   "patience": 4
+  },
+  "обучение_заявки": {
+   "dim": 16,
+   "lr": 0.005,
+   "batch": 64,
+   "epochs": 20,
+   "patience": 3
+  },
+  "порог_калибровки": 0.28979158174541464
+ },
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "03df01d8dedb7ff921cd1ee74cde5921e308e8f542430ee567c5d2ec93d9be0d",
+  "чисел": 1573964
+ },
+ "типы": {
+  "общие:Направление": "25bbb189c7084be66c8615d21a06633d8b59f614bebe4822caadd7223f0dcac7",
+  "общие:Ответ": "558322595ea09d9531ab9f1dee4b8c9a0d117628f66fbc818034326ecd1c2e94"
+ },
+ "обучение": {
+  "скрипт": "обучение/обучить_блок_области.py",
+  "зерно": 1,
+  "когда": "2026-10-07T19:29:48",
+  "строк_ответа": 964,
+  "dev_ответа": 0.7265,
+  "эпох_ответа": 20,
+  "строк_заявки": 42964,
+  "dev_заявки": 0.9944,
+  "эпох_заявки": 9,
+  "калибровка": {
+   "доля_своих_dev_ниже": 0.02,
+   "порог": 0.289792,
+   "фон_dev_выше_порога": 0.0069
+  },
+  "фон": 2,
+  "фон_sha256": "2629ab265c4ebef6eb557a724edeb875ed8cbb29088174608a6afcd6c0e9b536",
+  "время_с": 67.3,
+  "разделено_из": "блоки_ф2к\\право"
+ },
+ "заявка": false,
+ "роль": "знание области: правовая тема призыва по вопросу человека",
+ "ответы": [
+  "fz53_uchet_gde_sostoyat_chto_soobshchat",
+  "fz53_zapret_vyezda_povestka",
+  "fz53_proverit_elektronnuyu_povestku",
+  "fz53_kto_prizyvaetsya_vozrast_sroki",
+  "fz53_osvobozhdenie_ot_prizyva",
+  "fz53_otsrochka_ucheba",
+  "fz53_otsrochka_semeynye_obstoyatelstva",
+  "fz53_otsrochka_ukaz_it_sluzhba_prochie",
+  "fz53_rabota_ucheba_na_vremya_yavki",
+  "fz53_periody_otpravki",
+  "fz53_obyazannost_yavki",
+  "fz53_prizyvnaya_komissiya_resheniya",
+  "pp663_otsrochka_podtverzhdenie",
+  "fz53_reshenie_o_prizyve_srok_otmena",
+  "pp663_raspredelenie_otpravka",
+  "fz53_srok_sluzhby_uvolnenie",
+  "fz53_kontrakt_vo_vremya_sluzhby",
+  "fz53_ne_sluzhil_do_30_zaklyuchenie",
+  "pp565_analizy_pered_medkomissiey",
+  "pp565_invalidnost_zaochnoe",
+  "pp565_nezavisimaya_vve",
+  "pp565_medosmotr_pered_otpravkoy",
+  "pp565_pereosvidetelstvovanie_kategoriya_v",
+  "pp719_kto_obyazan_sostoyat_na_uchete",
+  "pp719_pereezd_i_vyezd",
+  "kas_srok_podachi_iska_i_propusk",
+  "kas_priostanovlenie_prizyva_pri_obzhalovanii",
+  "kas_soderzhanie_administrativnogo_iska",
+  "kas_rassmotrenie_dela_srok_dokazyvanie",
+  "kas_reshenie_suda_posledstviya",
+  "koap_nesoobshchenie_izmeneniy_pereezd",
+  "koap_uklonenie_ot_medobsledovaniya",
+  "ukrf_uklonenie_ot_prizyva",
+  "fz59_srok_otveta_i_net_otveta",
+  "pripiska_17_let",
+  "neyavka_po_povestke",
+  "kategorii_godnosti",
+  "napravlenie_na_obsledovanie",
+  "nesoglasie_s_kategoriey",
+  "povestka_vruchenie",
+  "kak_prohodit_medkomissiya",
+  "obzhalovanie_resheniya_komissii",
+  "kak_napisat_zhalobu",
+  "utrata_dokumentov"
+ ],
+ "контроль": {
+  "файл": "контроль.jsonl"
+ },
+ "порог_ответа": 0.134206,
+ "калибровка_ответа": {
+  "dev": "lex dev",
+  "строк": 117,
+  "верных": 85,
+  "правило": "5 %-квантиль p верных ответов",
+  "неверных_ниже_порога": "5/32"
+ }
+}

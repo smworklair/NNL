@@ -1,0 +1,100 @@
+{
+ "имя": "право.знание2_ф500к1",
+ "версия": 1,
+ "область": "право",
+ "заявка": false,
+ "роль": "знание области «право»: правовая тема призыва по вопросу человека; своё «∅ — ничего не подходит»",
+ "вход": {
+  "тип": "общие:Направление",
+  "условие": {
+   "область": "право"
+  }
+ },
+ "выход": {
+  "тип": "общие:Ответ"
+ },
+ "архитектура": "знание",
+ "ответы": [
+  "fz53_uchet_gde_sostoyat_chto_soobshchat",
+  "fz53_zapret_vyezda_povestka",
+  "fz53_proverit_elektronnuyu_povestku",
+  "fz53_kto_prizyvaetsya_vozrast_sroki",
+  "fz53_osvobozhdenie_ot_prizyva",
+  "fz53_otsrochka_ucheba",
+  "fz53_otsrochka_semeynye_obstoyatelstva",
+  "fz53_otsrochka_ukaz_it_sluzhba_prochie",
+  "fz53_rabota_ucheba_na_vremya_yavki",
+  "fz53_periody_otpravki",
+  "fz53_obyazannost_yavki",
+  "fz53_prizyvnaya_komissiya_resheniya",
+  "pp663_otsrochka_podtverzhdenie",
+  "fz53_reshenie_o_prizyve_srok_otmena",
+  "pp663_raspredelenie_otpravka",
+  "fz53_srok_sluzhby_uvolnenie",
+  "fz53_kontrakt_vo_vremya_sluzhby",
+  "fz53_ne_sluzhil_do_30_zaklyuchenie",
+  "pp565_analizy_pered_medkomissiey",
+  "pp565_invalidnost_zaochnoe",
+  "pp565_nezavisimaya_vve",
+  "pp565_medosmotr_pered_otpravkoy",
+  "pp565_pereosvidetelstvovanie_kategoriya_v",
+  "pp719_kto_obyazan_sostoyat_na_uchete",
+  "pp719_pereezd_i_vyezd",
+  "kas_srok_podachi_iska_i_propusk",
+  "kas_priostanovlenie_prizyva_pri_obzhalovanii",
+  "kas_soderzhanie_administrativnogo_iska",
+  "kas_rassmotrenie_dela_srok_dokazyvanie",
+  "kas_reshenie_suda_posledstviya",
+  "koap_nesoobshchenie_izmeneniy_pereezd",
+  "koap_uklonenie_ot_medobsledovaniya",
+  "ukrf_uklonenie_ot_prizyva",
+  "fz59_srok_otveta_i_net_otveta",
+  "pripiska_17_let",
+  "neyavka_po_povestke",
+  "kategorii_godnosti",
+  "napravlenie_na_obsledovanie",
+  "nesoglasie_s_kategoriey",
+  "povestka_vruchenie",
+  "kak_prohodit_medkomissiya",
+  "obzhalovanie_resheniya_komissii",
+  "kak_napisat_zhalobu",
+  "utrata_dokumentov",
+  "∅"
+ ],
+ "настройки": {
+  "корзины_ответа": 65536,
+  "обучение_ответа": {
+   "dim": 24,
+   "lr": 0.005,
+   "batch": 32,
+   "epochs": 30,
+   "patience": 4
+  }
+ },
+ "порог_ответа": 1e-06,
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "f67e02e4d8973eba527d3220b6be5c7e3bafd22b9fa4648f9f3ddf90c1e4ef47",
+  "чисел": 1573989
+ },
+ "типы": {
+  "общие:Направление": "25bbb189c7084be66c8615d21a06633d8b59f614bebe4822caadd7223f0dcac7",
+  "общие:Ответ": "558322595ea09d9531ab9f1dee4b8c9a0d117628f66fbc818034326ecd1c2e94"
+ },
+ "контроль": {
+  "файл": "контроль.jsonl"
+ },
+ "обучение": {
+  "скрипт": "обучение/обучить_право.py",
+  "когда": "2026-10-08T11:40:27",
+  "строк": 4290,
+  "из_них_ничего": 1988,
+  "ничего_фон": 500,
+  "ничего_живых_копий": 1,
+  "настоящих_право": 198,
+  "dev": 0.7402,
+  "пул_dev_тема_верна": "15/29",
+  "пул_dev_не_право_ничего": "125/135",
+  "lex_dev": 0.6325
+ }
+}

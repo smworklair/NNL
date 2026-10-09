@@ -1,0 +1,133 @@
+{
+ "имя": "право",
+ "версия": 1,
+ "роль": "блок области «право»",
+ "область": "право",
+ "архитектура": "мешок_шина",
+ "настройки": {
+  "корзины": 65536,
+  "размер": 48,
+  "граница": 8.0,
+  "соль": "право",
+  "свёртка": "корень"
+ },
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "b7b7177bd71c2e4271fb90f88a816c3a42a896fe0021913853dc93a671b8f152",
+  "чисел": 3148374
+ },
+ "язык": {
+  "имя": "NNL-1",
+  "версия": "1.0",
+  "правила": "40564480803950740e1728adf1985fd0f24fee01bf348a9047f8fdf1a6506184",
+  "ответы": "d95f5843858c35e79bc0504e4f42b63fab93e27e9c6f2cfaff02982b4dfd6b2d",
+  "понятия": {
+   "акт:127фз": "5d6a4c9941233f7516b0fa916f07613d65cf48556c521f12c20ac25a66ff1687",
+   "акт:53фз": "1e690a7344d1eff4ce1abc05fdb10a3afb500c930a2e7298ef63bf03276233e4",
+   "акт:59фз": "b0ad30b00173ddc78ff95c9c9479c4ef05f6520f95376a5a0b5c8f4568904ded",
+   "акт:кас": "d1dc8d11d84d98fb7e2c6b2f8afdc385c4d237010c455ef2a4a307e77dccc1f6",
+   "акт:коап": "16343a3738cc23c7640313f237679b3fc0759bbc0fedd9755c180ce868087c3d",
+   "акт:пп565": "6ada335b17e52c48e4fc1d435d9fe57c4799b9fa80c267cd613a80e3bf9af315",
+   "акт:пп663": "490c24d61fd897ca7d1905ba741b01a59d510b2befa8a19f87a955defb7dbda7",
+   "акт:пп719": "70beeed5b960fb21db2f36ebfcf722e12373f0398f065ab0ec73ccb2c7033bfa",
+   "акт:укрф": "b87093371dcfa66d055083992420be8efae3936a97d0a3289a57f347c30d9d55",
+   "область:право": "211e6f622d1bf464869e0c2762bd27433600d7b2e3b8c9160557c10b3dec7f9c"
+  }
+ },
+ "пишет": [
+  "область:право",
+  "акт:53фз",
+  "акт:пп565",
+  "акт:пп663",
+  "акт:пп719",
+  "акт:кас",
+  "акт:коап",
+  "акт:укрф",
+  "акт:127фз",
+  "акт:59фз"
+ ],
+ "читает": [],
+ "ответы": [
+  "ответ:право:fz53_uchet_gde_sostoyat_chto_soobshchat",
+  "ответ:право:fz53_zapret_vyezda_povestka",
+  "ответ:право:fz53_proverit_elektronnuyu_povestku",
+  "ответ:право:fz53_kto_prizyvaetsya_vozrast_sroki",
+  "ответ:право:fz53_osvobozhdenie_ot_prizyva",
+  "ответ:право:fz53_otsrochka_ucheba",
+  "ответ:право:fz53_otsrochka_semeynye_obstoyatelstva",
+  "ответ:право:fz53_otsrochka_ukaz_it_sluzhba_prochie",
+  "ответ:право:fz53_rabota_ucheba_na_vremya_yavki",
+  "ответ:право:fz53_periody_otpravki",
+  "ответ:право:fz53_obyazannost_yavki",
+  "ответ:право:fz53_prizyvnaya_komissiya_resheniya",
+  "ответ:право:pp663_otsrochka_podtverzhdenie",
+  "ответ:право:fz53_reshenie_o_prizyve_srok_otmena",
+  "ответ:право:pp663_raspredelenie_otpravka",
+  "ответ:право:fz53_srok_sluzhby_uvolnenie",
+  "ответ:право:fz53_kontrakt_vo_vremya_sluzhby",
+  "ответ:право:fz53_ne_sluzhil_do_30_zaklyuchenie",
+  "ответ:право:pp565_analizy_pered_medkomissiey",
+  "ответ:право:pp565_invalidnost_zaochnoe",
+  "ответ:право:pp565_nezavisimaya_vve",
+  "ответ:право:pp565_medosmotr_pered_otpravkoy",
+  "ответ:право:pp565_pereosvidetelstvovanie_kategoriya_v",
+  "ответ:право:pp719_kto_obyazan_sostoyat_na_uchete",
+  "ответ:право:pp719_pereezd_i_vyezd",
+  "ответ:право:kas_srok_podachi_iska_i_propusk",
+  "ответ:право:kas_priostanovlenie_prizyva_pri_obzhalovanii",
+  "ответ:право:kas_soderzhanie_administrativnogo_iska",
+  "ответ:право:kas_rassmotrenie_dela_srok_dokazyvanie",
+  "ответ:право:kas_reshenie_suda_posledstviya",
+  "ответ:право:koap_nesoobshchenie_izmeneniy_pereezd",
+  "ответ:право:koap_uklonenie_ot_medobsledovaniya",
+  "ответ:право:ukrf_uklonenie_ot_prizyva",
+  "ответ:право:fz59_srok_otveta_i_net_otveta",
+  "ответ:право:pripiska_17_let",
+  "ответ:право:neyavka_po_povestke",
+  "ответ:право:kategorii_godnosti",
+  "ответ:право:napravlenie_na_obsledovanie",
+  "ответ:право:nesoglasie_s_kategoriey",
+  "ответ:право:povestka_vruchenie",
+  "ответ:право:kak_prohodit_medkomissiya",
+  "ответ:право:obzhalovanie_resheniya_komissii",
+  "ответ:право:kak_napisat_zhalobu",
+  "ответ:право:utrata_dokumentov"
+ ],
+ "контроль": {
+  "файл": "контроль.jsonl",
+  "вопросов": 1157
+ },
+ "обучение": {
+  "скрипт": "обучение/обучить.py",
+  "вариант": "один_проход",
+  "зерно": 1,
+  "когда": "2026-10-08T20:24:33",
+  "схема": {
+   "проходов": 1,
+   "смешивание": "среднее"
+  },
+  "данные": {
+   "train": 39501,
+   "dev": 2357,
+   "живых_в_пулах": 2053,
+   "живых_dev": 307,
+   "выброшено_почти_повторов": 14,
+   "фон_train": 12000,
+   "фон_dev": 1500
+  },
+  "эпох": 9,
+  "лучший_dev": 0.767,
+  "выходные": 0.3,
+  "настройки_обучения": {
+   "эпох": 20,
+   "терпение": 3,
+   "пакет": 64,
+   "lr": 0.01,
+   "λ": 1.0
+  },
+  "вместе_с": [
+   "здоровье"
+  ]
+ },
+ "родитель": null
+}

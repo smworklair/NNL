@@ -1,0 +1,125 @@
+{
+ "имя": "команды",
+ "версия": 1,
+ "область": "команды",
+ "роль": "намерение голосовой команды (MASSIVE ru)",
+ "заявка": true,
+ "вход": {
+  "тип": "общие:Запрос"
+ },
+ "выход": {
+  "тип": "общие:Ответ"
+ },
+ "архитектура": "область",
+ "настройки": {
+  "корзины_ответа": 65536,
+  "корзины_заявки": 16384,
+  "обучение_ответа": {
+   "dim": 24,
+   "lr": 0.005,
+   "batch": 32,
+   "epochs": 30,
+   "patience": 4
+  },
+  "обучение_заявки": {
+   "dim": 8,
+   "lr": 0.005,
+   "batch": 64,
+   "epochs": 20,
+   "patience": 3
+  }
+ },
+ "ответы": [
+  "alarm_query",
+  "alarm_remove",
+  "alarm_set",
+  "audio_volume_down",
+  "audio_volume_mute",
+  "audio_volume_other",
+  "audio_volume_up",
+  "calendar_query",
+  "calendar_remove",
+  "calendar_set",
+  "cooking_query",
+  "cooking_recipe",
+  "datetime_convert",
+  "datetime_query",
+  "email_addcontact",
+  "email_query",
+  "email_querycontact",
+  "email_sendemail",
+  "general_greet",
+  "general_joke",
+  "general_quirky",
+  "iot_cleaning",
+  "iot_coffee",
+  "iot_hue_lightchange",
+  "iot_hue_lightdim",
+  "iot_hue_lightoff",
+  "iot_hue_lighton",
+  "iot_hue_lightup",
+  "iot_wemo_off",
+  "iot_wemo_on",
+  "lists_createoradd",
+  "lists_query",
+  "lists_remove",
+  "music_dislikeness",
+  "music_likeness",
+  "music_query",
+  "music_settings",
+  "news_query",
+  "play_audiobook",
+  "play_game",
+  "play_music",
+  "play_podcasts",
+  "play_radio",
+  "qa_currency",
+  "qa_definition",
+  "qa_factoid",
+  "qa_maths",
+  "qa_stock",
+  "recommendation_events",
+  "recommendation_locations",
+  "recommendation_movies",
+  "social_post",
+  "social_query",
+  "takeaway_order",
+  "takeaway_query",
+  "transport_query",
+  "transport_taxi",
+  "transport_ticket",
+  "transport_traffic",
+  "weather_query"
+ ],
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "a48ff1a59f65bfdc19e3f27667b9fdb723d9a5e4a0b26124c92ebbde327b6db3",
+  "чисел": 1705454
+ },
+ "типы": {
+  "общие:Запрос": "30370880f218965bfedd81af567dfa67d38daf92b07baa08a63d61b2aabc5ccb",
+  "общие:Ответ": "558322595ea09d9531ab9f1dee4b8c9a0d117628f66fbc818034326ecd1c2e94"
+ },
+ "контроль": {
+  "файл": "контроль.jsonl"
+ },
+ "обучение": {
+  "скрипт": "обучение/обучить_блок_области.py",
+  "зерно": 1,
+  "когда": "2026-10-07T19:08:15",
+  "строк_ответа": 11514,
+  "dev_ответа": 0.8151,
+  "эпох_ответа": 14,
+  "строк_заявки": 23514,
+  "dev_заявки": 0.975,
+  "эпох_заявки": 5,
+  "фон_sha256": "f9f1d0b88b38a0bc68050d6b9301e0189c454107494b7f1e6c03716b4c6253fe",
+  "время_с": 57.6
+ },
+ "перештамп": {
+  "было": {
+   "общие": "1217214546b3a1ae0485699de441db79df7bd51b9aff44f8764b8a59c0025a9f"
+  },
+  "почему": "в набор «общие» добавлен тип Направление; схемы Запрос и Ответ не менялись"
+ }
+}

@@ -1,0 +1,130 @@
+{
+ "имя": "команды",
+ "версия": 1,
+ "область": "команды",
+ "вход": {
+  "тип": "общие:Направление",
+  "условие": {
+   "область": "команды"
+  }
+ },
+ "выход": {
+  "тип": "общие:Ответ"
+ },
+ "архитектура": "знание",
+ "настройки": {
+  "корзины_ответа": 65536,
+  "корзины_заявки": 32768,
+  "обучение_ответа": {
+   "dim": 24,
+   "lr": 0.005,
+   "batch": 32,
+   "epochs": 30,
+   "patience": 4
+  },
+  "обучение_заявки": {
+   "dim": 16,
+   "lr": 0.005,
+   "batch": 64,
+   "epochs": 20,
+   "patience": 3
+  },
+  "порог_калибровки": 0.01
+ },
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "4bf3ace2eaacf9142a877a5b4f24254c4e7cf3bc5cc9d6ae15d3b9a6ad8fa78e",
+  "чисел": 1574364
+ },
+ "типы": {
+  "общие:Направление": "25bbb189c7084be66c8615d21a06633d8b59f614bebe4822caadd7223f0dcac7",
+  "общие:Ответ": "558322595ea09d9531ab9f1dee4b8c9a0d117628f66fbc818034326ecd1c2e94"
+ },
+ "обучение": {
+  "скрипт": "обучение/обучить_блок_области.py",
+  "зерно": 1,
+  "когда": "2026-10-07T19:32:26",
+  "строк_ответа": 11514,
+  "dev_ответа": 0.8151,
+  "эпох_ответа": 14,
+  "строк_заявки": 53514,
+  "dev_заявки": 0.9447,
+  "эпох_заявки": 9,
+  "калибровка": {
+   "доля_своих_dev_ниже": 0.02,
+   "порог": 0.01,
+   "фон_dev_выше_порога": 0.1534
+  },
+  "фон": 2,
+  "фон_sha256": "2629ab265c4ebef6eb557a724edeb875ed8cbb29088174608a6afcd6c0e9b536",
+  "время_с": 100.2,
+  "разделено_из": "блоки_ф2к\\команды"
+ },
+ "заявка": false,
+ "роль": "знание области: намерение голосовой команды (MASSIVE ru)",
+ "ответы": [
+  "alarm_query",
+  "alarm_remove",
+  "alarm_set",
+  "audio_volume_down",
+  "audio_volume_mute",
+  "audio_volume_other",
+  "audio_volume_up",
+  "calendar_query",
+  "calendar_remove",
+  "calendar_set",
+  "cooking_query",
+  "cooking_recipe",
+  "datetime_convert",
+  "datetime_query",
+  "email_addcontact",
+  "email_query",
+  "email_querycontact",
+  "email_sendemail",
+  "general_greet",
+  "general_joke",
+  "general_quirky",
+  "iot_cleaning",
+  "iot_coffee",
+  "iot_hue_lightchange",
+  "iot_hue_lightdim",
+  "iot_hue_lightoff",
+  "iot_hue_lighton",
+  "iot_hue_lightup",
+  "iot_wemo_off",
+  "iot_wemo_on",
+  "lists_createoradd",
+  "lists_query",
+  "lists_remove",
+  "music_dislikeness",
+  "music_likeness",
+  "music_query",
+  "music_settings",
+  "news_query",
+  "play_audiobook",
+  "play_game",
+  "play_music",
+  "play_podcasts",
+  "play_radio",
+  "qa_currency",
+  "qa_definition",
+  "qa_factoid",
+  "qa_maths",
+  "qa_stock",
+  "recommendation_events",
+  "recommendation_locations",
+  "recommendation_movies",
+  "social_post",
+  "social_query",
+  "takeaway_order",
+  "takeaway_query",
+  "transport_query",
+  "transport_taxi",
+  "transport_ticket",
+  "transport_traffic",
+  "weather_query"
+ ],
+ "контроль": {
+  "файл": "контроль.jsonl"
+ }
+}

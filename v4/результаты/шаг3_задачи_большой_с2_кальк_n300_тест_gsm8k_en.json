@@ -1,0 +1,38 @@
+{
+ "блок": "блоки_задачи/задачи_большой_с2",
+ "чисел": 5894144,
+ "результаты": {
+  "тест_gsm8k_en": {
+   "задач": 300,
+   "верно": 3,
+   "доля": 0.01,
+   "все_шаги_верны": 0.9,
+   "по_видам": {
+    "en": "3/300"
+   },
+   "сек_на_задачу": 4.17
+  }
+ },
+ "примеры": {
+  "тест_gsm8k_en": [
+   {
+    "вопрос": "Janet’s ducks lay 16 eggs per day. She eats three for breakfast every morning and bakes muffins for her friends every day with four. She sells the remainder at the farmers' market daily for $2 per fre",
+    "решение": "First find the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number of the number ",
+    "итог": null,
+    "верный": "18"
+   },
+   {
+    "вопрос": "Every day, Wendi feeds each of her chickens three cups of mixed chicken feed, containing seeds, mealworms and vegetables to help keep them healthy.  She gives the chickens their feed in three separate",
+    "решение": "The total of 15*25=<<15*25=375>>375\nThe total of 375*20=<<375*20=7500>>7500\n#### 7500",
+    "итог": "7500",
+    "верный": "20"
+   },
+   {
+    "вопрос": "John drives for 3 hours at a speed of 60 mph and then turns around because he realizes he forgot something very important at home.  He tries to get home in 4 hours but spends the first 2 hours in stan",
+    "решение": "The total of 3*60=<<3*60=180>>180\nThe total of 180*4=<<180*4=720>>720\n#### 720",
+    "итог": "720",
+    "верный": "45"
+   }
+  ]
+ }
+}

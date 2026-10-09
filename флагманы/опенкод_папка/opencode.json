@@ -1,0 +1,10 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "agent": {
+    "zamer": {
+      "description": "Замер флагманов: отвечает сам, без инструментов",
+      "mode": "primary",
+      "permission": {"*": "deny"}
+    }
+  }
+}
