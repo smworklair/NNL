@@ -1,0 +1,42 @@
+﻿тема;акты;число_актов;примеров_в_контроле;разных_наборов_актов
+fz53_kontrakt_vo_vremya_sluzhby;53фз;1;3;1
+fz53_ne_sluzhil_do_30_zaklyuchenie;53фз + пп663;2;2;1
+fz53_obyazannost_yavki;53фз;1;5;1
+fz53_osvobozhdenie_ot_prizyva;53фз;1;2;1
+fz53_otsrochka_semeynye_obstoyatelstva;53фз;1;5;1
+fz53_otsrochka_ucheba;53фз;1;10;1
+fz53_otsrochka_ukaz_it_sluzhba_prochie;53фз;1;2;1
+fz53_prizyvnaya_komissiya_resheniya;53фз + пп663;2;5;1
+fz53_proverit_elektronnuyu_povestku;53фз;1;2;1
+fz53_rabota_ucheba_na_vremya_yavki;53фз;1;3;1
+fz53_reshenie_o_prizyve_srok_otmena;53фз + пп663;2;4;1
+fz53_uchet_gde_sostoyat_chto_soobshchat;53фз;1;1;1
+fz53_zapret_vyezda_povestka;127фз + 53фз;2;1;1
+fz59_srok_otveta_i_net_otveta;59фз + кас;2;2;1
+kak_napisat_zhalobu;53фз + 59фз;2;2;1
+kak_prohodit_medkomissiya;53фз + пп565 + пп663;3;5;1
+kas_priostanovlenie_prizyva_pri_obzhalovanii;53фз + кас;2;1;1
+kas_rassmotrenie_dela_srok_dokazyvanie;кас;1;6;1
+kas_reshenie_suda_posledstviya;кас;1;3;1
+kas_soderzhanie_administrativnogo_iska;кас;1;3;1
+kas_srok_podachi_iska_i_propusk;кас;1;1;1
+kategorii_godnosti;53фз + пп565;2;5;1
+koap_nesoobshchenie_izmeneniy_pereezd;53фз + коап;2;4;1
+koap_uklonenie_ot_medobsledovaniya;коап;1;4;1
+napravlenie_na_obsledovanie;53фз + пп565;2;5;1
+nesoglasie_s_kategoriey;53фз + пп565;2;9;1
+neyavka_po_povestke;127фз + 53фз + коап + пп663;4;4;1
+obzhalovanie_resheniya_komissii;53фз + кас;2;5;1
+povestka_vruchenie;53фз + пп663 + пп719;3;5;1
+pp565_analizy_pered_medkomissiey;пп565;1;7;1
+pp565_invalidnost_zaochnoe;пп565;1;1;1
+pp565_medosmotr_pered_otpravkoy;пп565;1;2;1
+pp565_nezavisimaya_vve;пп565;1;1;1
+pp565_pereosvidetelstvovanie_kategoriya_v;пп565;1;7;1
+pp663_otsrochka_podtverzhdenie;53фз + пп663;2;3;1
+pp663_raspredelenie_otpravka;53фз + пп663;2;11;1
+pp719_kto_obyazan_sostoyat_na_uchete;пп719;1;7;1
+pp719_pereezd_i_vyezd;пп719;1;2;1
+pripiska_17_let;53фз + пп565 + пп719;3;7;1
+ukrf_uklonenie_ot_prizyva;53фз + укрф;2;2;1
+utrata_dokumentov;коап + пп719;2;9;1
