@@ -1,0 +1,99 @@
+{
+ "имя": "право.знание4",
+ "версия": 1,
+ "область": "право",
+ "заявка": false,
+ "роль": "знание области «право»: правовая тема призыва; учено на ~5000 живых вопросах трёх пулов (чистая разметка)",
+ "вход": {
+  "тип": "общие:Направление",
+  "условие": {
+   "область": "право"
+  }
+ },
+ "выход": {
+  "тип": "общие:Ответ"
+ },
+ "архитектура": "знание",
+ "ответы": [
+  "fz53_uchet_gde_sostoyat_chto_soobshchat",
+  "fz53_zapret_vyezda_povestka",
+  "fz53_proverit_elektronnuyu_povestku",
+  "fz53_kto_prizyvaetsya_vozrast_sroki",
+  "fz53_osvobozhdenie_ot_prizyva",
+  "fz53_otsrochka_ucheba",
+  "fz53_otsrochka_semeynye_obstoyatelstva",
+  "fz53_otsrochka_ukaz_it_sluzhba_prochie",
+  "fz53_rabota_ucheba_na_vremya_yavki",
+  "fz53_periody_otpravki",
+  "fz53_obyazannost_yavki",
+  "fz53_prizyvnaya_komissiya_resheniya",
+  "pp663_otsrochka_podtverzhdenie",
+  "fz53_reshenie_o_prizyve_srok_otmena",
+  "pp663_raspredelenie_otpravka",
+  "fz53_srok_sluzhby_uvolnenie",
+  "fz53_kontrakt_vo_vremya_sluzhby",
+  "fz53_ne_sluzhil_do_30_zaklyuchenie",
+  "pp565_analizy_pered_medkomissiey",
+  "pp565_invalidnost_zaochnoe",
+  "pp565_nezavisimaya_vve",
+  "pp565_medosmotr_pered_otpravkoy",
+  "pp565_pereosvidetelstvovanie_kategoriya_v",
+  "pp719_kto_obyazan_sostoyat_na_uchete",
+  "pp719_pereezd_i_vyezd",
+  "kas_srok_podachi_iska_i_propusk",
+  "kas_priostanovlenie_prizyva_pri_obzhalovanii",
+  "kas_soderzhanie_administrativnogo_iska",
+  "kas_rassmotrenie_dela_srok_dokazyvanie",
+  "kas_reshenie_suda_posledstviya",
+  "koap_nesoobshchenie_izmeneniy_pereezd",
+  "koap_uklonenie_ot_medobsledovaniya",
+  "ukrf_uklonenie_ot_prizyva",
+  "fz59_srok_otveta_i_net_otveta",
+  "pripiska_17_let",
+  "neyavka_po_povestke",
+  "kategorii_godnosti",
+  "napravlenie_na_obsledovanie",
+  "nesoglasie_s_kategoriey",
+  "povestka_vruchenie",
+  "kak_prohodit_medkomissiya",
+  "obzhalovanie_resheniya_komissii",
+  "kak_napisat_zhalobu",
+  "utrata_dokumentov"
+ ],
+ "настройки": {
+  "корзины_ответа": 65536,
+  "обучение_ответа": {
+   "dim": 24,
+   "lr": 0.005,
+   "batch": 32,
+   "epochs": 30,
+   "patience": 4
+  }
+ },
+ "веса": {
+  "файл": "веса.npz",
+  "sha256": "de32d8ce45268e8be97a05cf6224d9d362ebb9c17d82923761ca263ff413805c",
+  "чисел": 1573964
+ },
+ "типы": {
+  "общие:Направление": "25bbb189c7084be66c8615d21a06633d8b59f614bebe4822caadd7223f0dcac7",
+  "общие:Ответ": "558322595ea09d9531ab9f1dee4b8c9a0d117628f66fbc818034326ecd1c2e94"
+ },
+ "контроль": {
+  "файл": "контроль.jsonl"
+ },
+ "обучение": {
+  "пул1": 1108,
+  "пул2": 947,
+  "пул3": 2863,
+  "выброшено_почти_повторов": 0,
+  "dev": 0.5762,
+  "право_живых": 1087,
+  "здоровье_живых": 458,
+  "данные": "пул1 (Claude) + пул2 (Muse Spark) + пул3 (Claude Cowork)",
+  "скрипт": "обучение/обучить_пул3.py",
+  "когда": "2026-10-10T10:35:16",
+  "строк": 7379,
+  "dev_живые_тема": "104/185"
+ }
+}
