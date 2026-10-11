@@ -9,13 +9,12 @@ import os
 import sys
 
 sys.dont_write_bytecode = True
-sys.path.insert(0, r"C:\ЯДРО-ОПЫТ\v8\замер")
-import общее as О  # noqa: E402
+from лаба_общее import О  # noqa: E402
 
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 
-sys.path.insert(0, r"C:\ЯДРО-ОПЫТ\v8")
+sys.path.insert(0, О.V8)
 from обучение import данные as D  # noqa: E402
 from ядро import Ядро, Язык  # noqa: E402
 
