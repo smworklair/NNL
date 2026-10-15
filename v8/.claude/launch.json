@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "nnl-stand",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["-X", "utf8", "C:/ЯДРО-ОПЫТ/NNL/диалог/сервер.py", "8090"],
+      "port": 8090
+    }
+  ]
+}

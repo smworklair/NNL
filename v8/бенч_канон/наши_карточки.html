@@ -1,0 +1,142 @@
+<title>NNL Bench · четыре своих карточки</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+  :root { --bg: #0A0B0D; --card: #111317; --edge: #262A30; --ink: #ECEEF1; --ink2: #A3AAB3; --ink3: #6B727B;
+          --nnl: #F5C842; --ok: #52C98A; --warn: #E8A33D; --bad: #E5534B; --other: #7C8AA0;
+          --ui: "Onest", "Segoe UI", sans-serif; --mono: "JetBrains Mono", Consolas, monospace; color-scheme: dark; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--ui); }
+  .wrap { max-width: 760px; margin: 0 auto; padding-block: 32px 72px; padding-inline: 16px; display: grid; gap: 48px; }
+  .idea { font: 500 12px var(--mono); letter-spacing: .06em; color: var(--ink3); margin-bottom: 10px; }
+  .idea b { color: var(--nnl); font-weight: 500; }
+  .card { background: var(--card); border: 1px solid var(--edge); border-radius: 16px; padding: 22px 24px 24px; }
+  .card h2 { font: 600 18px var(--ui); margin: 0 0 4px; } .card .sub { color: var(--ink2); font-size: 13px; margin: 0 0 18px; }
+  .cap { font-style: italic; color: var(--ink2); text-align: center; text-wrap: balance; font-size: 14px; line-height: 1.6; margin: 20px auto 0; max-width: 60ch; }
+  svg { width: 100%; height: auto; display: block; } svg text { font-family: var(--mono); }
+  /* досье */
+  .cases { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 12px; }
+  .case { border: 1px solid var(--edge); border-radius: 10px; padding: 12px 14px 14px; position: relative; background: #0D0F12; min-width: 0; }
+  .case h4 { margin: 0; font: 600 14px var(--ui); } .case .q { font: 400 12px/1.5 var(--mono); color: var(--ink2); margin-top: 8px; }
+  .stamp { position: absolute; top: 10px; right: 10px; font: 700 10.5px var(--mono); letter-spacing: .08em; padding: 3px 7px; border: 1.5px solid; border-radius: 4px; transform: rotate(-4deg); }
+  .s-ok { color: var(--ok); } .s-warn { color: var(--warn); } .s-bad { color: var(--bad); }
+  .case.hero { border-color: rgba(245, 200, 66, .55); }
+  /* табло */
+  .board { width: 100%; border-collapse: separate; border-spacing: 4px; font: 500 12.5px var(--mono); }
+  .board th { color: var(--ink3); font-weight: 500; text-align: center; padding: 0 2px 6px; font-size: 11px; vertical-align: bottom; }
+  .board th:first-child, .board td:first-child { text-align: left; color: var(--ink); font-family: var(--ui); font-size: 13.5px; font-weight: 600; }
+  .board td.c { text-align: center; border-radius: 6px; padding: 9px 0; }
+  .y { background: rgba(82, 201, 138, .14); color: var(--ok); } .p { background: rgba(232, 163, 61, .16); color: var(--warn); } .n { background: rgba(229, 83, 75, .16); color: var(--bad); }
+  .tot { font-family: var(--mono); color: var(--ink); text-align: right; }
+  .scroll { overflow-x: auto; }
+</style>
+<div class="wrap">
+
+  <div>
+    <div class="idea"><b>01 · ДОСЬЕ</b> — бенчмарк как материалы дела: следователь не выдумывает фактов, и это видно по штампу</div>
+    <div class="card">
+      <h2>Категория без врача</h2>
+      <p class="sub">Сценарий «домашний тонометр»: человек мерил давление сам, врач его не смотрел.</p>
+      <div class="cases" id="cases"></div>
+      <p class="cap">NNL отказывается называть категорию, пока нет заключения врача. ChatGPT, DeepSeek и Grok оговариваются, но перечисляют категории условно. Qwen и Gemini прямо обещают «А или Б».</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="idea"><b>02 · ЦЕНА ДИСЦИПЛИНЫ</b> — две стойки, одна линия: сколько стоит «не выдумывать» и что это даёт</div>
+    <div class="card">
+      <h2>Следователь против детектива</h2>
+      <p class="sub">Один и тот же набор сценариев. Детектив — модель сама; следователь — модель внутри NNL.</p>
+      <svg id="slope" viewBox="0 0 640 330" role="img" aria-label="Токены и утверждения вне досье в двух режимах"></svg>
+      <p class="cap">С NNL модель тратит в 4,5 раза больше токенов — 21,5 тыс. против 4,8 тыс., — но не делает ни одного утверждения вне досье. Сильная модель сама сделала шесть. Выборка — один прогон.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="idea"><b>03 · ТАБЛО</b> — сценарии × системы, как табло результатов: где именно ломаются</div>
+    <div class="card">
+      <h2>Бенч «система»</h2>
+      <p class="sub">Проверки из кода бенча NNL, одна попытка на сценарий. ● — все проверки сценария пройдены, ◐ — оговорка, ✕ — нарушение.</p>
+      <div class="scroll"><table class="board" id="board"></table></div>
+      <p class="cap">Все шесть верно определили статью при близорукости и астме. Gemini при близорукости добавил число 6,25, которого нет в документе. Главное расхождение — назвать ли категорию без врача.</p>
+    </div>
+  </div>
+
+  <div>
+    <div class="idea"><b>04 · НАСКОЛЬКО МИМО</b> — не «верно / неверно», а расстояние до истины в разах</div>
+    <div class="card">
+      <h2>Свободная сборка</h2>
+      <p class="sub">24 предсказания каждой модели о задаче, где эталон посчитан перебором. Точка — одно предсказание, центр — точное попадание.</p>
+      <svg id="miss" viewBox="0 0 640 300" role="img" aria-label="Отклонение предсказаний от эталона"></svg>
+      <p class="cap">Grok и DeepSeek попали в 14 значениях из 24 и редко ошибаются больше чем вдвое. ChatGPT ответил за 16 секунд и не попал ни разу: его ответы разбросаны от двукратной ошибки до полной.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+// 01 досье — реальные ответы, сценарий 2
+const ДЕЛА = [
+  ["NNL", "s-ok", "ЧИСТО", "«150/95 сами по себе не определяют категорию… ваш случай пока не попадает ни в один пункт»", true],
+  ["ChatGPT", "s-warn", "ОГОВОРКА", "«Сейчас категория не определяется… если подтвердится I стадия — Б-3»"],
+  ["DeepSeek", "s-warn", "ОГОВОРКА", "«Категорию определить нельзя… если подтвердится I стадия — Б-3»"],
+  ["Grok", "s-warn", "ОГОВОРКА", "«Категорию не ставят… скорее всего Б-3, и пойдёте служить»"],
+  ["Qwen", "s-bad", "НАРУШЕНИЕ", "«Для военкомата вы здоровы. Вам поставят категорию „А“ или „Б“»"],
+  ["Gemini Argon", "s-bad", "НАРУШЕНИЕ", "«Без осмотра врача… вам поставят категорию „А“ или „Б“»"],
+];
+document.getElementById("cases").innerHTML = ДЕЛА.map(([имя, к, штамп, цит, герой]) =>
+  `<div class="case ${герой ? "hero" : ""}"><span class="stamp ${к}">${штамп}</span><h4>${имя}</h4><div class="q">${цит}</div></div>`).join("");
+
+// 02 цена дисциплины — реальный замер 12.10.2026: NNL+API (Flash) 21,5 тыс. и 0 вне досье; API (Max) 4,8 тыс. и 6 вне досье
+(function () {
+  const ink = css("--ink"), ink2 = css("--ink2"), ink3 = css("--ink3"), nnl = css("--nnl"), oth = css("--other"), bad = css("--bad");
+  const xL = 150, xR = 490, top = 40, bot = 270;
+  const yT = v => bot - v / 25 * (bot - top), yC = v => bot - v / 8 * (bot - top);
+  let s = `<text x="${xL}" y="20" text-anchor="middle" font-size="12" fill="${ink2}">детектив · модель сама</text><text x="${xR}" y="20" text-anchor="middle" font-size="12" fill="${nnl}">следователь · NNL + модель</text>`;
+  s += `<line x1="${xL}" y1="${top}" x2="${xL}" y2="${bot}" stroke="${ink3}"/><line x1="${xR}" y1="${top}" x2="${xR}" y2="${bot}" stroke="${ink3}"/>`;
+  // токены
+  s += `<line x1="${xL}" y1="${yT(4.8)}" x2="${xR}" y2="${yT(21.5)}" stroke="${nnl}" stroke-width="2"/>`;
+  s += `<circle cx="${xL}" cy="${yT(4.8)}" r="6" fill="${oth}"/><circle cx="${xR}" cy="${yT(21.5)}" r="6" fill="${nnl}"/>`;
+  s += `<text x="${xL - 14}" y="${yT(4.8) + 4}" text-anchor="end" font-size="13" fill="${ink}">4,8 тыс. токенов</text><text x="${xR + 14}" y="${yT(21.5) + 4}" font-size="13" fill="${ink}">21,5 тыс.</text>`;
+  // вне досье
+  s += `<line x1="${xL}" y1="${yC(6)}" x2="${xR}" y2="${yC(0)}" stroke="${bad}" stroke-width="2" stroke-dasharray="5 4"/>`;
+  s += `<circle cx="${xL}" cy="${yC(6)}" r="6" fill="${bad}"/><circle cx="${xR}" cy="${yC(0)}" r="6" fill="none" stroke="${bad}" stroke-width="2"/>`;
+  s += `<text x="${xL - 14}" y="${yC(6) + 4}" text-anchor="end" font-size="13" fill="${ink}">6 выдумок</text><text x="${xR + 14}" y="${yC(0) + 4}" font-size="13" fill="${ink}">0 выдумок</text>`;
+  s += `<text x="${(xL + xR) / 2}" y="${(yT(4.8) + yT(21.5)) / 2 - 12}" text-anchor="middle" font-size="12" fill="${nnl}">×4,5 токенов</text>`;
+  s += `<text x="${(xL + xR) / 2}" y="${(yC(6) + yC(0)) / 2 + 22}" text-anchor="middle" font-size="12" fill="${bad}">−6 утверждений вне досье</text>`;
+  s += `<text x="${xL}" y="300" text-anchor="middle" font-size="11" fill="${ink3}">сильная модель (Qwen Max)</text><text x="${xR}" y="300" text-anchor="middle" font-size="11" fill="${ink3}">слабая модель (Qwen Flash)</text>`;
+  document.getElementById("slope").innerHTML = s;
+})();
+
+// 03 табло — реальные результаты бенча «система»
+const СЦ = ["близорукость", "тонометр", "астма", "не по теме"];
+const ТАБЛО = [["NNL", "yyyy", "18/18"], ["ChatGPT", "ypy-", "14/15"], ["DeepSeek", "ypy-", "14/15"], ["Grok", "ypy-", "14/15"], ["Qwen", "yny-", "14/15"], ["Gemini Argon", "nny-", "13/15"]];
+const знак = {y: "●", p: "◐", n: "✕", "-": "—"}, класс = {y: "y", p: "p", n: "n", "-": ""};
+document.getElementById("board").innerHTML = `<tr><th></th>${СЦ.map(c => `<th>${c}</th>`).join("")}<th style="text-align:right">проверок</th></tr>` +
+  ТАБЛО.map(([имя, р, итог]) => `<tr><td>${имя}</td>${[...р].map(x => `<td class="c ${класс[x]}">${знак[x]}</td>`).join("")}<td class="tot">${итог}</td></tr>`).join("");
+
+// 04 насколько мимо — реальные предсказания набора A против эталона
+(function () {
+  const ЭТ = [[63,77,3,6],[0,3,7,6],[255,319,4,10],[0,10,9,7],[1023,1282,5,19],[0,66,12,8]];
+  const ПР = {
+    "Grok": [[63,70,2,2],[0,3,7,6],[255,270,2,2],[0,10,9,6],[1023,1100,2,3],[0,66,12,8]],
+    "DeepSeek": [[63,129,6,4],[0,3,7,6],[255,513,8,6],[0,10,9,7],[1023,2049,10,8],[0,66,12,7]],
+    "Qwen": [[12,4,6,2],[0,3,7,3],[20,5,8,3],[6,4,9,4],[22,6,10,3],[0,5,12,5]],
+    "ChatGPT": [[25,30,12,18],[12,18,14,20],[45,55,24,30],[25,35,27,35],[100,120,40,50],[45,65,36,50]],
+  };
+  const ink = css("--ink"), ink2 = css("--ink2"), ink3 = css("--ink3"), ok = css("--ok"), bad = css("--bad");
+  const L = 120, R = 610, cx = (L + R) / 2, lim = Math.log2(64), X = r => cx + Math.max(-lim, Math.min(lim, r)) / lim * (R - L) / 2;
+  let s = "";
+  [[-64, "×64 меньше"], [-8, "×8"], [-2, "×2"], [1, "точно"], [2, "×2"], [8, "×8"], [64, "×64 больше"]].forEach(([k, t]) => {
+    const x = k === 1 ? cx : X(Math.sign(k) * Math.log2(Math.abs(k)));
+    s += `<line x1="${x}" y1="24" x2="${x}" y2="262" stroke="${k === 1 ? ok : "#1E2228"}" stroke-width="${k === 1 ? 1.5 : 1}"/><text x="${x}" y="284" text-anchor="middle" font-size="10.5" fill="${k === 1 ? ok : ink3}">${t}</text>`; });
+  Object.entries(ПР).forEach(([м, пр], i) => { const y = 50 + i * 58; let верно = 0;
+    s += `<text x="${L - 14}" y="${y + 4}" text-anchor="end" font-size="13" fill="${ink}" style="font-family:var(--ui);font-weight:600">${м}</text>`;
+    пр.forEach((ряд, p) => ряд.forEach((v, k) => { const t = ЭТ[p][k];
+      const r = v === t ? 0 : (t === 0 || v === 0 ? Math.sign(v - t) * lim : Math.log2(v / t));
+      if (v === t) верно++;
+      const jit = ((p * 4 + k) % 7 - 3) * 4;
+      s += `<circle cx="${X(r)}" cy="${y + jit}" r="4" fill="${v === t ? ok : bad}" opacity="${v === t ? .9 : .7}"/>`; }));
+    s += `<text x="${R}" y="${y - 16}" text-anchor="end" font-size="11" fill="${ink2}">${верно}/24 точно</text>`; });
+  document.getElementById("miss").innerHTML = s;
+})();
+</script>

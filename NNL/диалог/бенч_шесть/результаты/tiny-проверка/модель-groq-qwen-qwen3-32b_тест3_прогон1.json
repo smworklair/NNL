@@ -1,0 +1,11 @@
+{
+ "режим": "модель:groq:qwen/qwen3-32b",
+ "тест": "3",
+ "прогон": 1,
+ "ответ": "",
+ "строки": {},
+ "мс": 1264,
+ "токены": null,
+ "вызовов": 0,
+ "ошибка": "LLMError: HTTP 404: The model `qwen/qwen3-32b` does not exist or you do not have access to it."
+}

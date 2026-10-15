@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f3" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme:dark)">
+<title>Разбор — Справка по годности</title>
+<style>
+:root{
+  --шрифт:Aptos,"Segoe UI Variable Text","Segoe UI",Roboto,sans-serif;
+  --фон:#f5f5f3;--пов:#fff;--пов2:#ecece9;--поле:#fff;--пуз:#ecece9;
+  --чернила:#141414;--чер2:#4d4d4a;--тих:#8a8a85;--тише:#9c9c97;
+  --вол:rgba(0,0,0,.1);--вол2:rgba(0,0,0,.2);--навед:rgba(0,0,0,.06);
+  --подтв:#237a47;--подтв-ф:rgba(35,122,71,.10);--сам:#8a6400;--сам-ф:rgba(138,100,0,.10);--сбой:#c62828;
+  color-scheme:light}
+@media(prefers-color-scheme:dark){:root{
+  --фон:#121212;--пов:#1a1a1a;--пов2:#232323;--поле:#1f1f1f;--пуз:#282826;
+  --чернила:#f1f1ef;--чер2:#b9b9b6;--тих:#85857f;--тише:#6f6f68;
+  --вол:rgba(255,255,255,.09);--вол2:rgba(255,255,255,.2);--навед:rgba(255,255,255,.07);
+  --подтв:#5fd08a;--подтв-ф:rgba(95,208,138,.12);--сам:#f5cf2e;--сам-ф:rgba(245,207,46,.12);--сбой:#ff6b6b;
+  color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{font:16px/1.5 var(--шрифт);background:var(--фон);color:var(--чернила);display:flex;justify-content:center;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--чернила);outline-offset:2px;border-radius:8px}
+.и{width:16px;height:16px;display:block;flex:none}
+.т{width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;background:var(--фон);position:relative;overflow:hidden}
+@media(min-width:700px){.т{max-width:680px}}
+.ш{flex:none;display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px 14px}
+.лого{display:flex;align-items:center;gap:9px;min-width:0;flex:1}
+.лого svg{width:26px;height:20px;flex:none}
+.лого h1{font-size:15px;font-weight:700;letter-spacing:.02em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.кш{min-height:44px;min-width:44px;padding:0 12px;border-radius:12px;color:var(--чер2);font-size:14px;display:grid;place-items:center}
+.кш:hover{background:var(--навед);color:var(--чернила)}
+.кш .и{width:20px;height:20px}
+.сегмент{flex:none;display:flex;gap:4px;margin:0 12px 8px;padding:4px;border-radius:16px;background:var(--пуз);border:1px solid var(--вол)}
+.сегмент a{flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:13.5px;color:var(--тих);text-decoration:none}
+.сегмент a:hover{color:var(--чернила)}
+.сегмент a[aria-current="page"]{background:var(--пов);color:var(--чернила);font-weight:650;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.тело{flex:1;overflow-y:auto;padding:6px 16px 20px;-webkit-overflow-scrolling:touch;scroll-behavior:smooth}
+.карт{background:var(--пов);border:1px solid var(--вол);border-radius:18px;padding:16px;margin:0 0 12px}
+.карт h2{margin:0 0 4px;font-size:22px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.карт p.л{margin:0 0 14px;font-size:14.5px;color:var(--чер2);line-height:1.5}
+.заг{margin:20px 4px 8px;font-size:15.5px;font-weight:650}
+.подп{margin:0 4px 8px;font-size:12.5px;color:var(--тих)}
+.поиск{display:flex;gap:8px}
+.поиск input{flex:1;min-width:0;min-height:50px;border:1px solid var(--вол2);border-radius:14px;background:var(--поле);color:var(--чернила);font:16px var(--шрифт);padding:0 14px;outline:none}
+.поиск input:focus{border-color:var(--чернила)}
+.кн{min-height:44px;padding:0 16px;border-radius:13px;font-size:14.5px;border:1px solid var(--вол2);background:var(--пов);color:var(--чернила)}
+.кн.гл{background:var(--чернила);color:var(--фон);border-color:transparent;font-weight:600}
+.кн:hover{background:var(--навед)}.кн.гл:hover{opacity:.9;background:var(--чернила)}
+.поиск .кн{min-height:50px}
+.стр{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--пов);border:1px solid var(--вол);border-radius:16px;padding:12px 14px;margin:0 0 8px;min-height:56px;text-decoration:none;color:inherit}
+.стр:hover{background:var(--навед)}
+.стр-т{flex:1;font-size:14.5px;font-weight:600;line-height:1.35}
+.стр-т small{display:block;font-weight:400;font-size:12.5px;color:var(--тих);margin-top:2px}
+.стр .и{color:var(--тише)}
+.прим{margin:10px 0 0}
+.прим .стр{background:transparent;border-style:dashed;min-height:48px}
+/* чат */
+.чат{display:flex;flex-direction:column;gap:12px}
+.я{align-self:flex-end;max-width:88%;background:var(--чернила);color:var(--фон);padding:10px 14px;border-radius:18px 18px 5px 18px;white-space:pre-wrap;overflow-wrap:anywhere}
+.бот{align-self:stretch}
+.бот .т-о{background:var(--пов);border:1px solid var(--вол);border-radius:18px 18px 18px 5px;padding:12px 14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.т-о.свёрн{display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.ещё{color:var(--чер2);font-size:13.5px;text-decoration:underline;text-underline-offset:3px;min-height:44px;padding:0 4px}
+.думает{color:var(--тих);font-size:13.5px;padding:2px 4px}
+.ошиб{border:1px solid var(--сбой);color:var(--сбой);border-radius:14px;padding:10px 14px;font-size:13.5px}
+/* досье: четыре кирпича, цвет несёт смысл и дублируется текстом */
+.дос{margin-top:10px;background:var(--пов);border:1px solid var(--вол);border-radius:18px;padding:14px}
+.дос h3{margin:0 0 10px;font-size:12.5px;font-weight:600;color:var(--тих);letter-spacing:.03em}
+.кир{position:relative;display:flex;gap:10px;align-items:center;border:1px solid var(--вол2);border-radius:12px;background:var(--пов2);padding:9px 12px;margin:0 0 6px;min-height:50px}
+.кир:last-of-type{margin-bottom:0}
+.кир::before{content:"";width:4px;align-self:stretch;border-radius:2px;background:var(--тише);flex:none}
+.кир small{display:block;font-size:11.5px;color:var(--тих)}
+.кир b{display:block;font-size:15px;font-weight:650;line-height:1.3}
+.кир.ок{background:var(--подтв-ф);border-color:var(--подтв)}.кир.ок::before{background:var(--подтв)}.кир.ок small{color:var(--подтв)}
+.кир.сам{background:var(--сам-ф);border-color:var(--сам)}.кир.сам::before{background:var(--сам)}.кир.сам small{color:var(--сам)}
+.кир.пуст{background:transparent;border-style:dashed}.кир.пуст::before{background:transparent;border-left:2px dashed var(--тише);width:0}
+.итог-с{margin:10px 2px 0;font-size:13px;color:var(--чер2);line-height:1.45}
+.итог-с b{color:var(--чернила)}
+.дейст{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+/* поле ввода в диалоге */
+.ввод{flex:none;display:none;gap:8px;align-items:flex-end;padding:8px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--вол);background:var(--фон)}
+[data-в="чат"] .ввод{display:flex}
+.ввод textarea{flex:1;min-height:48px;max-height:120px;resize:none;border:1px solid var(--вол2);border-radius:14px;background:var(--поле);color:var(--чернила);font:16px/1.35 var(--шрифт);padding:12px 14px;outline:none}
+.ввод textarea:focus{border-color:var(--чернила)}
+.ввод .кн{min-height:48px;width:52px;padding:0;display:grid;place-items:center}
+[data-в="чат"] .старт{display:none}[data-в="старт"] .чат{display:none}
+.снос{margin:14px 4px 0;text-align:center;color:var(--тише);font-size:11.5px;line-height:1.5}
+/* листы */
+.фон{position:absolute;inset:0;z-index:40;background:rgba(10,10,10,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+.фон.в{opacity:1;pointer-events:auto}
+.лист{position:absolute;left:0;right:0;bottom:0;z-index:41;display:flex;flex-direction:column;background:var(--пов);border-radius:22px 22px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.3);transform:translateY(105%);transition:transform .25s cubic-bezier(.3,.9,.3,1);max-height:92%;visibility:hidden}
+.лист.от{transform:none;visibility:visible}
+.шл{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px 8px 18px}
+.шл h2{font-size:15.5px;font-weight:650;margin:0;flex:1;min-width:0;line-height:1.3}
+.lt{overflow-y:auto;padding:0 18px calc(22px + env(safe-area-inset-bottom))}
+.пункт{border:1px solid var(--вол2);border-radius:14px;padding:12px;margin:0 0 8px;font-size:14px;line-height:1.5}
+.пункт.хит{border-color:var(--подтв);background:var(--подтв-ф)}
+.пункт h4{margin:0 0 4px;font-size:14px}
+.пункт .к{margin-top:6px;font-size:13px;color:var(--чер2)}
+.прим-с{font-size:13px;color:var(--тих);margin:10px 0 0;padding-left:18px}
+.стр-к{display:block;width:100%;text-align:left;border:0;border-top:1px solid var(--вол);padding:12px 2px;min-height:52px;font-size:14.5px;line-height:1.35}
+.стр-к b{color:var(--чер2);margin-right:8px;font-weight:650}
+.найти{width:100%;min-height:46px;border:1px solid var(--вол2);border-radius:13px;background:var(--поле);color:var(--чернила);font:16px var(--шрифт);padding:0 12px;margin:0 0 6px;outline:none}
+.лин-вв{display:flex;gap:12px;align-items:center;margin:6px 0 8px}
+.лин-вв input[type=number]{width:110px;min-height:48px;border:1px solid var(--вол2);border-radius:13px;background:var(--поле);color:var(--чернила);font:20px var(--шрифт);padding:0 12px}
+.лин-вв input[type=range]{flex:1;min-height:44px;accent-color:var(--чернила)}
+.шкала{position:relative;display:flex;height:40px;margin:30px 4px 30px;border-radius:10px;border:1px solid var(--вол2)}
+.шкала .з{height:100%;display:grid;place-items:center;font-size:11.5px;font-weight:650;border-right:1px solid var(--вол2);overflow:hidden}
+.шкала .з:last-of-type{border-right:0}
+.з.н{background:var(--пов2);color:var(--тих)}.з.с{background:var(--сам-ф);color:var(--сам)}.з.д{background:var(--подтв-ф);color:var(--подтв)}.з.т{background:var(--чернила);color:var(--фон)}
+.шкала .мк{position:absolute;top:-8px;bottom:-8px;width:3px;margin-left:-1.5px;background:var(--чернила);border-radius:2px}
+.шкала .мк::after{content:attr(data-т);position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:700;white-space:nowrap}
+.шкала .тик{position:absolute;top:100%;margin-top:3px;font-size:11px;color:var(--тих);transform:translateX(-50%)}
+.лин-вых p{margin:8px 0;font-size:14.5px;line-height:1.5}
+.легенда>div{display:flex;gap:12px;align-items:baseline;border-top:1px solid var(--вол);padding:9px 0;font-size:14px}
+.легенда b{min-width:34px;font-size:17px}
+.пер{display:flex}
+#печать{display:none}
+@media print{body{display:block;background:#fff;color:#000}.т{display:none}#печать{display:block;font:13pt/1.5 Georgia,serif}#печать table{border-collapse:collapse;width:100%;margin:10pt 0}#печать td{border:1px solid #666;padding:6pt 8pt;vertical-align:top}#печать td:first-child{width:32%;font-weight:700}}
+@media(prefers-reduced-motion:reduce){.лист,.фон{transition:none}.тело{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="и-знак" viewBox="0 0 26 20"><rect y="7" width="26" height="13" rx="2" fill="currentColor"/><circle cx="7" cy="4" r="3.4" fill="currentColor"/><circle cx="19" cy="4" r="3.4" fill="var(--сам)"/></symbol>
+<symbol id="и-крест" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="и-назад" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="и-вперёд" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="и-отпр" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="и-часы" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8" fill="none"/><path d="M12 7.5V12l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+</defs></svg>
+
+<main class="т" data-в="старт" id="т">
+  <header class="ш">
+    <a class="лого" href="index.html" id="лого" style="text-decoration:none;color:inherit"><svg><use href="#и-знак"/></svg><h1>Справка по годности</h1></a>
+    <button class="кш" id="к-ист" aria-label="Мои разборы"><svg class="и"><use href="#и-часы"/></svg></button>
+  </header>
+  <nav class="сегмент" aria-label="Разделы">
+    <a href="index.html" aria-current="page">Разбор</a>
+    <a href="дневник.html">Дневник</a>
+    <a href="заявления.html">Заявления</a>
+  </nav>
+
+  <div class="тело" id="тело">
+    <div class="старт" id="старт">
+      <section class="карт">
+        <h2>Что у вас со здоровьем?</h2>
+        <p class="л">Напишите своими словами или то, что написал врач. Найдём статью Расписания болезней. Категорию годности назовём только если врач это подтвердил.</p>
+        <form class="поиск" id="ф-старт" autocomplete="off">
+          <label class="sr" for="в-старт" style="position:absolute;left:-9999px">Диагноз или жалоба</label>
+          <input id="в-старт" placeholder="Диагноз или жалоба" enterkeyhint="send">
+          <button class="кн гл" type="submit">Разобрать</button>
+        </form>
+        <div class="прим" id="прим"></div>
+      </section>
+
+      <h2 class="заг">Что беспокоит</h2>
+      <p class="подп">Выберите область и посмотрите статьи Расписания.</p>
+      <div id="темы"></div>
+
+      <h2 class="заг">Полезное</h2>
+      <button class="стр" id="к-лин"><span class="стр-т">Где я относительно границы<small>Диоптрии: какой пункт и категория по статье 34</small></span><svg class="и"><use href="#и-вперёд"/></svg></button>
+      <a class="стр" href="дневник.html"><span class="стр-т">Дневник давления<small>Замеры утром и вечером, средние и цвет от 140/90</small></span><svg class="и"><use href="#и-вперёд"/></svg></a>
+      <a class="стр" href="заявления.html"><span class="стр-т">Заявления<small>Шаблоны с вашими данными</small></span><svg class="и"><use href="#и-вперёд"/></svg></a>
+      <button class="стр" id="к-кат"><span class="стр-т">Что значат буквы категорий<small>А, Б, В, Г, Д и цвета на сайте</small></span><svg class="и"><use href="#и-вперёд"/></svg></button>
+      <p class="снос"><!-- справочная сноска: при необходимости удалить -->Справочная система, не заменяет заключение врача и решение призывной комиссии.<br>Текст сообщения при отправке уходит на сервер для разбора.</p>
+    </div>
+    <div class="чат" id="чат" aria-live="polite"></div>
+  </div>
+
+  <form class="ввод" id="ф-чат" autocomplete="off">
+    <button type="button" class="кн" id="к-нов" aria-label="Новый разбор" style="width:48px;min-height:48px;padding:0;display:grid;place-items:center"><svg class="и" style="width:20px;height:20px"><use href="#и-назад"/></svg></button>
+    <label for="в-чат" style="position:absolute;left:-9999px">Сообщение</label>
+    <textarea id="в-чат" rows="1" placeholder="Напишите ещё" enterkeyhint="send"></textarea>
+    <button class="кн гл" type="submit" id="к-отпр" aria-label="Отправить"><svg class="и" style="width:22px;height:22px"><use href="#и-отпр"/></svg></button>
+  </form>
+
+  <div class="фон" id="фон"></div>
+  <section class="лист" id="л-статья" role="dialog" aria-labelledby="с-з"><div class="шл"><h2 id="с-з">Статья</h2><button class="кш" data-з aria-label="Закрыть"><svg class="и"><use href="#и-крест"/></svg></button></div><div class="lt" id="с-т"></div></section>
+  <section class="лист" id="л-список" role="dialog" aria-labelledby="сп-з"><div class="шл"><h2 id="сп-з">Статьи</h2><button class="кш" data-з aria-label="Закрыть"><svg class="и"><use href="#и-крест"/></svg></button></div><div class="lt"><input class="найти" id="сп-найти" type="search" placeholder="Найти по названию" aria-label="Найти по названию" hidden><div id="сп-т"></div></div></section>
+  <section class="лист" id="л-лин" role="dialog" aria-labelledby="л-з"><div class="шл"><h2 id="л-з">Где я относительно границы</h2><button class="кш" data-з aria-label="Закрыть"><svg class="и"><use href="#и-крест"/></svg></button></div><div class="lt">
+    <p class="подп" style="margin:0 0 6px">Статья 34, близорукость по худшему глазу. Пороги читает программа из текста Расписания.</p>
+    <div class="лин-вв"><label for="л-чис" style="position:absolute;left:-9999px">Диоптрии</label><input id="л-чис" type="number" inputmode="decimal" step="0.25" min="-20" max="0" value="-7"><label for="л-пол" style="position:absolute;left:-9999px">Ползунок</label><input id="л-пол" type="range" min="-14" max="0" step="0.25" value="-7"></div>
+    <div class="шкала" id="л-шк" role="img" aria-label="Шкала диоптрий"></div><div class="лин-вых" id="л-вых"></div></div></section>
+  <section class="лист" id="л-кат" role="dialog" aria-labelledby="к-з"><div class="шл"><h2 id="к-з">Что значат буквы</h2><button class="кш" data-з aria-label="Закрыть"><svg class="и"><use href="#и-крест"/></svg></button></div><div class="lt">
+    <div class="легенда" id="к-лег"></div>
+    <h3 style="font-size:14.5px;margin:16px 0 4px">Цвета на сайте</h3>
+    <div class="кир ок" style="margin-top:6px"><div><small>Зелёный</small><b>Подтверждено врачом</b></div></div>
+    <div class="кир сам"><div><small>Жёлтый</small><b>Со слов человека</b></div></div>
+    <div class="кир пуст"><div><small>Пунктир</small><b>Не сказано или нельзя определить</b></div></div>
+    <p class="подп" style="margin-top:10px">Зелёный значит «подтверждено», а не «хорошо» или «плохо».</p></div></section>
+  <section class="лист" id="л-ист" role="dialog" aria-labelledby="и-з"><div class="шл"><h2 id="и-з">Мои разборы</h2><button class="кш" data-з aria-label="Закрыть"><svg class="и"><use href="#и-крест"/></svg></button></div><div class="lt">
+    <label style="display:flex;gap:10px;align-items:center;min-height:48px"><input type="checkbox" id="и-хр" style="width:20px;height:20px;accent-color:var(--чернила)"> Хранить на этом устройстве</label>
+    <div id="и-сп"></div><button class="кн" id="и-ст" style="margin-top:10px">Стереть всё</button>
+    <p class="подп" style="margin:10px 0 0">Хранится только в этом браузере.</p></div></section>
+</main>
+<section id="печать" aria-hidden="true"></section>
+
+<script>
+(function(){
+"use strict";
+var $=function(i){return document.getElementById(i)};
+var LS={get:function(k,d){try{var v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+var РЕЖИМ=new URLSearchParams(location.search).get('режим')||'ядро';
+var КАТ={'А':'годен к военной службе','Б':'годен с незначительными ограничениями','Б-3':'годен с незначительными ограничениями','В':'ограниченно годен','Г':'временно не годен','Д':'не годен'};
+var ПРИМЕРЫ=['Окулист после капель написал: близорукость −7 на оба глаза','Сам решил, что у меня минус семь','Давление дома 150 на 95, врач не смотрел'];
+var ТЕМЫ=[['Глаза и зрение',[29,30,31,32,33,34,35,36]],['Слух, нос и горло',[37,38,39,40,41,49,50]],['Сердце и давление',[42,43,44,45,46,47,48]],['Лёгкие и дыхание',[2,51,52,53]],['Спина и суставы',[64,65,66,67,68,69,70,81,85]],['Нервы и голова',[21,22,23,24,25,26,27,28,80]],['Живот и пищеварение',[57,58,59,60,61]],['Почки и мочеполовая',[71,72,73,74,75,76,77,78]]];
+var СЛ={'есть':'есть у вас','нет':'нет','было':'было раньше','чужое':'у другого человека'};
+function э(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function эл(t,к,x){var e=document.createElement(t);if(к)e.className=к;if(x!=null)e.textContent=x;return e}
+var новыйИд=function(){return 'в'+Math.random().toString(36).slice(2,9)+Date.now().toString(36)};
+var разговор={id:новыйИд(),сессия:новыйИд(),название:'',t:Date.now(),сообщ:[]},занят=false,последний=null;
+
+/* ---------- кирпичи: категорию страница не вычисляет, берёт из решения программы и только при враче ---------- */
+function вид(р){
+  var д=р.решение_кода||null,врач=!!р.подтверждено_врачом,топ=(р.рейтинг||[])[0],статья=д&&д.статья?String(д.статья):null,вероятно=false;
+  if(!статья&&топ&&топ.p>=0.5){статья=String(топ.статья);вероятно=true}
+  var пункт=d_п(д),кат=(врач&&д&&д.категория)?д.категория:null,слова=[],у=(р.улики||[]);
+  у.forEach(function(x){if(x&&x.термин&&!слова.some(function(w){return w.т===x.термин}))слова.push({т:x.термин,с:x.статус})});
+  var почему=null;
+  if(!кат){почему=д&&д.почему?(д.почему.charAt(0).toUpperCase()+д.почему.slice(1)+'.'):(!врач?'Нет подтверждения врача.':'Не хватает данных для выбора пункта.')}
+  return{статья:статья,вероятно:вероятно,пункт:пункт,кат:кат,врач:врач,слова:слова.slice(-3),почему:почему};
+}
+function d_п(д){return д&&д.пункт?д.пункт:null}
+function кирпичи(в){
+  var ес=в.слова.length>0,реальные=в.слова.filter(function(w){return w.с==='есть'||w.с==='было'});
+  return[
+   {к:'Ваши слова',з:ес?в.слова.map(function(w){return w.т+(w.с&&w.с!=='есть'?' ('+(СЛ[w.с]||w.с)+')':'')}).join(', '):'пока не названы',с:!ес?'пуст':реальные.length?'сам':'пуст'},
+   {к:'Кто подтвердил',з:в.врач?'врач':ес?'пока никто, вы сами':'пока никто',с:в.врач?'ок':ес?'сам':'пуст'},
+   {к:'Статья Расписания',з:в.статья?'ст. '+в.статья+(в.пункт?', пункт «'+в.пункт+'»':'')+(в.вероятно?' (вероятно)':''):'пока не определена',с:в.статья?(в.врач&&!в.вероятно?'ок':'сам'):'пуст'},
+   {к:'Категория годности',з:в.кат?в.кат+' — '+(КАТ[в.кат]||''):'нужно заключение врача',с:в.кат?'ок':'пуст'}];
+}
+function кирЭл(б){var d=эл('div','кир '+б.с),i=эл('div');i.append(эл('small',null,б.к),эл('b',null,б.з));d.append(i);return d}
+function досье(в){
+  var к=эл('section','дос');к.setAttribute('aria-label','Что система поняла');к.append(эл('h3',null,'ЧТО СИСТЕМА ПОНЯЛА'));
+  кирпичи(в).forEach(function(б){к.append(кирЭл(б))});
+  var п=эл('p','итог-с');
+  if(в.кат){п.append(эл('b',null,'Категория названа, потому что врач подтвердил. '),'Её определила программа по тексту статьи.')}
+  else{п.append(эл('b',null,'Категория не названа. '),в.почему||'Нужно заключение врача.')}
+  к.append(п);
+  var а=эл('div','дейст');
+  if(в.статья){var б=эл('button','кн гл','Откуда это: ст. '+в.статья);б.type='button';б.onclick=function(){статья(в.статья,в.пункт)};а.append(б)}
+  var пр=эл('button','кн','Сохранить итог');пр.type='button';пр.onclick=function(){печать(в)};а.append(пр);
+  к.append(а);return к;
+}
+
+/* ---------- листы ---------- */
+var открыт=null;
+function лист(id){закрыть();$('л-'+id).classList.add('от');$('фон').classList.add('в');открыт=id}
+function закрыть(){document.querySelectorAll('.лист.от').forEach(function(л){л.classList.remove('от')});$('фон').classList.remove('в');открыт=null}
+$('фон').onclick=закрыть;document.querySelectorAll('[data-з]').forEach(function(b){b.onclick=закрыть});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&открыт)закрыть()});
+
+var ВСЕ=null;
+function статьи(){return ВСЕ?Promise.resolve(ВСЕ):fetch('/api/статьи').then(function(r){return r.json()}).then(function(a){ВСЕ=a;return a}).catch(function(){ВСЕ=[];return ВСЕ})}
+function статья(ид,пункт){
+  var т=$('с-т');т.textContent='Загружаю…';$('с-з').textContent='Статья '+ид;лист('статья');
+  fetch('/api/статья?ид='+encodeURIComponent(ид)).then(function(r){return r.json()}).then(function(а){
+    if(а.ошибка)throw new Error(а.ошибка);
+    $('с-з').textContent='Ст. '+а.ид+'. '+а.название;т.textContent='';
+    т.append(эл('p','подп','Текст Расписания болезней, графа I (призывники). Нужный пункт выделен.'));
+    var хит=null;
+    (а.пункты||[]).forEach(function(п){
+      var д=эл('div','пункт'+(пункт&&п.буква===пункт?' хит':''));
+      д.append(эл('h4',null,п.буква&&п.буква!=='—'?'Пункт «'+п.буква+'»':'Статья без деления на пункты'));
+      д.append(эл('div',null,Array.isArray(п.описание)?п.описание.join(' '):(п.описание||'')));
+      if((п.графы||[])[0]){var к=эл('div','к');к.append('Категория для призывника: ',эл('b',null,п.графы[0]));д.append(к)}
+      т.append(д);if(пункт&&п.буква===пункт)хит=д});
+    if((а.примечания||[]).length){var ul=эл('ul','прим-с');а.примечания.forEach(function(n){ul.append(эл('li',null,n))});т.append(ul)}
+    var мне=эл('button','кн гл','Это про меня: разобрать');мне.type='button';mне_стиль(мне);
+    мне.onclick=function(){закрыть();вЧат();var п=$('в-чат');п.value='У меня: '+а.название.split(',')[0]+'. ';авто();п.focus()};
+    т.append(мне);if(хит)setTimeout(function(){хит.scrollIntoView({block:'center'})},60);
+  }).catch(function(){т.textContent='Не удалось открыть статью. Проверьте связь и попробуйте ещё раз.'});
+}
+function mне_стиль(b){b.style.cssText='width:100%;margin:14px 0 4px'}
+function список(название,ids){
+  $('сп-з').textContent=название;var т=$('сп-т'),н=$('сп-найти');т.textContent='Загружаю…';н.hidden=ids!==null;н.value='';лист('список');
+  статьи().then(function(арт){
+    var стр=ids?арт.filter(function(a){return ids.indexOf(+a.ид)>=0}):арт;
+    function рис(q){т.textContent='';var ф=стр.filter(function(a){return!q||a.название.toLowerCase().indexOf(q)>=0});
+      if(!ф.length)т.append(эл('p','подп','Ничего не нашлось.'));
+      ф.forEach(function(a){var b=эл('button','стр-к');b.type='button';b.append(эл('b',null,'ст. '+a.ид),a.название.length>110?a.название.slice(0,107)+'…':a.название);b.onclick=function(){статья(String(a.ид),null)};т.append(b)})}
+    рис('');н.oninput=function(){рис(н.value.trim().toLowerCase())};
+  });
+}
+
+/* ---------- линейка (ст. 34): пороги отдаёт сервер из текста статьи ---------- */
+var ДИАП=null;
+function линейка(){лист('лин');(ДИАП?Promise.resolve(ДИАП):fetch('/api/ст34').then(function(r){return r.json()}).then(function(r){ДИАП=(r.диапазоны||[]).slice().sort(function(a,b){return a.более-b.более});return ДИАП}).catch(function(){ДИАП=[];return ДИАП})).then(рисЛин)}
+function ф(x){return String(x).replace('.',',')}
+function рисЛин(){
+  var шк=$('л-шк'),вых=$('л-вых');шк.textContent='';вых.textContent='';
+  if(!ДИАП||!ДИАП.length){вых.textContent='Не удалось получить пороги с сервера.';return}
+  var МАКС=14,пр=function(v){return Math.min(100,Math.max(0,v/МАКС*100))};
+  var части=[{от:0,до:ДИАП[0].более,к:'н',п:'—'}];
+  ДИАП.forEach(function(r){части.push({от:r.более,до:r.до==null?МАКС:r.до,к:r.категория==='Д'?'т':r.категория==='В'?'д':'с',п:r.категория+' «'+r.пункт+'»'})});
+  части.forEach(function(ч){var з=эл('div','з '+ч.к,ч.до-ч.от>=2?ч.п:'');з.style.width=(пр(ч.до)-пр(ч.от))+'%';з.title=ч.п;шк.append(з)});
+  ДИАП.map(function(r){return r.более}).forEach(function(v){var т=эл('span','тик',ф(v)+',0');т.style.left=пр(v)+'%';шк.append(т)});
+  var сырое=parseFloat(String($('л-чис').value).replace(',','.'));
+  if(isNaN(сырое)){вых.append(эл('p',null,'Введите диоптрии, например −7 или −6,5.'));return}
+  var x=Math.abs(сырое),мк=эл('div','мк');мк.style.left=пр(Math.min(x,МАКС))+'%';мк.dataset.т=ф(сырое);шк.append(мк);
+  var тек=null;ДИАП.forEach(function(r){if(x>r.более&&(r.до==null||x<=r.до))тек=r});
+  var п1=эл('p');
+  if(!тек)п1.append('По статье 34 это значение пункта не даёт: близорукость не более ',эл('b',null,ф(ДИАП[0].более)+',0'),' дптр.');
+  else п1.append('Худший глаз ',эл('b',null,ф(сырое)+' дптр'),' → пункт ',эл('b',null,'«'+тек.пункт+'»'),', категория ',эл('b',null,тек.категория),' (',КАТ[тек.категория]||'',').');
+  вых.append(п1);
+  if(тек){
+    var сл=тек.до!=null?ДИАП.filter(function(r){return r.более===тек.до})[0]:null;
+    if(сл)вых.append(эл('p',null,'Пункт «'+тек.пункт+'» действует до '+ф(тек.до)+',0 включительно. Выше — пункт «'+сл.пункт+'», категория '+сл.категория+(сл.категория===тек.категория?' (та же).':'.')));
+    var ни=ДИАП.filter(function(r){return r.до===тек.более})[0];
+    вых.append(эл('p',null,'Ровно '+ф(тек.более)+',0 — это ещё '+(ни?'пункт «'+ни.пункт+'»':'ниже порога статьи')+': «более» значит строго больше.'));
+  }
+  вых.append(эл('p','подп','Расчёт по тексту статьи. Категорию называет только врач в заключении; для астигматизма и других показателей правила другие.'));
+}
+$('л-чис').addEventListener('input',function(e){var v=parseFloat(e.target.value.replace(',','.'));if(!isNaN(v))$('л-пол').value=Math.max(-14,Math.min(0,v));рисЛин()});
+$('л-пол').addEventListener('input',function(e){$('л-чис').value=e.target.value;рисЛин()});
+
+/* ---------- история ---------- */
+function история(){return LS.get('справка_разборы',[])}
+function сохранить(){
+  if(!LS.get('справка_хранить',true)||!разговор.сообщ.length)return;
+  var сп=история().filter(function(c){return c.id!==разговор.id});
+  сп.unshift({id:разговор.id,сессия:разговор.сессия,название:разговор.название,t:разговор.t,сообщ:разговор.сообщ.map(function(m){return{р:m.р,т:m.т,в:m.в||null}})});
+  LS.set('справка_разборы',сп.slice(0,20));
+}
+function покИстория(){
+  $('и-хр').checked=LS.get('справка_хранить',true);var б=$('и-сп');б.textContent='';var сп=история();
+  if(!сп.length)б.append(эл('p','подп','Сохранённых разборов нет.'));
+  сп.forEach(function(c){var b=эл('button','стр-к');b.type='button';b.append(c.название||'Без названия',эл('small',null,new Date(c.t).toLocaleString('ru-RU',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'})));b.querySelector('small').style.cssText='display:block;color:var(--тих);font-size:12px;margin-top:2px';
+    b.onclick=function(){закрыть();восстановить(c)};б.append(b)});
+  лист('ист');
+}
+$('и-хр').onchange=function(e){LS.set('справка_хранить',e.target.checked);if(!e.target.checked)LS.set('справка_разборы',[]);покИстория()};
+$('и-ст').onclick=function(){LS.set('справка_разборы',[]);покИстория()};
+$('к-ист').onclick=покИстория;
+
+/* ---------- чат ---------- */
+function вЧат(){$('т').dataset['в']='чат';$('тело').scrollTop=0}
+function вСтарт(){$('т').dataset['в']='старт';$('тело').scrollTop=0}
+function я(т,тихо){var m=эл('div','я',т);$('чат').append(m);разговор.сообщ.push({р:'я',т:т,узел:m});if(!разговор.название)разговор.название=т.slice(0,60);if(!тихо)к(m)}
+function бот(т,в,тихо){
+  var о=эл('div','бот'),т_=эл('div','т-о',т);о.append(т_);
+  if(т.length>320){т_.classList.add('свёрн');var е=эл('button','ещё','Показать полностью');е.type='button';е.onclick=function(){т_.classList.remove('свёрн');е.remove()};о.append(е)}
+  if(в)о.append(досье(в));$('чат').append(о);разговор.сообщ.push({р:'бот',т:т,в:в,узел:о});if(!тихо)к(о);
+}
+function к(у){у.scrollIntoView({block:'start'})}
+function восстановить(c){
+  разговор={id:c.id,сессия:c.сессия,название:c.название,t:c.t,сообщ:[]};$('чат').textContent='';вЧат();
+  c.сообщ.forEach(function(m){m.р==='я'?я(m.т,true):бот(m.т,m.в,true)});
+  var п=c.сообщ.slice().reverse().filter(function(m){return m.в})[0];последний=п?п.в:null;
+}
+function ход(текст){
+  if(занят||!текст.trim())return;вЧат();занят=true;$('к-отпр').disabled=true;я(текст);
+  $('в-чат').value='';авто();
+  var д=эл('div','думает','Разбираю слова…');$('чат').append(д);д.scrollIntoView({block:'end'});
+  var итог=null,сбой=null;
+  fetch('/api/turn_stream',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({сессия:разговор.сессия,режим:РЕЖИМ,текст:текст})}).then(function(r){
+    if(!r.ok||!r.body)throw new Error('HTTP '+r.status);
+    var rd=r.body.getReader(),dc=new TextDecoder(),буф='';
+    function стр(s){if(!s.trim())return;var e=JSON.parse(s);if(e.т==='шаг'&&e.шаг&&e.шаг.название)д.textContent=e.шаг.название.replace(/^Ядро решило: .*/,'Собираю решение')+'…';else if(e.т==='итог')итог=e.результат;else if(e.т==='ошибка')сбой=e.ошибка}
+    function шаг(){return rd.read().then(function(x){if(x.done){стр(буф);return}буф+=dc.decode(x.value,{stream:true});var i;while((i=буф.indexOf('\n'))>=0){стр(буф.slice(0,i));буф=буф.slice(i+1)}return шаг()})}
+    return шаг();
+  }).then(function(){
+    if(сбой)throw new Error(сбой);if(!итог)throw new Error('пустой ответ');
+    д.remove();var в=вид(итог);последний=в;бот(итог.ответ||'',в);сохранить();
+  }).catch(function(){
+    д.remove();var э_=эл('div','ошиб','Не удалось ответить. Ваш текст остался в поле, нажмите «Отправить» ещё раз.');э_.setAttribute('role','alert');$('чат').append(э_);
+    $('в-чат').value=текст;авто();разговор.сообщ.pop();э_.scrollIntoView({block:'end'});
+  }).then(function(){занят=false;$('к-отпр').disabled=false});
+}
+function авто(){var t=$('в-чат');t.style.height='auto';t.style.height=Math.min(120,t.scrollHeight)+'px'}
+$('в-чат').addEventListener('input',авто);
+$('в-чат').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey&&matchMedia('(min-width:700px)').matches){e.preventDefault();ход($('в-чат').value)}});
+$('ф-чат').addEventListener('submit',function(e){e.preventDefault();ход($('в-чат').value)});
+$('ф-старт').addEventListener('submit',function(e){e.preventDefault();var т=$('в-старт').value.trim();if(!т){$('в-старт').focus();return}$('в-старт').value='';ход(т)});
+function новый(){разговор={id:новыйИд(),сессия:новыйИд(),название:'',t:Date.now(),сообщ:[]};последний=null;$('чат').textContent='';$('в-чат').value='';авто();вСтарт()}
+$('к-нов').onclick=новый;
+$('лого').addEventListener('click',function(e){if($('т').dataset['в']==='чат'){e.preventDefault();новый()}});
+
+/* ---------- печать итога ---------- */
+function печать(в){
+  var п=$('печать');п.textContent='';п.append(эл('h1',null,'Справка по статье Расписания болезней'));
+  п.append(эл('div',null,'Составлено '+new Date().toLocaleString('ru-RU',{dateStyle:'long',timeStyle:'short'})));
+  var т=эл('table');кирпичи(в).forEach(function(б){var tr=эл('tr');tr.append(эл('td',null,б.к),эл('td',null,б.з+(б.с==='ок'?' (подтверждено)':б.с==='сам'?' (со слов)':'')));т.append(tr)});п.append(т);
+  п.append(эл('p',null,в.кат?'Категория названа по тексту статьи, потому что врач подтвердил диагноз.':'Категория не названа. '+(в.почему||'')));
+  п.append(эл('p',null,'Справочная система. Не заменяет заключение врача и решение призывной комиссии.'));
+  window.print();
+}
+
+/* ---------- старт ---------- */
+ПРИМЕРЫ.forEach(function(т){var b=эл('button','стр');b.type='button';b.append(эл('span','стр-т',т));var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','и');s.innerHTML='<use href="#и-вперёд"/>';b.append(s);b.onclick=function(){$('в-старт').value=т;$('в-старт').focus()};$('прим').append(b)});
+ТЕМЫ.forEach(function(тм){var b=эл('button','стр');b.type='button';var с=эл('span','стр-т',тм[0]);с.append(эл('small',null,тм[1].length+' '+(тм[1].length<5?'статьи':'статей')));b.append(с);var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','и');s.innerHTML='<use href="#и-вперёд"/>';b.append(s);b.onclick=function(){список(тм[0],тм[1])};$('темы').append(b)});
+var вс=эл('button','стр');вс.type='button';var вс_т=эл('span','стр-т','Все 88 статей');вс_т.append(эл('small',null,'Поиск по названию'));вс.append(вс_т);вс.onclick=function(){список('Все статьи Расписания',null)};$('темы').append(вс);
+$('к-лин').onclick=линейка;$('к-кат').onclick=function(){лист('кат')};
+Object.keys(КАТ).forEach(function(k){var d=эл('div');d.append(эл('b',null,k),эл('span',null,КАТ[k]));$('к-лег').append(d)});
+if(LS.get('справка_хранить',null)===null)LS.set('справка_хранить',true);
+})();
+</script>
+</body></html>

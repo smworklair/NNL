@@ -1,0 +1,92 @@
+<title>NNL Bench · вариации карточки</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+  :root { --ui: "Onest", "Segoe UI", system-ui, sans-serif; --mono: "JetBrains Mono", Consolas, monospace; color-scheme: dark; }
+  body { background: #000; color: #E8EAED; font: 14px/1.5 var(--ui); }
+  .wrap { padding-block: 24px 64px; padding-inline: 16px; }
+  .label { max-width: 680px; margin: 40px auto 12px; font: 400 12px var(--mono); letter-spacing: .08em; color: #7C828A; }
+  .label b { color: #E8EAED; font-weight: 400; }
+  .tabs { display: flex; gap: 2px; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 auto 28px; padding: 4px; border-radius: 999px; }
+  .tab { padding: 9px 16px; border-radius: 999px; font: 500 13.5px var(--ui); white-space: nowrap; }
+  .card { max-width: 680px; margin: 0 auto; border-radius: 16px; padding: 20px 24px 24px; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top h3 { margin: 0; font: 600 17px var(--ui); }
+  .sel { display: inline-flex; gap: 6px; align-items: center; margin: 12px 0 14px; padding: 6px 12px; border-radius: 10px; font: 500 13px var(--ui); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13.5px; margin-bottom: 6px; }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  svg.plot { width: 100%; height: auto; display: block; }
+  svg text { font-family: var(--mono); }
+  .cap { font-style: italic; text-align: center; font-size: 14px; line-height: 1.6; margin: 18px auto 0; max-width: 62ch; text-wrap: balance; }
+  /* темы */
+  .dark { --bg: #000; --card: #08090A; --edge: #2A2D31; --ink: #E8EAED; --ink2: #B6BBC1; --tabOn: #2A2D31; --sel: #15171A; }
+  .light { --bg: #F5F5F2; --card: #FFFFFF; --edge: #E2E2DD; --ink: #16181B; --ink2: #50555C; --tabOn: #16181B; --sel: #F5F5F2; }
+  section { background: var(--bg); color: var(--ink); padding-block: 8px 40px; }
+  section .tabs { border: 1px solid var(--edge); }
+  section .tab { color: var(--ink2); } section .tab.on { background: var(--tabOn); color: var(--card); }
+  section.dark .tab.on { color: #fff; }
+  section .card { background: var(--card); border: 1px solid var(--edge); }
+  section .sel { border: 1px solid var(--edge); background: var(--sel); color: var(--ink); }
+  section .cap { color: var(--ink2); }
+</style>
+<div class="wrap" id="root"></div>
+<script>
+// Демо-данные: ряд = система, точки = её настройки (как уровни рассуждения у образца).
+const РЯДЫ = [
+  {имя: "NNL + Groq",   м: "star",    ц: "#F5C842", т: [[6.1, 94], [8.5, 100], [11.8, 100]], наш: true},
+  {имя: "NNL + Qwen",   м: "star",    ц: "#C9962A", т: [[9.4, 89], [14.2, 97], [21.5, 100]], наш: true},
+  {имя: "Qwen 3.8 Max", м: "square",  ц: "#5B8DEF", т: [[3.1, 71], [4.8, 78], [7.2, 83]]},
+  {имя: "Gemini Flash", м: "circle",  ц: "#2C4F9E", т: [[2.4, 64], [4.1, 70]]},
+  {имя: "GPT-OSS 120B", м: "diamond", ц: "#8A94A6", т: [[5.6, 58]]},
+];
+const ВКЛ = ["Цена решения", "Бенч «система»", "Свободная сборка", "Каскады", "Скорость"];
+function маркер(м, x, y, ц, r = 6, op = 1) {
+  if (м === "star") { let p = ""; for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * .45 : r * 1.15; p += (i ? "L" : "M") + (x + rr * Math.cos(a)).toFixed(1) + " " + (y + rr * Math.sin(a)).toFixed(1); }
+    return `<path d="${p}Z" fill="${ц}" opacity="${op}"/>`; }
+  if (м === "square") return `<rect x="${x - r * .85}" y="${y - r * .85}" width="${r * 1.7}" height="${r * 1.7}" fill="${ц}" opacity="${op}"/>`;
+  if (м === "diamond") return `<path d="M${x} ${y - r} L${x + r} ${y} L${x} ${y + r} L${x - r} ${y}Z" fill="${ц}" opacity="${op}"/>`;
+  return `<circle cx="${x}" cy="${y}" r="${r * .85}" fill="${ц}" opacity="${op}"/>`;
+}
+// opts: лог — логарифмическая ось X; зона — квадрант выгоды и Парето; фокус — приглушить чужих и подписать NNL; подписи — подписи у концов линий вместо легенды
+function карточка(opts, тема) {
+  const W = 620, H = 400, L = 64, R = opts.подписи ? 96 : 20, T = 14, B = 54, w = W - L - R, h = H - T - B;
+  const ink = тема === "light" ? "#16181B" : "#E8EAED", ink2 = тема === "light" ? "#50555C" : "#B6BBC1";
+  const X = opts.лог ? v => L + (Math.log2(v) - 1) / (Math.log2(32) - 1) * w : v => L + v / 24 * w;
+  const Y = v => T + h - (v - 50) / 50 * h;
+  let s = "";
+  if (opts.зона) {
+    s += `<rect x="${L}" y="${T}" width="${X(opts.лог ? 8 : 9) - L}" height="${Y(90) - T}" fill="#3FB27F" opacity="${тема === "light" ? .12 : .1}"/>`;
+    s += `<text x="${L + 8}" y="${T + 16}" font-size="11" fill="#3FB27F">дешевле и точнее</text>`;
+    const все = РЯДЫ.flatMap(р => р.т).sort((a, b) => a[0] - b[0]); let лучш = -1, пф = [];
+    все.forEach(p => { if (p[1] > лучш) { пф.push(p); лучш = p[1]; } });
+    s += `<polyline points="${пф.map(p => X(p[0]) + "," + Y(p[1])).join(" ")}" fill="none" stroke="${ink2}" stroke-width="1.2" stroke-dasharray="2 4"/>`;
+  }
+  s += `<path d="M${L} ${T}V${T + h}H${L + w}" fill="none" stroke="${ink}" stroke-width="1"/>`;
+  for (let v = 50; v <= 100; v += 10) s += `<path d="M${L - 5} ${Y(v)}H${L}" stroke="${ink}"/><text x="${L - 9}" y="${Y(v) + 4}" text-anchor="end" font-size="11.5" fill="${ink}">${v}%</text>`;
+  (opts.лог ? [2, 4, 8, 16, 32] : [0, 6, 12, 18, 24]).forEach(v => s += `<path d="M${X(v)} ${T + h}V${T + h + 5}" stroke="${ink}"/><text x="${X(v)}" y="${T + h + 20}" text-anchor="middle" font-size="11.5" fill="${ink}">${v}k</text>`);
+  s += `<text x="${L + w / 2}" y="${H - 6}" text-anchor="middle" font-size="13" fill="${ink}" style="font-family:var(--ui)">Токены на сценарий${opts.лог ? " (log)" : ""}</text>`;
+  s += `<text transform="translate(16 ${T + h / 2}) rotate(-90)" text-anchor="middle" font-size="13" font-weight="600" fill="${ink}" style="font-family:var(--ui)">Доля пройденных проверок</text>`;
+  РЯДЫ.forEach(р => { const op = opts.фокус && !р.наш ? .35 : 1, pts = р.т.map(([a, b]) => [X(a), Y(b)]);
+    if (pts.length > 1) s += `<polyline points="${pts.map(p => p.join(",")).join(" ")}" fill="none" stroke="${р.ц}" stroke-width="1.5" opacity="${op}"/>`;
+    pts.forEach(([x, y]) => s += маркер(р.м, x, y, р.ц, 6, op));
+    if (opts.подписи) { const [x, y] = pts[pts.length - 1]; s += `<text x="${x + 10}" y="${y + 4}" font-size="11.5" fill="${р.ц}" style="font-family:var(--ui);font-weight:500">${р.имя}</text>`; } });
+  if (opts.фокус) { const [x, y] = [X(8.5), Y(100)];
+    s += `<circle cx="${x}" cy="${y}" r="13" fill="none" stroke="#F5C842" stroke-width="1.2"/>`;
+    s += `<path d="M${x + 12} ${y + 10} L${x + 40} ${y + 40}" stroke="#F5C842" stroke-width="1"/>`;
+    s += `<text x="${x + 44}" y="${y + 46}" font-size="12" fill="${ink}" style="font-family:var(--ui);font-weight:600">100% за 8,5k токенов</text>`;
+    s += `<text x="${x + 44}" y="${y + 62}" font-size="11.5" fill="${ink2}" style="font-family:var(--ui)">лучшая модель без ядра — 83%</text>`; }
+  const legend = opts.подписи ? "" : `<div class="legend">${РЯДЫ.map(р => `<span style="opacity:${opts.фокус && !р.наш ? .5 : 1}"><svg width="14" height="14" viewBox="0 0 14 14">${маркер(р.м, 7, 7, р.ц, 5.5)}</svg>${р.имя}</span>`).join("")}</div>`;
+  return `<div class="card"><div class="top"><h3>Цена решения</h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity=".7"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg></div>
+    <div class="sel">Токены <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3.5 5 6.5 8 3.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></div>
+    ${legend}<svg class="plot" viewBox="0 0 ${W} ${H}">${s}</svg>
+    <p class="cap">«Цена решения» прогоняет одни и те же сценарии в двух режимах: NNL, где факты собирают блоки и ядро, и та же модель без ядра. NNL + Groq проходит 100% проверок при 8,5 тыс. токенов; лучшая модель без ядра — 83% при 7,2 тыс.</p></div>`;
+}
+const ВАРИАЦИИ = [
+  ["A", "КАК ОБРАЗЕЦ", "тёмная карточка, формы маркеров, линии настроек, вывод курсивом", {}, "dark"],
+  ["B", "ЗОНА ВЫГОДЫ", "квадрант «дешевле и точнее», пунктир Парето, подписи у концов линий вместо легенды, ось цены в логарифме", {зона: true, подписи: true, лог: true}, "dark"],
+  ["C", "ФОКУС НА NNL", "чужие ряды приглушены, на лучшей точке NNL выноска с главным числом", {фокус: true}, "dark"],
+  ["D", "СВЕТЛАЯ", "та же карточка на светлой странице, с зоной выгоды и подписями", {зона: true, подписи: true}, "light"],
+];
+document.getElementById("root").innerHTML = ВАРИАЦИИ.map(([n, имя, что, opts, тема]) =>
+  `<section class="${тема}"><div class="label"><b>${n} · ${имя}</b> — ${что}</div>
+   <div class="tabs">${ВКЛ.map((t, i) => `<span class="tab ${i === 0 ? "on" : ""}">${t}</span>`).join("")}</div>${карточка(opts, тема)}</section>`).join("");
+</script>

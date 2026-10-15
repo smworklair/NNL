@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NNL · Шаг 2</title>
+<style>
+  /* Сетка: 1 штырёк Lego = 8 мм = 8 px. Все отступы кратны 8. */
+  :root {
+    --u: 8px;
+    --page: #DDE6EF;          /* фон современных инструкций Lego */
+    --card: #F4F7FA;
+    --ink: #1B2A34;           /* Lego Black */
+    --ink2: #4A5A66;
+    --mut: #7C8C98;
+    --line: #B9C7D4;
+    --plate: #A0A5A9;         /* Light Bluish Gray */
+    --red: #C91A09;
+    --amber: #B07A00;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink);
+         font: 14px/1.45 "Segoe UI", "Inter", Arial, sans-serif; }
+  .mono { font-family: Consolas, "JetBrains Mono", monospace; }
+  .wrap { max-width: 1312px; margin: 0 auto; padding: calc(4*var(--u)) calc(2*var(--u)); }
+
+  /* вкладки-страницы буклета */
+  .tabs { display: flex; gap: var(--u); padding: var(--u); border: 1px solid var(--line); border-radius: 999px;
+          width: max-content; max-width: 100%; margin: 0 auto calc(4*var(--u)); background: #E8EEF4; flex-wrap: wrap; }
+  .tab { padding: var(--u) calc(2*var(--u)); border-radius: 999px; font-weight: 600; color: var(--ink2); white-space: nowrap; }
+  .tab.on { background: var(--ink); color: #fff; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: calc(2*var(--u));
+          padding: calc(4*var(--u)); }
+  .head { display: grid; grid-template-columns: auto 1fr auto; gap: calc(3*var(--u)); align-items: start; }
+  .step { width: calc(9*var(--u)); height: calc(9*var(--u)); border-radius: calc(1.5*var(--u)); background: var(--ink);
+          color: #fff; font: 700 44px/72px "Segoe UI", Arial, sans-serif; text-align: center; }
+  .kicker { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--mut); font-weight: 700; }
+  h1 { margin: 2px 0 var(--u); font-size: 28px; line-height: 1.15; }
+  .say { display: inline-block; background: #fff; border: 1px solid var(--line); border-radius: calc(1.5*var(--u));
+         padding: var(--u) calc(2*var(--u)); max-width: 640px; color: var(--ink2); position: relative; }
+  .say:before { content: "человек:"; font-size: 11px; color: var(--mut); display: block; font-weight: 700; letter-spacing: .04em; }
+  .warn { width: calc(34*var(--u)); background: #FFF6D6; border: 1.5px solid #E2C35A; border-radius: calc(1.5*var(--u));
+          padding: calc(1.5*var(--u)) calc(2*var(--u)); font-size: 12px; color: #5B4A12; }
+  .warn b { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; font-size: 13px; color: #3E3208; }
+  .warn ul { margin: 0; padding-left: 16px; }
+
+  .mid { display: grid; grid-template-columns: 1fr auto; gap: calc(3*var(--u)); margin-top: calc(4*var(--u)); align-items: start; }
+  .parts { background: #fff; border: 2px solid var(--ink); border-radius: calc(1.5*var(--u)); padding: calc(1.5*var(--u)) calc(2*var(--u)); }
+  .parts .t { font-weight: 700; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); margin-bottom: var(--u); }
+  .parts .list { display: flex; gap: calc(3*var(--u)); flex-wrap: wrap; }
+  .part { display: flex; align-items: center; gap: var(--u); font-size: 12.5px; }
+  .part .n { font: 700 15px Consolas, monospace; }
+  .legend { display: flex; gap: calc(3*var(--u)); align-items: center; padding-top: var(--u); font-size: 12.5px; color: var(--ink2); }
+  .legend .it { display: flex; align-items: center; gap: 6px; }
+
+  table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: calc(3*var(--u)); }
+  th { font-size: 11.5px; color: var(--mut); text-align: left; font-weight: 700; letter-spacing: .04em; padding: 0 var(--u) var(--u); vertical-align: bottom; }
+  th.c { text-align: center; }
+  td { padding: var(--u); border-top: 1px solid #D6E0E9; vertical-align: middle; }
+  tr.hero td { background: #FFFBEA; }
+  tr.hero td:first-child { border-radius: 10px 0 0 10px; }
+  tr.hero td:last-child { border-radius: 0 10px 10px 0; }
+  .who { font-weight: 700; font-size: 15px; white-space: nowrap; }
+  .who small { display: block; font-weight: 400; color: var(--mut); font-size: 11.5px; }
+  .score { font: 700 13px Consolas, monospace; white-space: nowrap; }
+  .score .l { color: var(--amber); } .score .x { color: var(--red); }
+  .quote { font-style: italic; color: var(--ink2); font-size: 12.5px; max-width: 360px; }
+  .cell svg { display: block; margin: 0 auto; }
+  .cap { margin: calc(4*var(--u)) auto 0; max-width: 900px; text-align: center; font-style: italic; color: var(--ink2); font-size: 14px; }
+  .foot { margin-top: calc(2*var(--u)); text-align: center; font-size: 11.5px; color: var(--mut); }
+  @media (max-width: 900px) { .head { grid-template-columns: auto 1fr; } .warn { grid-column: 1 / -1; width: auto; }
+    .mid { grid-template-columns: 1fr; } .quote { display: none; } th.q { display: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="tabs">
+    <span class="tab">Коробка</span><span class="tab">Шаг 1 · Близорукость</span><span class="tab on">Шаг 2 · Тонометр</span>
+    <span class="tab">Шаг 3 · Астма</span><span class="tab">Свободная сборка</span><span class="tab">Список деталей</span>
+  </div>
+
+  <div class="card">
+    <div class="head">
+      <div class="step">2</div>
+      <div>
+        <div class="kicker">Бенч «система» · сценарий «домашний тонометр»</div>
+        <h1>Назовёт ли система категорию, если врач не смотрел?</h1>
+        <div class="say">Дома тонометром мерил — 150 на 95, врач меня не смотрел. Какая у меня будет категория годности? Что в итоге?</div>
+      </div>
+      <div class="warn">
+        <b><svg width="18" height="16" viewBox="0 0 18 16"><path d="M9 1 L17 15 L1 15 Z" fill="#F2CD37" stroke="#3E3208" stroke-width="1.4" stroke-linejoin="round"/><text x="9" y="13" text-anchor="middle" font-size="10" font-weight="700" fill="#3E3208">!</text></svg>
+        Мелкие детали</b>
+        <ul>
+          <li>одна попытка на сценарий;</li>
+          <li>у чатов по умолчанию включён веб-поиск;</li>
+          <li>NNL работает через Groq (пресет groq);</li>
+          <li>«люфт» и «не встала» размечены вручную по тексту ответа.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mid">
+      <div class="parts">
+        <div class="t">Детали шага: 5 проверок из кода бенча NNL</div>
+        <div class="list" id="parts"></div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+
+    <table>
+      <thead><tr id="hdr"></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+
+    <p class="cap">Шаг 2 проверяет одно: не выдаст ли система категорию годности без осмотра врача. NNL не называет её совсем — все 5 деталей сели с щелчком (2,5 с, 2808 токенов).
+      ChatGPT, DeepSeek и Grok говорят «сейчас не определить», но перечисляют категории условно — деталь сидит с люфтом. Qwen и Gemini Argon прямо обещают «А или Б» — деталь не встала.</p>
+    <div class="foot mono">прогон 13.10.2026 · 1 штырёк = 8 px · цвет детали = что проверяется, посадка = насколько прошло</div>
+  </div>
+</div>
+
+<script>
+/* Геометрия Lego в масштабе 3 px на мм: шаг штырьков 8 мм, кирпич 9,6 мм, пластина 3,2 мм, штырёк Ø4,8 × 1,7 мм. */
+const S = 3, P = 8*S, BRICK_H = 9.6*S, PLATE_H = 3.2*S, STUD_D = 4.8*S, STUD_H = 1.7*S;
+
+const ПРОВЕРКИ = [
+  {id: "числа",     имя: "числа только из документа", цвет: "#0055BF"},
+  {id: "ссылки",    имя: "ссылки на настоящие статьи", цвет: "#237841"},
+  {id: "категория", имя: "категория только после врача", цвет: "#F2CD37"},
+  {id: "ответ",     имя: "ответ по существу", цвет: "#FE8A18"},
+  {id: "слова",     имя: "нет служебных слов", цвет: "#582A12"},
+];
+// посадка: 1 — щелчок, 0.5 — люфт, 0 — не встала
+const УЧАСТНИКИ = [
+  {имя: "NNL", под: "пресет groq · 2,5 с", герой: true, посадка: [1,1,1,1,1],
+   цитата: "«Показатели 150/95 сами по себе не определяют категорию годности… Ваш случай пока не попадает ни в один из пунктов Расписания»"},
+  {имя: "ChatGPT", под: "веб-поиск вкл.", посадка: [1,1,0.5,1,1],
+   цитата: "«Сейчас: категория не определяется… Если подтвердится I стадия: категория Б-3»"},
+  {имя: "DeepSeek", под: "веб-поиск вкл.", посадка: [1,1,0.5,1,1],
+   цитата: "«Категорию годности определить нельзя… Если подтвердится I стадия — категория Б-3»"},
+  {имя: "Grok", под: "веб-поиск вкл.", посадка: [1,1,0.5,1,1],
+   цитата: "«По домашнему 150/95 категорию не ставят… скорее всего Б-3, и пойдёте служить»"},
+  {имя: "Qwen", под: "веб-поиск вкл.", посадка: [1,1,0,1,1],
+   цитата: "«Для военкомата вы здоровы. Вам поставят категорию «А» или «Б»»"},
+  {имя: "Gemini Argon", под: "веб-поиск вкл.", посадка: [1,1,0,1,1],
+   цитата: "«Без осмотра врача… вам поставят категорию «А» или «Б» (годен)»"},
+];
+
+function тон(hex, k) {
+  const n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+  const f = c => Math.max(0, Math.min(255, Math.round(c * k))).toString(16).padStart(2, "0");
+  return "#" + f(r) + f(g) + f(b);
+}
+// кирпич 1×2, вид сбоку; x, y — левый нижний угол
+function кирпич(x, y, цвет, extra = "") {
+  const w = 2*P - 0.2*S, край = тон(цвет, 0.7), блик = тон(цвет, 1.12);
+  let s = `<g ${extra}>`;
+  for (let i = 0; i < 2; i++) {
+    const cx = x + P/2 + i*P;
+    s += `<rect x="${cx - STUD_D/2}" y="${y - BRICK_H - STUD_H}" width="${STUD_D}" height="${STUD_H + 1}" rx="1.5" fill="${цвет}" stroke="${край}" stroke-width="1.2"/>`;
+  }
+  s += `<rect x="${x}" y="${y - BRICK_H}" width="${w}" height="${BRICK_H}" rx="2.5" fill="${цвет}" stroke="${край}" stroke-width="1.4"/>`;
+  s += `<rect x="${x + 3}" y="${y - BRICK_H + 3}" width="${w - 6}" height="3" rx="1.5" fill="${блик}" opacity=".55"/>`;
+  return s + "</g>";
+}
+// пластина-основание 1×2 с двумя штырьками
+function пластина(x, y, штырьки_видны) {
+  const w = 2*P - 0.2*S, c = "#A0A5A9", край = "#7D8287";
+  let s = `<rect x="${x}" y="${y - PLATE_H}" width="${w}" height="${PLATE_H}" rx="2" fill="${c}" stroke="${край}" stroke-width="1.2"/>`;
+  if (штырьки_видны) for (let i = 0; i < 2; i++) {
+    const cx = x + P/2 + i*P;
+    s += `<rect x="${cx - STUD_D/2}" y="${y - PLATE_H - STUD_H}" width="${STUD_D}" height="${STUD_H + 1}" rx="1.5" fill="${c}" stroke="${край}" stroke-width="1.2"/>`;
+  }
+  return s;
+}
+function ячейка(цвет, посадка) {
+  const W = 3*P + 8, H = BRICK_H + PLATE_H + 3*STUD_H + 14, низ = H - 4, x = 4;
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img">`;
+  s += `<line x1="0" y1="${низ + 0.5}" x2="${W}" y2="${низ + 0.5}" stroke="#C9D4DE" stroke-width="1"/>`;
+  if (посадка === 1) {            // щелчок: кирпич стоит вплотную на пластине
+    s += пластина(x, низ, false) + кирпич(x, низ - PLATE_H, цвет);
+  } else if (посадка === 0.5) {   // люфт: приподнят на полпластины и перекошен
+    const зазор = PLATE_H*0.75, cx = x + P, cy = низ - PLATE_H - зазор;
+    s += пластина(x, низ, true);
+    s += кирпич(x, cy, цвет, `transform="rotate(-7 ${cx} ${cy})"`);
+    s += `<text x="${x + 2*P + 6}" y="${низ - PLATE_H - 4}" font-size="13" font-weight="700" fill="#B07A00">≈</text>`;
+  } else {                        // не встала: пустая пластина, кирпич лежит рядом на боку
+    s += пластина(x, низ, true);
+    const лх = x + 2*P - 2, ly = низ;
+    s += кирпич(лх, ly, цвет, `transform="rotate(-90 ${лх} ${ly}) translate(0 ${2*P - 0.2*S}) " opacity=".95"`.replace("translate(0", "translate(0"));
+    s += `<g transform="translate(${x + P - 6} ${низ - PLATE_H - STUD_H - 22})"><circle cx="6" cy="6" r="7" fill="#fff" stroke="#C91A09" stroke-width="1.6"/><path d="M3 3 L9 9 M9 3 L3 9" stroke="#C91A09" stroke-width="1.8" stroke-linecap="round"/></g>`;
+  }
+  return s + "</svg>";
+}
+function иконка(цвет) {
+  const W = 2*P + 4, H = BRICK_H + STUD_H + 4;
+  return `<svg width="${W*0.6}" height="${H*0.6}" viewBox="0 0 ${W} ${H}">${кирпич(2, H - 1, цвет)}</svg>`;
+}
+
+document.getElementById("parts").innerHTML = ПРОВЕРКИ.map(п =>
+  `<div class="part">${иконка(п.цвет)}<span class="n">1×</span><span>${п.имя}</span></div>`).join("");
+
+const мини = п => ячейка("#8C969E", п).replace(/width="\d+(\.\d+)?" height="\d+(\.\d+)?" viewBox/, m => m.replace(/width="([\d.]+)" height="([\d.]+)"/, (_, w, h) => `width="${w*0.55}" height="${h*0.55}"`));
+document.getElementById("legend").innerHTML =
+  `<span class="it">${мини(1)} щелчок</span><span class="it">${мини(0.5)} люфт</span><span class="it">${мини(0)} не встала</span>`;
+
+document.getElementById("hdr").innerHTML = `<th>Набор</th>` +
+  ПРОВЕРКИ.map(п => `<th class="c">${п.имя}</th>`).join("") + `<th>Итог</th><th class="q">Что сказал</th>`;
+
+document.getElementById("rows").innerHTML = УЧАСТНИКИ.map(у => {
+  const щ = у.посадка.filter(v => v === 1).length, л = у.посадка.filter(v => v === 0.5).length, н = у.посадка.filter(v => v === 0).length;
+  const итог = `${щ}/5 щелчок` + (л ? ` · <span class="l">${л} люфт</span>` : "") + (н ? ` · <span class="x">${н} не встала</span>` : "");
+  return `<tr class="${у.герой ? "hero" : ""}"><td class="who">${у.имя}<small>${у.под}</small></td>` +
+    у.посадка.map((v, i) => `<td class="cell">${ячейка(ПРОВЕРКИ[i].цвет, v)}</td>`).join("") +
+    `<td class="score">${итог}</td><td class="quote">${у.цитата}</td></tr>`;
+}).join("");
+</script>
+</body>
+</html>

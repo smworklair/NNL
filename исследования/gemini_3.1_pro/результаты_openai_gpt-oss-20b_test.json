@@ -1,0 +1,701 @@
+{
+  "модель": "openai/gpt-oss-20b",
+  "выборка": "test",
+  "сводка": {
+    "T1_perm": {
+      "n": 16,
+      "fact_errs": 1,
+      "fact_err_rate": 0.0625,
+      "fact_ci": [
+        0.0111,
+        0.2833
+      ],
+      "core_errs": 3,
+      "core_err_rate": 0.1875,
+      "core_ci": [
+        0.0659,
+        0.4301
+      ]
+    },
+    "T2_units": {
+      "n": 16,
+      "fact_errs": 3,
+      "fact_err_rate": 0.1875,
+      "fact_ci": [
+        0.0659,
+        0.4301
+      ],
+      "core_errs": 8,
+      "core_err_rate": 0.5,
+      "core_ci": [
+        0.28,
+        0.72
+      ]
+    },
+    "T3_noise": {
+      "n": 16,
+      "fact_errs": 1,
+      "fact_err_rate": 0.0625,
+      "fact_ci": [
+        0.0111,
+        0.2833
+      ],
+      "core_errs": 4,
+      "core_err_rate": 0.25,
+      "core_ci": [
+        0.1018,
+        0.495
+      ]
+    },
+    "T4_self": {
+      "n": 16,
+      "fact_errs": 0,
+      "fact_err_rate": 0.0,
+      "fact_ci": [
+        0.0,
+        0.1936
+      ],
+      "core_errs": 0,
+      "core_err_rate": 0.0,
+      "core_ci": [
+        0.0,
+        0.1936
+      ]
+    },
+    "T5a_neg": {
+      "n": 16,
+      "fact_errs": 1,
+      "fact_err_rate": 0.0625,
+      "fact_ci": [
+        0.0111,
+        0.2833
+      ],
+      "core_errs": 5,
+      "core_err_rate": 0.3125,
+      "core_ci": [
+        0.1416,
+        0.556
+      ]
+    },
+    "T5b_past": {
+      "n": 16,
+      "fact_errs": 0,
+      "fact_err_rate": 0.0,
+      "fact_ci": [
+        0.0,
+        0.1936
+      ],
+      "core_errs": 0,
+      "core_err_rate": 0.0,
+      "core_ci": [
+        0.0,
+        0.1936
+      ]
+    },
+    "T5c_other": {
+      "n": 16,
+      "fact_errs": 2,
+      "fact_err_rate": 0.125,
+      "fact_ci": [
+        0.035,
+        0.3602
+      ],
+      "core_errs": 2,
+      "core_err_rate": 0.125,
+      "core_ci": [
+        0.035,
+        0.3602
+      ]
+    }
+  },
+  "кейсы": [
+    {
+      "case_id": "case_01",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "6.25",
+        "found": [
+          "6.25"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_03",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "3",
+        "found": [
+          "18",
+          "3"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": true,
+        "core_err": true
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": true,
+        "core_err": true
+      }
+    },
+    {
+      "case_id": "case_05",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": true,
+        "val1": "4.5",
+        "found": [
+          "4.5"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": true,
+        "core_err": true
+      }
+    },
+    {
+      "case_id": "case_08",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": true,
+        "core_err": true,
+        "val1": "4",
+        "found": []
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_12",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": true,
+        "max_dl": 0.3324
+      },
+      "T2_units": {
+        "fact_err": true,
+        "core_err": true,
+        "val1": "150/95",
+        "found": [
+          "95",
+          "150"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": true
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_13",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "158",
+        "found": [
+          "158",
+          "45"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_20",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": true,
+        "core_err": true,
+        "val1": "152/98",
+        "found": [
+          "98",
+          "152"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": true,
+        "max_dl": 1.0887
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": true
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_21",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": "",
+        "val1": "",
+        "found": []
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": true,
+        "max_dl": 1.6059
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_25",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "4.25",
+        "found": [
+          "4.25"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": true
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_29",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": true,
+        "val1": "160",
+        "found": [
+          "160",
+          "6.25"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_30",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": "",
+        "val1": "",
+        "found": []
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": true
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_33",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": true,
+        "val1": "",
+        "found": []
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_34",
+      "T1_perm": {
+        "fact_err": true,
+        "core_err": true,
+        "max_dl": 4.2313
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": true,
+        "val1": "17",
+        "found": [
+          "17"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": true,
+        "core_err": true,
+        "max_dl": 4.2313
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_35",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "4.75",
+        "found": [
+          "22",
+          "4.75"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_39",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": true,
+        "val1": "",
+        "found": []
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": false,
+        "max_dl": 0.0
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    },
+    {
+      "case_id": "case_40",
+      "T1_perm": {
+        "fact_err": false,
+        "core_err": true,
+        "max_dl": 0.8684
+      },
+      "T2_units": {
+        "fact_err": false,
+        "core_err": false,
+        "val1": "7.25",
+        "found": [
+          "7.25"
+        ]
+      },
+      "T3_noise": {
+        "fact_err": false,
+        "core_err": true,
+        "max_dl": 0.8684
+      },
+      "T4_self": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5a_neg": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5b_past": {
+        "fact_err": false,
+        "core_err": false
+      },
+      "T5c_other": {
+        "fact_err": false,
+        "core_err": false
+      }
+    }
+  ]
+}

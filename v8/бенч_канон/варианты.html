@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NNL · бенч-карточка</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.45 "Segoe UI", Inter, Arial, sans-serif; }
+  .page { padding: 32px 16px 56px; }
+  .page + .page { border-top: 1px solid #222; }
+  .label { max-width: 760px; margin: 0 auto 12px; font: 700 12px Consolas, monospace; letter-spacing: .08em; opacity: .55; }
+  .tabs { display: flex; gap: 4px; width: max-content; max-width: 100%; margin: 0 auto 32px; padding: 4px; border-radius: 999px; flex-wrap: wrap; }
+  .tab { padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 13.5px; white-space: nowrap; }
+  .card { max-width: 680px; margin: 0 auto; border-radius: 16px; padding: 20px 24px 24px; }
+  .top { display: flex; justify-content: space-between; align-items: center; }
+  .top h3 { margin: 0; font-size: 17px; }
+  .dl { width: 18px; height: 18px; opacity: .7; }
+  .sel { display: inline-flex; gap: 6px; align-items: center; margin: 12px 0 14px; padding: 6px 12px; border-radius: 10px; font-size: 13px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 13px; margin-bottom: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .cap { font-style: italic; text-align: center; font-size: 13.5px; margin: 18px 12px 0; }
+  .demo { text-align: center; font: 11px Consolas, monospace; opacity: .5; margin-top: 10px; }
+  svg text { font-family: Consolas, "JetBrains Mono", monospace; }
+
+  /* вариант 1 — тёмный, как образец */
+  .v1 { background: #000; color: #E6E9EC; }
+  .v1 .tabs { border: 1px solid #2B2F35; } .v1 .tab { color: #D7DBDF; } .v1 .tab.on { background: #2A2D31; color: #fff; }
+  .v1 .card { background: #070809; border: 1px solid #2B2F35; } .v1 .sel { border: 1px solid #3A3F46; background: #15171A; }
+  .v1 .cap { color: #CFD4D9; }
+  /* вариант 2 — тёмный, сетка = штырьки опорной плиты */
+  .v2 { background: #0B0E12; color: #E6E9EC; }
+  .v2 .tabs { border: 1px solid #263040; background: #10151C; } .v2 .tab { color: #C8D0DA; } .v2 .tab.on { background: #F2CD37; color: #111; }
+  .v2 .card { background: #10151C; border: 1px solid #263040; } .v2 .sel { border: 1px solid #33404F; background: #161D26; }
+  .v2 .cap { color: #C8D0DA; }
+  /* вариант 3 — светлый, бумага инструкции Lego */
+  .v3 { background: #DDE6EF; color: #1B2A34; }
+  .v3 .tabs { border: 1px solid #B9C7D4; background: #E8EEF4; } .v3 .tab { color: #3D4B57; } .v3 .tab.on { background: #1B2A34; color: #fff; }
+  .v3 .card { background: #F7F9FB; border: 1px solid #B9C7D4; } .v3 .sel { border: 1px solid #B9C7D4; background: #fff; }
+  .v3 .cap { color: #3D4B57; }
+</style></head>
+<body>
+
+<section class="page v1"><div class="label">ВАРИАНТ 1 · КАК ОБРАЗЕЦ, МАРКЕРЫ — ДЕТАЛИ LEGO СВЕРХУ</div><div id="p1"></div></section>
+<section class="page v2"><div class="label">ВАРИАНТ 2 · ПОЛЕ ГРАФИКА = ОПОРНАЯ ПЛИТА (ШТЫРЬКИ ВМЕСТО СЕТКИ)</div><div id="p2"></div></section>
+<section class="page v3"><div class="label">ВАРИАНТ 3 · СВЕТЛЫЙ, БУМАГА ИНСТРУКЦИИ</div><div id="p3"></div></section>
+
+<script>
+// Демо-данные: только для оценки дизайна. Ряд = одна модель на разных настройках (как «effort» в образце).
+const РЯДЫ = [
+  {имя: "NNL + Groq",       деталь: "2x2",   ц: "#F2CD37", т: [[6.1, 94], [8.5, 100], [11.8, 100]]},
+  {имя: "NNL + Qwen",       деталь: "1x2",   ц: "#FE8A18", т: [[9.4, 89], [14.2, 97], [21.5, 100]]},
+  {имя: "API: Qwen Max",    деталь: "round", ц: "#5B9BD5", т: [[3.1, 71], [4.8, 78], [7.2, 83]]},
+  {имя: "API: Gemini",      деталь: "tile",  ц: "#A0A5A9", т: [[2.4, 64], [4.1, 70]]},
+  {имя: "API: GPT-OSS",     деталь: "slope", ц: "#C91A09", т: [[5.6, 58]]},
+];
+const ВКЛАДКИ = ["Бенч «система»", "Цена решения", "Свободная сборка", "Каскады", "Скорость"];
+
+function тон(h, k) { const n = parseInt(h.slice(1), 16), f = c => Math.max(0, Math.min(255, Math.round(c * k))).toString(16).padStart(2, "0");
+  return "#" + f(n >> 16) + f((n >> 8) & 255) + f(n & 255); }
+// маркер = деталь Lego, вид сверху
+function деталь(тип, x, y, ц, r = 7) {
+  const e = тон(ц, .62), hi = тон(ц, 1.12), st = (cx, cy, rr) => `<circle cx="${cx}" cy="${cy}" r="${rr}" fill="${hi}" stroke="${e}" stroke-width="1"/>`;
+  if (тип === "2x2") return `<rect x="${x - r}" y="${y - r}" width="${2 * r}" height="${2 * r}" rx="2.5" fill="${ц}" stroke="${e}" stroke-width="1.2"/>` +
+    st(x - r / 2, y - r / 2, r * .3) + st(x + r / 2, y - r / 2, r * .3) + st(x - r / 2, y + r / 2, r * .3) + st(x + r / 2, y + r / 2, r * .3);
+  if (тип === "1x2") return `<rect x="${x - r * 1.2}" y="${y - r * .7}" width="${2.4 * r}" height="${1.4 * r}" rx="2.5" fill="${ц}" stroke="${e}" stroke-width="1.2"/>` +
+    st(x - r * .6, y, r * .36) + st(x + r * .6, y, r * .36);
+  if (тип === "round") return `<circle cx="${x}" cy="${y}" r="${r * .95}" fill="${ц}" stroke="${e}" stroke-width="1.2"/>` + st(x, y, r * .45);
+  if (тип === "tile") return `<rect x="${x - r * .8}" y="${y - r * .8}" width="${1.6 * r}" height="${1.6 * r}" rx="2" fill="${ц}" stroke="${e}" stroke-width="1.2"/>` +
+    `<rect x="${x - r * .45}" y="${y - r * .45}" width="${.9 * r}" height="${.9 * r}" rx="1.5" fill="${hi}" opacity=".6"/>`;
+  if (тип === "slope") return `<path d="M${x - r} ${y + r * .8} L${x + r} ${y + r * .8} L${x + r} ${y - r * .8} Z" fill="${ц}" stroke="${e}" stroke-width="1.2" stroke-linejoin="round"/>` +
+    st(x + r * .5, y + r * .35, r * .28);
+}
+
+function карточка(id, тема) {
+  const тёмный = тема !== 3, оси = тёмный ? "#E6E9EC" : "#1B2A34", подпись = тёмный ? "#B9C0C7" : "#3D4B57";
+  const W = 600, H = 400, L = 64, R = 20, T = 14, B = 52, w = W - L - R, h = H - T - B;
+  const X = v => L + v / 24 * w, Y = v => T + h - (v - 50) / 50 * h;
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Цена решения: токены против доли проверок">`;
+  if (тема === 2) {          // штырьки опорной плиты вместо сетки: шаг 16 px
+    for (let x = L + 8; x < W - R; x += 16) for (let y = T + 8; y < T + h; y += 16)
+      s += `<circle cx="${x}" cy="${y}" r="3.2" fill="none" stroke="#1F2833" stroke-width="1.4"/>`;
+  }
+  s += `<line x1="${L}" y1="${T}" x2="${L}" y2="${T + h}" stroke="${оси}" stroke-width="1"/>`;
+  s += `<line x1="${L}" y1="${T + h}" x2="${W - R}" y2="${T + h}" stroke="${оси}" stroke-width="1"/>`;
+  for (let v = 50; v <= 100; v += 10) { s += `<line x1="${L - 5}" y1="${Y(v)}" x2="${L}" y2="${Y(v)}" stroke="${оси}"/>`;
+    s += `<text x="${L - 9}" y="${Y(v) + 4}" text-anchor="end" font-size="11.5" fill="${оси}">${v}%</text>`; }
+  for (let v = 0; v <= 24; v += 6) { s += `<line x1="${X(v)}" y1="${T + h}" x2="${X(v)}" y2="${T + h + 5}" stroke="${оси}"/>`;
+    s += `<text x="${X(v)}" y="${T + h + 20}" text-anchor="middle" font-size="11.5" fill="${оси}">${v}k</text>`; }
+  s += `<text x="${L + w / 2}" y="${H - 6}" text-anchor="middle" font-size="13" fill="${оси}" font-family="Segoe UI, Arial">Токены на сценарий</text>`;
+  s += `<text x="16" y="${T + h / 2}" text-anchor="middle" font-size="13" font-weight="600" fill="${оси}" font-family="Segoe UI, Arial" transform="rotate(-90 16 ${T + h / 2})">Проверок пройдено</text>`;
+  РЯДЫ.forEach(р => { const pts = р.т.map(([a, b]) => [X(a), Y(b)]);
+    if (pts.length > 1) s += `<polyline points="${pts.map(p => p.join(",")).join(" ")}" fill="none" stroke="${р.ц}" stroke-width="1.6"/>`;
+    pts.forEach(([x, y]) => s += деталь(р.деталь, x, y, р.ц)); });
+  s += "</svg>";
+  const legend = РЯДЫ.map(р => `<span><svg width="20" height="18" viewBox="0 0 20 18">${деталь(р.деталь, 10, 9, р.ц, 7)}</svg>${р.имя}</span>`).join("");
+  document.getElementById(id).innerHTML =
+    `<div class="tabs">${ВКЛАДКИ.map((t, i) => `<span class="tab ${i === 1 ? "on" : ""}">${t}</span>`).join("")}</div>
+     <div class="card">
+       <div class="top"><h3>Цена решения</h3><svg class="dl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg></div>
+       <div class="sel">Токены <svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 3.5 L5 6.5 L8 3.5" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+       <div class="legend">${legend}</div>
+       ${s}
+       <p class="cap">«Цена решения» сравнивает два режима на одних и тех же сценариях: NNL, где факты собирают блоки и ядро, а модель только пересказывает, и ту же модель без ядра. NNL + Groq проходит 100% проверок за 8,5 тыс. токенов; лучшая модель без ядра — 83% при 7,2 тыс.</p>
+       <div class="demo">демо-данные для макета · реальные точки появятся после прогона теста «наблюдение»</div>
+     </div>`;
+}
+карточка("p1", 1); карточка("p2", 2); карточка("p3", 3);
+</script>
+</body></html>

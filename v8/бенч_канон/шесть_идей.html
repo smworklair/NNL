@@ -1,0 +1,112 @@
+<title>NNL Bench · шесть идей</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  :root { --bg: #08090B; --ink: #ECEEF0; --mut: #8A9099; --y: #F2CD37; --y2: #B8901C; --b: #7DA6DB; --b2: #3F67A6; --r: #C91A09; --g: #237841;
+          --ui: "Onest", "Segoe UI", sans-serif; --mono: "JetBrains Mono", Consolas, monospace; color-scheme: dark; }
+  body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--ui); }
+  .wrap { max-width: 1440px; margin: 0 auto; padding-block: 32px 64px; padding-inline: 16px; }
+  h1 { font: 800 28px/1.1 var(--ui); margin: 0 0 6px; } .lead { color: var(--mut); margin: 0 0 28px; max-width: 70ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 620px), 1fr)); gap: 24px; }
+  figure { margin: 0; border-radius: 16px; overflow: hidden; border: 1px solid #23262B; display: flex; flex-direction: column; }
+  .art { padding: 20px; flex: 1; display: grid; place-items: center; min-height: 380px; }
+  .art svg { width: 100%; height: auto; display: block; }
+  figcaption { padding: 14px 20px 18px; background: #0E1013; border-top: 1px solid #23262B; }
+  figcaption b { font: 600 15px var(--ui); display: block; } figcaption span { color: var(--mut); font-size: 13px; }
+  .n { font: 600 12px var(--mono); color: var(--y); letter-spacing: .06em; }
+  svg text { font-family: var(--mono); }
+</style>
+<div class="wrap">
+  <h1>Шесть идей для бенч-страницы NNL</h1>
+  <p class="lead">Одни и те же демо-данные: четыре системы, цена в токенах и доля пройденных проверок. Каждая идея взята из реального приёма, где Lego уже работал как язык данных.</p>
+  <div class="grid">
+    <figure><div class="art" style="background:#E9EDF1" id="v1"></div><figcaption><span class="n">01 · КОРОБКА НАБОРА</span><b>Бенчмарк как коробка, на которой написано, что внутри</b><span>Номер набора = дата прогона, число деталей = токены, «возраст» = версия. На лицевой стороне — результат, на торце — оговорки, как «мелкие детали». По мотивам инфографики Brian Moore.</span></figcaption></figure>
+    <figure><div class="art" style="background:#DCE6EF" id="v2"></div><figcaption><span class="n">02 · ИНСТРУКЦИЯ БЕЗ СЛОВ</span><b>Каждая система — шаг сборки: какие детали потрачены и что получилось</b><span>Рамка «нужные детали» показывает цену (×N кирпичей по 1 тыс. токенов), справа — собранная модель высотой в качество. Язык инструкций Lego: числа и формы вместо текста.</span></figcaption></figure>
+    <figure><div class="art" style="background:#F5F6F7" id="v3"></div><figcaption><span class="n">03 · ISOTYPE ИЗ КИРПИЧЕЙ</span><b>Считать, а не оценивать на глаз</b><span>Слева серые кирпичи — потраченные токены (1 = 1 тыс.), справа жёлтые — пройденные проверки (1 = 5%). Сразу видно, кто тратит больше, а получает меньше. Метод Отто Нейрата, единица = деталь.</span></figcaption></figure>
+    <figure><div class="art" style="background:#1A1D21" id="v4"></div><figcaption><span class="n">04 · ФИЗИЧЕСКИЙ ГРАФИК</span><b>Диаграмма, собранная на опорной плите</b><span>Изометрия: плита = ось цены, высота колонны = качество. Как перестраиваемые 3D-графики из кирпичей у General Motors — его хочется «потрогать».</span></figcaption></figure>
+    <figure><div class="art" style="background:#050607" id="v5"></div><figcaption><span class="n">05 · МОЗАИКА LEGO ART</span><b>Композиция образца, выложенная круглыми плитками</b><span>Точки и линии квантуются на штырьки, поле — плита 60 × 34. Самый близкий к образцу вариант.</span></figcaption></figure>
+    <figure><div class="art" style="background:#101215" id="v6"></div><figcaption><span class="n">06 · ИЗ ЧЕГО СОБРАН ОТВЕТ</span><b>Стена цены: куда ушли токены у каждой системы</b><span>Каждый ряд — система, кирпич = 500 токенов, цвет = кто их потратил (разбор, вопросы, итог, речь). По мотивам «brick by brick» Accurat.</span></figcaption></figure>
+  </div>
+</div>
+<script>
+const СИС = [
+  {имя: "NNL + Groq", ток: 8.5, кач: 100, ц: "#F2CD37", роли: [2, 3, 2, 1.5]},
+  {имя: "NNL + Qwen", ток: 14.2, кач: 97, ц: "#B8901C", роли: [4, 4.5, 3.5, 2.2]},
+  {имя: "Qwen Max", ток: 7.2, кач: 83, ц: "#7DA6DB", роли: [0, 0, 5.2, 2]},
+  {имя: "Gemini Flash", ток: 4.1, кач: 70, ц: "#3F67A6", роли: [0, 0, 3, 1.1]},
+];
+const тон = (h, k) => { const n = parseInt(h.slice(1), 16), f = c => Math.max(0, Math.min(255, Math.round(c * k))).toString(16).padStart(2, "0"); return "#" + f(n >> 16) + f((n >> 8) & 255) + f(n & 255); };
+const svg = (id, w, h, body) => document.getElementById(id).innerHTML = `<svg viewBox="0 0 ${w} ${h}">${body}</svg>`;
+// кирпич сбоку: x, y = левый нижний
+const бок = (x, y, w, h, c, st = 2) => { let s = ""; const e = тон(c, .68);
+  for (let i = 0; i < st; i++) { const cx = x + w * (i + .5) / st, d = w / st * .55; s += `<rect x="${cx - d / 2}" y="${y - h - 3.5}" width="${d}" height="4.5" rx="1.2" fill="${c}" stroke="${e}"/>`; }
+  return s + `<rect x="${x}" y="${y - h}" width="${w}" height="${h}" rx="2" fill="${c}" stroke="${e}" stroke-width="1.1"/>`; };
+// изометрия
+const ISO = (ox, oy, u) => (x, y, z) => [ox + (x - y) * .866 * u, oy + (x + y) * .5 * u - z * u];
+const poly = p => p.map(q => q.map(v => v.toFixed(1)).join(",")).join(" ");
+function куб(P, x, y, z, w, d, h, c) { const e = тон(c, .62);
+  return `<polygon points="${poly([P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x, y + d, z + h)])}" fill="${тон(c, .82)}" stroke="${e}" stroke-width=".8"/>` +
+         `<polygon points="${poly([P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x + w, y, z + h)])}" fill="${тон(c, .66)}" stroke="${e}" stroke-width=".8"/>` +
+         `<polygon points="${poly([P(x, y, z + h), P(x + w, y, z + h), P(x + w, y + d, z + h), P(x, y + d, z + h)])}" fill="${c}" stroke="${e}" stroke-width=".8"/>`; }
+
+// 01 коробка
+(function () { let s = "";
+  s += `<rect x="40" y="20" width="520" height="340" rx="10" fill="#FFD43B"/><rect x="40" y="20" width="520" height="70" rx="10" fill="#111"/>`;
+  s += `<text x="64" y="66" font-family="Onest" font-weight="800" font-size="34" fill="#FFD43B">NNL</text><text x="150" y="52" font-size="12" fill="#ECEEF0">BENCH · ЦЕНА РЕШЕНИЯ</text><text x="150" y="70" font-size="11" fill="#9AA0A8">набор 13102026</text>`;
+  s += `<rect x="470" y="34" width="74" height="42" rx="6" fill="#ECEEF0"/><text x="507" y="62" text-anchor="middle" font-size="20" font-weight="600" fill="#111">18+</text>`;
+  // лицевая сторона: столбики-башни
+  СИС.forEach((d, i) => { const x = 80 + i * 92, n = Math.round(d.кач / 10); let y = 300;
+    for (let k = 0; k < n; k++) { s += бок(x, y, 56, 14, d.ц); y -= 15.5; }
+    s += `<text x="${x + 28}" y="${y - 12}" text-anchor="middle" font-size="13" font-weight="600" fill="#111">${d.кач}%</text><text x="${x + 28}" y="322" text-anchor="middle" font-size="10.5" fill="#3A2F00">${d.имя}</text>`; });
+  s += `<rect x="440" y="250" width="104" height="94" rx="8" fill="#111"/><text x="492" y="278" text-anchor="middle" font-size="26" font-weight="600" fill="#FFD43B">8 500</text><text x="492" y="298" text-anchor="middle" font-size="10" fill="#ECEEF0">токенов</text><text x="492" y="318" text-anchor="middle" font-size="10" fill="#9AA0A8">в наборе NNL + Groq</text>`;
+  s += `<path d="M454 110 L470 138 L438 138 Z" fill="#FFD43B" stroke="#111" stroke-width="2" stroke-linejoin="round"/><text x="454" y="134" text-anchor="middle" font-size="13" font-weight="600" fill="#111">!</text><text x="478" y="122" font-size="10" fill="#111">1 попытка</text><text x="478" y="136" font-size="10" fill="#111">демо-данные</text>`;
+  svg("v1", 600, 380, s); })();
+
+// 02 инструкция без слов
+(function () { let s = "";
+  СИС.forEach((d, i) => { const y0 = 18 + i * 92;
+    s += `<rect x="10" y="${y0}" width="40" height="40" rx="6" fill="#1B2A34"/><text x="30" y="${y0 + 28}" text-anchor="middle" font-size="22" font-weight="600" fill="#fff">${i + 1}</text>`;
+    s += `<rect x="62" y="${y0}" width="250" height="74" rx="10" fill="#fff" stroke="#1B2A34" stroke-width="2"/>`;
+    s += бок(80, y0 + 52, 36, 20, "#A0A5A9") + `<text x="126" y="${y0 + 46}" font-size="20" font-weight="600" fill="#1B2A34">${Math.round(d.ток)}×</text><text x="80" y="${y0 + 68}" font-size="9.5" fill="#6B7884">1 кирпич = 1 тыс. токенов</text>`;
+    s += `<path d="M322 ${y0 + 37} h40" stroke="#1B2A34" stroke-width="2.5"/><path d="M362 ${y0 + 30} l12 7 l-12 7 Z" fill="#1B2A34"/>`;
+    const n = Math.round(d.кач / 20); let y = y0 + 74;
+    for (let k = 0; k < n; k++) { s += бок(390, y, 46, 13, d.ц); y -= 14.5; }
+    s += `<text x="450" y="${y0 + 46}" font-size="18" font-weight="600" fill="#1B2A34">${d.кач}%</text><text x="450" y="${y0 + 64}" font-size="10.5" fill="#4A5A66">${d.имя}</text>`; });
+  svg("v2", 600, 390, s); })();
+
+// 03 ISOTYPE
+(function () { let s = `<text x="150" y="20" font-size="11" fill="#6B7884">потрачено, 1 = 1 тыс. токенов</text><text x="405" y="20" font-size="11" fill="#6B7884">пройдено, 1 = 5%</text>`;
+  СИС.forEach((d, i) => { const y = 64 + i * 82; s += `<text x="10" y="${y - 12}" font-size="12.5" font-weight="600" fill="#1B2A34" font-family="Onest">${d.имя}</text>`;
+    const t = Math.round(d.ток); for (let k = 0; k < t; k++) s += бок(150 + (k % 8) * 28 - 0, y + Math.floor(k / 8) * 18 - 4, 24, 12, "#A0A5A9", 1);
+    const q = Math.round(d.кач / 5); for (let k = 0; k < q; k++) s += бок(405 + (k % 10) * 18, y + Math.floor(k / 10) * 18 - 4, 15, 12, d.ц, 1); });
+  s += `<line x1="390" y1="30" x2="390" y2="370" stroke="#C8CDD2" stroke-dasharray="3 4"/>`;
+  svg("v3", 600, 380, s); })();
+
+// 04 физический график (изометрия)
+(function () { const P = ISO(120, 120, 13); let s = "";
+  s += `<polygon points="${poly([P(0, 0, 0), P(26, 0, 0), P(26, 10, 0), P(0, 10, 0)])}" fill="#5A5F66"/>`;
+  s += `<polygon points="${poly([P(0, 10, 0), P(26, 10, 0), P(26, 10, -.6), P(0, 10, -.6)])}" fill="#3E4248"/><polygon points="${poly([P(26, 0, 0), P(26, 10, 0), P(26, 10, -.6), P(26, 0, -.6)])}" fill="#33373C"/>`;
+  for (let x = .5; x < 26; x += 1) for (let y = .5; y < 10; y += 1) { const [a, b] = P(x, y, 0); s += `<ellipse cx="${a.toFixed(1)}" cy="${b.toFixed(1)}" rx="3.6" ry="2.1" fill="#6A7077"/>`; }
+  СИС.slice().sort((a, b) => a.ток - b.ток).forEach((d, i) => { const x = Math.round(d.ток / 16 * 22) + 1, y = 1 + i * 2, h = d.кач / 100 * 9;
+    s += куб(P, x, y, 0, 1.6, 1.6, h, d.ц); const [a, b] = P(x + .8, y + .8, h + .6); s += `<text x="${a}" y="${b - 4}" text-anchor="middle" font-size="11" font-weight="600" fill="#ECEEF0">${d.кач}%</text>`;
+    const [c, e] = P(x + 1.6, y + 1.6, 0); s += `<text x="${c + 6}" y="${e + 12}" font-size="10" fill="#B9C0C7">${d.имя} · ${d.ток}k</text>`; });
+  svg("v4", 600, 400, s); })();
+
+// 05 мозаика (мини)
+(function () { const C = 48, R = 26, cell = 11, L = 46, T = 10; let s = "";
+  const grid = Array.from({length: R}, () => Array(C).fill(null)), col = v => Math.round(v / 16 * (C - 1)), row = v => Math.round((100 - v) / 40 * (R - 1));
+  const set = (x, y, c) => { if (x >= 0 && x < C && y >= 0 && y < R) grid[y][x] = c; };
+  СИС.forEach(d => { const x = col(d.ток), y = row(d.кач); for (const [a, b] of [[0,0],[1,0],[-1,0],[0,1],[0,-1]]) set(x + a, y + b, d.ц); });
+  for (let y = 0; y < R; y++) for (let x = 0; x < C; x++) { const c = grid[y][x] || (x === 0 || y === R - 1 ? "#5B6068" : "#16181C");
+    s += `<circle cx="${L + x * cell + 5.5}" cy="${T + y * cell + 5.5}" r="4.6" fill="${c}"/>`; if (grid[y][x]) s += `<circle cx="${L + x * cell + 4}" cy="${T + y * cell + 4}" r="1.5" fill="#fff" opacity=".3"/>`; }
+  [60, 80, 100].forEach(v => s += `<text x="${L - 6}" y="${T + row(v) * cell + 9}" text-anchor="end" font-size="10" fill="#ECEEF0">${v}%</text>`);
+  [0, 8, 16].forEach(v => s += `<text x="${L + col(v) * cell + 5}" y="${T + R * cell + 16}" text-anchor="middle" font-size="10" fill="#ECEEF0">${v}k</text>`);
+  svg("v5", 600, 320, s); })();
+
+// 06 стена цены
+(function () { const роли = [["разбор", "#0055BF"], ["вопросы", "#237841"], ["итог", "#F2CD37"], ["речь", "#C91A09"]]; let s = "";
+  роли.forEach(([n, c], i) => s += бок(20 + i * 120, 30, 18, 11, c, 1) + `<text x="${44 + i * 120}" y="28" font-size="11" fill="#B9C0C7">${n}</text>`);
+  СИС.forEach((d, i) => { const y = 92 + i * 74; let x = 130; s += `<text x="16" y="${y - 6}" font-size="12" font-weight="600" fill="#ECEEF0" font-family="Onest">${d.имя}</text>`;
+    d.роли.forEach((v, r) => { const n = Math.round(v * 2); for (let k = 0; k < n; k++) { s += бок(x, y, 14, 18, роли[r][1], 1); x += 15; } });
+    s += `<text x="${x + 8}" y="${y - 5}" font-size="11.5" fill="#ECEEF0">${d.ток}k · ${d.кач}%</text>`; });
+  svg("v6", 600, 380, s); })();
+</script>

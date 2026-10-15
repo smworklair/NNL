@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NNL · Neural Network Lego</title><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 20'%3E%3Crect y='7' width='26' height='13' rx='2' fill='%23f1f1ef'/%3E%3Ccircle cx='7' cy='4' r='3.4' fill='%23f1f1ef'/%3E%3Ccircle cx='19' cy='4' r='3.4' fill='%23f5cf2e'/%3E%3C/svg%3E">
+<style>
+/* NNL. Идея оформления выведена из самого продукта, а не из шаблона:
+   88 статей Расписания = 88 «шипов» на базовой пластине конструктора. Пока разговора нет, шипы тусклые; по мере разговора ядро подсвечивает те статьи,
+   которые подходят человеку. Эта карта — главный визуальный объект и одновременно рабочий индикатор. Всё остальное нейтральное и тихое.
+   Основа цвета и размеров — по референсам пользователя: чёрный нейтральный фон, плоское поле ввода без градиентов и теней. */
+:root{
+  --bg:#121212;--raise:#1a1a1a;--raise2:#232323;--field:#1f1f1f;--hair:rgba(255,255,255,.09);--hover:rgba(255,255,255,.07);
+  --ink:#f1f1ef;--ink2:#b9b9b6;--mut:#85857f;--acc:#f5cf2e;--on-acc:#141414;
+  --ok:#5fd08a;--bad:#ff6b6b;--warn:#f5cf2e;--okb:rgba(95,208,138,.13);--badb:rgba(255,107,107,.13);--warnb:rgba(245,207,46,.13);
+  --кА:#5fd08a;--кБ:#5fd08a;--кБ3:#5fd08a;--кВ:#f5cf2e;--кГ:#ff9a4d;--кД:#ff6b6b;
+  --c1:#e8453c;--c2:#f5cf2e;--c3:#3b82f6;--c4:#34a853;--c5:#f1f1ef;--c6:#ff9a4d;--c7:#a074e0;--c8:#85857f;
+  --surf:var(--raise);--surf2:var(--raise2);--line:var(--hair);--sel:rgba(245,207,46,.1);--поле:var(--field);--acc2:rgba(245,207,46,.12);--doc:var(--acc);--docb:rgba(245,207,46,.12);
+  --шрифт:Aptos,"Segoe UI Variable Text","Segoe UI",sans-serif;--моно:"Cascadia Mono",Consolas,monospace;color-scheme:dark}
+@media(prefers-color-scheme:light){:root{
+  --bg:#f5f5f3;--raise:#ffffff;--raise2:#ecece9;--field:#ffffff;--hair:rgba(0,0,0,.1);--hover:rgba(0,0,0,.06);
+  --ink:#141414;--ink2:#4d4d4a;--mut:#8a8a85;--acc:#b8860b;--on-acc:#ffffff;
+  --ok:#237a47;--bad:#c62828;--warn:#8a6400;--okb:rgba(35,122,71,.1);--badb:rgba(198,40,40,.1);--warnb:rgba(138,100,0,.12);
+  --кА:#237a47;--кБ:#237a47;--кБ3:#237a47;--кВ:#8a6400;--кГ:#b4531a;--кД:#c62828;
+  --c1:#d32f2f;--c2:#e0a800;--c3:#1f5fcf;--c4:#2e8b57;--c5:#141414;--c6:#e8710a;--c7:#7048b8;--c8:#8a8a85;
+  --sel:rgba(184,134,11,.1);--acc2:rgba(184,134,11,.1);--docb:rgba(184,134,11,.1);color-scheme:light}}
+
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--шрифт);display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+button,select,input,textarea{font:inherit;color:inherit}button{cursor:pointer}[hidden]{display:none!important}
+::selection{background:color-mix(in srgb,var(--acc) 35%,transparent)}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+*{scrollbar-width:thin;scrollbar-color:rgba(127,127,127,.35) transparent}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:rgba(127,127,127,.32);border-radius:8px;border:3px solid transparent;background-clip:content-box}
+.мут{color:var(--mut)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.ч{font-variant-numeric:tabular-nums}
+
+/* ---------- шапка ---------- */
+header{height:56px;flex:none;display:flex;align-items:center;gap:28px;padding:0 20px}
+.лого{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:.04em;color:var(--ink)}
+.лого .знак{width:26px;height:20px;display:block}
+.лого i{width:6px;height:6px;border-radius:50%;background:var(--mut);display:block}.лого i.жив{background:var(--ok)}.лого i.нет{background:var(--bad)}
+nav{display:flex;gap:2px}
+nav button,.справа button{background:none;border:0;height:34px;padding:0 12px;border-radius:10px;color:var(--mut);white-space:nowrap}
+nav button:hover,.справа button:hover{background:var(--hover);color:var(--ink)}nav button.on,.справа button.on{background:var(--hover);color:var(--ink)}
+.справа{margin-left:auto;display:flex;gap:2px;align-items:center}.справа #новый{margin-right:8px}
+.экран{display:none;flex:1;min-height:0}.экран.on{display:flex}#э-диалог{overflow:hidden}
+
+/* ---------- диалог: одна колонка, без «первого экрана» ---------- */
+.колонка{flex:1;min-width:0;display:flex;flex-direction:column}
+.лентаОбёртка{flex:1;overflow:auto;padding:20px 28px 0}
+.лента{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:24px;padding-bottom:28px}
+.м.я{align-self:flex-end;max-width:80%;background:var(--raise2);padding:9px 16px;border-radius:18px;white-space:pre-wrap;word-wrap:break-word;line-height:1.55}
+.м.они{font-size:15.5px;line-height:1.7}
+.м.они p{margin:0 0 .9em;white-space:pre-wrap;word-wrap:break-word}.м.они p:last-child{margin-bottom:0}
+.м.они.приветствие{color:var(--ink2)}
+.м .мета{display:block;margin-top:12px;color:var(--mut);font-size:12.5px;font-variant-numeric:tabular-nums}
+.точки::after{content:"…";animation:мигать 1s infinite}@keyframes мигать{50%{opacity:.25}}
+a.ссылка{color:var(--acc);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;cursor:pointer;white-space:nowrap}
+a.ссылка:hover{text-decoration-thickness:2px}a.ссылка.плохая{color:var(--bad);text-decoration:line-through}
+.выдержка{margin:.5em 0 1em}
+.выдержка .пункт{display:grid;grid-template-columns:24px 1fr auto;gap:12px;align-items:baseline;padding:9px 0;font-size:14.5px;line-height:1.55;color:var(--ink2)}
+.выдержка .пункт+.пункт{border-top:1px solid var(--hair)}
+.выдержка .буква{color:var(--acc);font-weight:600}
+.кат{font-weight:700;font-variant-numeric:tabular-nums}
+.кат-А{color:var(--кА)}.кат-Б{color:var(--кБ)}.кат-Б-3{color:var(--кБ3)}.кат-В{color:var(--кВ)}.кат-Г{color:var(--кГ)}.кат-Д{color:var(--кД)}.кат-иное{color:var(--ink2)}
+
+/* ---------- поле ввода: референс Grok — плоское, чуть светлее фона, крупное скругление; ниже, чем раньше ---------- */
+.композерОбёртка{padding:6px 28px 14px}
+.композер{max-width:680px;margin:0 auto;display:flex;flex-direction:column;background:var(--field);border:1px solid var(--hair);border-radius:28px;padding:16px 10px 8px 22px}
+.композер:focus-within{border-color:rgba(127,127,127,.35)}
+.композер textarea{width:100%;border:0;outline:0;resize:none;background:none;max-height:220px;min-height:28px;padding:0 10px 8px 0;font-size:16px;line-height:1.5}
+.композер textarea::placeholder{color:var(--mut)}
+.композер .низ{display:flex;align-items:center;min-height:40px;margin-left:-8px}
+.растяжка{flex:1}
+.пилюля{background:none;border:0;border-radius:999px;height:34px;padding:0 12px 0 10px;color:var(--ink2);display:flex;align-items:center;gap:8px;font-size:14px}
+.пилюля:hover,.пилюля.on{background:var(--hover);color:var(--ink)}.пилюля .знак{width:15px;height:15px;flex:none}.пилюля .стр{width:9px;height:9px;opacity:.6}
+.круг{width:36px;height:36px;margin-left:6px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);display:grid;place-items:center;flex:none}
+.круг svg{width:17px;height:17px}.круг:hover:not(:disabled){transform:scale(1.05)}.круг:disabled{background:var(--hover);color:var(--mut);cursor:default}
+.подпись{max-width:680px;margin:8px auto 0;text-align:center;color:var(--mut);font-size:12px}
+
+/* ---------- меню ---------- */
+.меню{position:fixed;z-index:60;background:var(--raise2);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.35),0 0 0 1px var(--hair);padding:6px;min-width:260px;max-height:72vh;overflow:auto}
+.меню .п{display:flex;align-items:center;gap:14px;padding:9px 12px;border-radius:10px;cursor:pointer}.меню .п:hover{background:var(--hover)}
+.меню .п .т{flex:1;min-width:0}.меню .п .под{display:block;color:var(--mut);font-size:12.5px;line-height:1.35;margin-top:1px}
+.меню .п .пр{color:var(--mut);font-size:13px;min-width:14px;text-align:right}.меню .п .пр.гал{color:var(--acc)}
+.меню .раздел{padding:10px 12px 4px;color:var(--mut);font-size:12px}
+.меню hr{border:0;border-top:1px solid var(--hair);margin:6px 4px}.меню input{width:100%;margin:2px 0 6px}
+
+/* ---------- панель справа: карта статей + доказательства / документ ---------- */
+.панель{width:min(42%,580px);flex:none;display:flex;flex-direction:column;min-height:0;background:var(--raise);margin:0 12px 12px 0;border-radius:22px;overflow:hidden}
+@media(max-width:900px){.панель{position:absolute;inset:0;width:auto;margin:0;border-radius:0;z-index:40}}
+.вкл{display:flex;gap:2px;padding:10px 12px 4px}
+.вкл button{background:none;border:0;height:32px;padding:0 12px;border-radius:9px;color:var(--mut)}.вкл button:hover{color:var(--ink)}.вкл button.on{background:var(--hover);color:var(--ink)}.вкл .закр{margin-left:auto}
+.вид{flex:1;min-height:0;display:none;flex-direction:column}.вид.on{display:flex}
+.прокрутка{flex:1;overflow:auto;padding:12px 22px 22px}
+.секция{margin-bottom:26px}.секция h3{margin:0 0 10px;font-size:12px;font-weight:500;color:var(--mut)}
+.секция .строкаФакт{display:flex;gap:10px;padding:2px 0;font-size:14px}.секция .строкаФакт b{font-weight:400;color:var(--mut);min-width:128px}
+/* карта статей: 88 шипов, 11 × 8 */
+#карта88{display:block}#карта88 svg{width:100%;height:auto;display:block}
+#карта88 .шип{cursor:pointer;transition:opacity .35s,fill .35s}
+.подКартой{display:flex;justify-content:space-between;gap:12px;margin-top:10px;font-size:12.5px;color:var(--mut)}
+.вер{display:grid;grid-template-columns:34px minmax(0,1fr) 38px;gap:10px;align-items:start;margin:0 0 12px}
+.вер .номер{font-variant-numeric:tabular-nums;font-weight:600;color:var(--acc);cursor:pointer}
+.вер-имя{font-size:13.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:6px}.вер.первая .вер-имя{color:var(--ink)}
+.вер-знач{font-variant-numeric:tabular-nums;color:var(--mut);text-align:right;font-size:13.5px}.вер.первая .вер-знач{color:var(--ink)}
+.полоса{height:3px;background:var(--hover);border-radius:2px;overflow:hidden}.полоса i{display:block;height:100%;background:var(--acc);border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+td,th{padding:8px 10px 8px 0;text-align:left;vertical-align:top;border-bottom:1px solid var(--hair)}
+th{color:var(--mut);font-size:12px;font-weight:500;white-space:nowrap}td.ч,th.ч{text-align:right}
+.итого{display:grid;grid-template-columns:1fr auto;gap:6px 16px;font-size:14px}.итого b{font-weight:500;font-variant-numeric:tabular-nums}
+
+/* ---------- читалка ---------- */
+.поискБлок{padding:6px 22px 12px;display:grid;gap:8px}
+input[type=text],textarea.поле,select{background:var(--bg);border:1px solid transparent;border-radius:12px;padding:9px 12px;outline:0}
+input[type=text]:focus,textarea.поле:focus,select:focus{border-color:var(--hair)}
+.списокСтатей{max-height:136px;overflow:auto;border-radius:12px;background:var(--bg)}
+.списокСтатей div{padding:7px 12px;cursor:pointer;font-size:13.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.списокСтатей div:hover,.списокСтатей div.on{background:var(--hover);color:var(--ink)}
+#ок-тело h3{margin:0 0 14px;font-size:19px;line-height:1.3;font-weight:600}
+#ок-тело h3 span{display:block;font-size:12.5px;font-weight:500;color:var(--acc);margin-bottom:4px}
+tr.выбран td{background:var(--sel)}td.г1{white-space:nowrap}td.гд{color:var(--mut);font-size:12px}
+.описание,.примечание{line-height:1.6}
+mark{background:color-mix(in srgb,var(--acc) 40%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.вопросБлок{background:var(--raise2);padding:12px 22px 16px;display:grid;gap:8px;max-height:46%;overflow:auto}.вопросБлок textarea{width:100%;resize:none}
+.плав{position:fixed;z-index:70;display:none;gap:4px;background:var(--raise2);border-radius:12px;padding:4px;box-shadow:0 8px 28px rgba(0,0,0,.4),0 0 0 1px var(--hair)}
+.цитата{border-left:2px solid var(--hair);padding:2px 12px;margin:8px 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}.цитата.ok{border-color:var(--ok)}.цитата.bad{border-color:var(--bad)}
+#вид-читалка.безСтатьи .поискБлок{flex:1;min-height:0;grid-template-rows:auto minmax(0,1fr)}
+#вид-читалка.безСтатьи .списокСтатей{max-height:none;height:100%}
+#вид-читалка.безСтатьи #ок-тело,#вид-читалка.безСтатьи .вопросБлок{display:none}
+
+/* ---------- кнопки, значки ---------- */
+.кнопка,.чип{border:0;background:var(--hover);color:var(--ink);border-radius:10px;height:34px;padding:0 15px}
+.кнопка:hover,.чип:hover{background:color-mix(in srgb,var(--ink) 14%,transparent)}.кнопка:disabled{opacity:.5;cursor:default}
+.кнопка.гл{background:var(--ink);color:var(--bg)}.кнопка.гл:hover{background:var(--ink);opacity:.88}
+.чип{height:28px;padding:0 11px;font-size:13px;border-radius:8px}
+.строка{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.бейдж{display:inline-block;padding:1px 9px;border-radius:99px;font-size:12.5px}.бейдж.ok{background:var(--okb)}.бейдж.bad{background:var(--badb)}.бейдж.warn{background:var(--warnb)}
+
+/* ---------- бенчмарки и система ---------- */
+.страница{flex:1;overflow:auto;padding:24px 32px 48px}.страница>.внутри{max-width:1320px;margin:0 auto}
+.бенч{display:grid;grid-template-columns:340px minmax(0,1fr);gap:32px}@media(max-width:1000px){.бенч{grid-template-columns:1fr}}
+.левая{display:grid;gap:26px;align-content:start}
+.левая h3,.карта h3{margin:0 0 10px;font-size:12px;font-weight:500;color:var(--mut);display:flex;justify-content:space-between;gap:8px;align-items:center}
+.карта{background:var(--raise);border-radius:20px;padding:18px 20px}
+.список{max-height:300px;overflow:auto;border-radius:14px;background:var(--raise);padding:8px 14px;display:grid;gap:4px}
+.список label{display:flex;gap:10px;align-items:center;font-size:13.5px;cursor:pointer;padding:2px 0}.список label input{accent-color:var(--acc)}
+.список .гр{font-size:12px;color:var(--mut);margin-top:10px}
+.тест{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14px}.тест small{display:block;color:var(--mut);font-size:12.5px;line-height:1.45;margin-top:1px}.тест input{accent-color:var(--acc);margin-top:4px}
+.прогресс{height:4px;background:var(--hover);border-radius:3px;overflow:hidden}.прогресс i{display:block;height:100%;background:var(--acc);transition:width .3s}
+.графики{display:grid;grid-template-columns:repeat(auto-fit,minmax(440px,1fr));gap:16px;margin-top:16px}
+.график svg{width:100%;height:auto;display:block;border-radius:12px}
+.ячейка{padding:1px 9px;border-radius:7px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.дельта.плюс{color:var(--ok)}.дельта.минус{color:var(--bad)}
+.двеКолонки{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:32px}@media(max-width:1000px){.двеКолонки{grid-template-columns:1fr}}
+
+</style></head><body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="знак" viewBox="0 0 26 20"><rect x="0" y="7" width="26" height="13" rx="2" fill="currentColor"/><circle cx="7" cy="4" r="3.4" fill="currentColor"/><circle cx="19" cy="4" r="3.4" fill="var(--acc)"/></symbol></defs></svg><header><span class="лого" title="NNL, Neural Network Lego"><svg class="знак"><use href="#знак"/></svg>NNL<i id="состояние" title="проверяю связь"></i></span>
+<nav id="вкладки"><button data-в="диалог" class="on">Диалог</button><button data-в="бенч">Бенчмарки</button><button data-в="система">Система</button></nav>
+<div class="справа" id="панелиКнопки"><button id="новый">Новый диалог</button><button data-п="ядро">Ядро</button><button data-п="читалка">Расписание</button></div></header>
+
+<!-- ================= ДИАЛОГ ================= -->
+<div class="экран on" id="э-диалог">
+ <div class="колонка">
+  <div class="лентаОбёртка" id="прокрутка"><div class="лента" id="лента"></div></div>
+  <div class="композерОбёртка"><div class="композер">
+   <textarea id="реплика" rows="1" placeholder="Например: у окулиста нашли близорукость −7 на оба глаза"></textarea>
+   <div class="низ"><button class="пилюля" id="режимКнопка"></button><span class="растяжка"></span><button class="пилюля" id="модельКнопка"></button>
+    <button class="круг" id="отпр" aria-label="Отправить" disabled><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg></button></div>
+  </div><div class="подпись" id="подпись">Это опора для визита к врачу, а не диагноз</div></div>
+ </div>
+ <aside class="панель" id="панель" hidden>
+  <div class="вкл"><button data-п="ядро">Ядро</button><button data-п="читалка">Расписание</button><button class="закр" id="панельЗакрыть" aria-label="Закрыть">✕</button></div>
+  <div class="вид" id="вид-ядро"><div class="прокрутка">
+   <div class="секция"><h3>Карта статей</h3><div id="карта88"></div><div class="подКартой"><span id="карта-итог"></span><span>каждый шип — одна статья</span></div></div>
+   <div class="секция"><h3>Решение ядра</h3><div id="решение" class="мут">пока ничего не спрашивали</div></div>
+   <div class="секция"><h3>Статьи: вероятность, что относится к человеку</h3><div id="рейтинг" class="мут">—</div></div>
+   <div class="секция"><h3>Выбор следующего вопроса</h3><div id="выбор" class="мут">—</div></div>
+   <div class="секция"><h3>Последние улики</h3><div id="улики" class="мут">—</div></div>
+   <div class="секция"><h3>Вызовы моделей (этот ход)</h3><div id="вызовы" class="мут">—</div></div>
+   <div class="секция"><h3>Охрана чисел и ссылок</h3><div id="охрана" class="мут">—</div></div>
+   <div class="секция"><h3>Итого за диалог (измерено)</h3><div id="итого" class="итого"></div></div>
+  </div></div>
+  <div class="вид безСтатьи" id="вид-читалка">
+   <div class="поискБлок"><input type="text" id="ок-поиск" placeholder="Поиск по названию и тексту статей"><div class="списокСтатей" id="ок-список"></div></div>
+   <div class="прокрутка" id="ок-тело"><div class="мут">Выберите статью. Выделите фрагмент, и появится кнопка «Спросить». Ссылки вида «ст. 34 п. «в»» в ответах открывают нужное место здесь.</div></div>
+   <div class="вопросБлок">
+    <div id="ок-выделено" class="мут" style="font-size:13px" hidden></div>
+    <textarea class="поле" id="ок-вопрос" rows="2" placeholder="Вопрос по этой статье. Модель отвечает только по её тексту и цитирует его"></textarea>
+    <div class="строка"><button class="кнопка гл" id="ок-спросить">Спросить</button><button class="кнопка" id="ок-вдиалог">В диалог</button><span class="мут" id="ок-инфо" style="font-size:12.5px"></span></div>
+    <div id="ок-ответ"></div></div>
+  </div>
+ </aside>
+</div>
+
+<!-- ================= БЕНЧМАРКИ ================= -->
+<div class="экран" id="э-бенч"><div class="страница"><div class="внутри"><div class="бенч">
+ <div class="левая">
+  <div><h3>1. Что сравнить <span class="строка"><button class="чип" id="б-все">с ключом</button><button class="чип" id="б-быстро">быстрая выборка</button><button class="чип" id="б-никого">очистить</button></span></h3>
+   <input type="text" id="б-найти" placeholder="Найти модель" style="width:100%;margin-bottom:6px"><div class="список" id="б-кандидаты"></div>
+   <div class="строка" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="б-свой" placeholder="провайдер:модель или a|b" style="flex:1;min-width:0"><button class="чип" id="б-добавить">добавить</button></div>
+   <div class="мут" style="font-size:12.5px;margin-top:6px">Набор — модели по ролям. Участвует только в тесте «Вся система».</div></div>
+  <div><h3>2. Какие тесты</h3><div id="б-тесты"></div>
+   <div class="строка" style="margin-top:8px;flex-wrap:nowrap"><input type="text" id="б-метка" placeholder="метка прогона" style="flex:1;min-width:0"><button class="кнопка гл" id="б-пуск">Запустить</button></div>
+   <div style="margin-top:10px" id="б-ход" hidden><div class="прогресс"><i id="б-полоса" style="width:0"></i></div><div class="мут" id="б-текст" style="margin-top:5px;font-size:12.5px"></div></div></div>
+  <div><h3>Прошлые прогоны <button class="чип" id="б-обновить">обновить</button></h3><div id="б-история" class="мут">—</div></div>
+ </div>
+ <div id="б-итоги"><div class="карта мут">Выберите модели и тесты слева и нажмите «Запустить». Истина в тестах считается кодом из текста документа, а не моделью-судьёй. Результаты сохраняются в <code>NNL/диалог/результаты_бенч/</code>.</div></div>
+</div></div></div></div>
+
+<!-- ================= СИСТЕМА ================= -->
+<div class="экран" id="э-система"><div class="страница"><div class="внутри"><div class="двеКолонки">
+ <div style="display:grid;gap:22px;align-content:start">
+  <div><div class="строка" style="justify-content:space-between"><b>Провайдеры</b><button class="чип" id="с-обновить">обновить</button></div><div id="с-пров" style="margin-top:8px"></div></div>
+  <div><div class="строка" style="justify-content:space-between"><b>Последние вызовы моделей</b><button class="чип" id="с-csv">CSV</button></div><div id="с-журнал" style="margin-top:8px;max-height:60vh;overflow:auto"></div></div>
+ </div>
+ <div style="display:grid;gap:22px;align-content:start">
+  <div><b>Устройство ответа</b><div style="font-size:13.5px;line-height:1.6;margin-top:8px"><b>1.</b> Разбор реплики в факты (быстрая модель).<br><b>2.</b> Ядро: байесовское обновление по 88 статьям, выбор вопроса по информационному выигрышу, остановка.<br><b>3.</b> Вопрос или итог пишет модель, только из текста статей.<br><b>4.</b> Охрана: числа с единицами сверяются с документом, ссылки на статьи с реестром, категория звучит только с подтверждением врача.<br><b>5.</b> Все цифры на этой странице измерены в вашем запуске.</div></div>
+  <div><b>Ключи</b><div id="с-ключи" class="мут" style="margin-top:8px">—</div></div>
+ </div>
+</div></div></div></div>
+
+<div class="плав" id="плав"><button class="чип" id="пл-спросить">Спросить</button><button class="чип" id="пл-диалог">В диалог</button></div>
+<div class="меню" id="меню" hidden></div><div class="меню" id="меню2" hidden></div>
+
+<script>
+const $=id=>document.getElementById(id);
+const el=(tag,attrs,...kids)=>{const e=document.createElement(tag);if(attrs)for(const[k,v]of Object.entries(attrs)){if(v==null)continue;if(k==='class')e.className=v;else if(k==='текст')e.textContent=v;else if(k.startsWith('on'))e[k]=v;else e.setAttribute(k,v)}kids.flat().forEach(x=>{if(x!=null)e.append(x.nodeType?x:document.createTextNode(String(x)))});return e};
+const LS={get(k,def){try{const v=localStorage.getItem(k);return v==null?def:JSON.parse(v)}catch(e){return def}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const J=async(u,body)=>{const r=await fetch(u,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:undefined);return r.json()};
+const цвет=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const РОЛИ_ИМЕНА=['разбор','вопросы','итог','речь','базовая'];
+let МОДЕЛИ={модели:[],пресеты:{}},конфиг={},выбор=null,режим='ядро',сессия=null,счёт={};
+
+/* ---------- названия ---------- */
+const ИМЕНА={'alibaba:qwen3.8-flash':'Qwen 3.8 Flash','alibaba:qwen3.7-max':'Qwen 3.7 Max','alibaba:qwen3.8-max':'Qwen 3.8 Max','alibaba:qwen3.8-27b':'Qwen 3.8 27B','groq:openai/gpt-oss-120b':'GPT-OSS 120B · Groq','groq:openai/gpt-oss-20b':'GPT-OSS 20B · Groq','groq:qwen/qwen3.8-27b':'Qwen 3.8 27B · Groq','gemini:gemini-3.1-flash-lite':'Gemini 3.1 Flash-Lite','gemini:gemini-3.8-flash':'Gemini 3.8 Flash','gemini:gemini-2.5-flash':'Gemini 2.5 Flash'};
+const СЛОВА={gpt:'GPT',oss:'OSS',llama:'Llama',gemini:'Gemini',gemma:'Gemma',qwen:'Qwen',flash:'Flash',lite:'Lite',pro:'Pro',max:'Max',plus:'Plus',turbo:'Turbo',coder:'Coder',instruct:'Instruct',preview:'Preview',mini:'Mini',nano:'Nano',thinking:'Thinking',deepseek:'DeepSeek',kimi:'Kimi',glm:'GLM',moe:'MoE',vl:'VL',omni:'Omni'};
+function красиво(id){if(ИМЕНА[id])return ИМЕНА[id];const м=id.replace(/^[^:]+:/,'').replace(/^.*\//,'');
+ return м.split(/[-_]/).map(т=>{const l=т.toLowerCase();if(СЛОВА[l])return СЛОВА[l];const a=l.match(/^([a-z]+)(\d[\d.]*)$/);if(a)return (СЛОВА[a[1]]||a[1][0].toUpperCase()+a[1].slice(1))+' '+a[2];if(/^\d[\d.]*b$/.test(l)||/^a\d[\d.]*b$/.test(l))return l.toUpperCase();if(/^\d/.test(l))return l;return l[0].toUpperCase()+l.slice(1)}).join(' ')}
+const провайдерИмя=п=>({alibaba:'Alibaba (Qwen)',groq:'Groq',gemini:'Google Gemini'})[п]||п;
+const ИЗБРАННЫЕ=['alibaba:qwen3.8-flash','alibaba:qwen3.7-max','groq:openai/gpt-oss-120b','gemini:gemini-3.1-flash-lite'];
+const РЕЖИМЫ=[{id:'nnl',имя:'NNL',под:'Только ядро, без моделей'},{id:'ядро',имя:'NNL + API',под:'Ядро решает, модель говорит'},{id:'база',имя:'API',под:'Только модель, без ядра'}];
+
+/* ---------- роли из выбора ---------- */
+function роли(){if(!выбор)return конфиг.роли;if(выбор.тип==='пресет')return МОДЕЛИ.пресеты[выбор.имя];const[п,...о]=выбор.id.split(':');const пара=[п,о.join(':')];return Object.fromEntries(РОЛИ_ИМЕНА.map(р=>[р,пара]))}
+function подписьМодели(){if(!выбор)return'—';return выбор.тип==='пресет'?'Набор «'+выбор.имя+'»':красиво(выбор.id)}
+const стрелка='<svg class="стр" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3.5 5 6.5 8 3.5"/></svg>';
+const ЗНАКИ={nnl:'<circle cx="8" cy="8" r="5.6"/><circle cx="8" cy="8" r="1.8" fill="currentColor" stroke="none"/>',ядро:'<circle cx="6" cy="8" r="4.2"/><circle cx="10.4" cy="8" r="4.2"/>',база:'<path d="M5.8 2.8c-1.6 0-1.8 1-1.8 2.3S4 7.6 2.8 8c1.2.4 1.2 1.1 1.2 2.9s.2 2.3 1.8 2.3M10.2 2.8c1.6 0 1.8 1 1.8 2.3S12 7.6 13.2 8c-1.2.4-1.2 1.1-1.2 2.9s-.2 2.3-1.8 2.3"/>'};
+const значок=р=>'<svg class="знак" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'+ЗНАКИ[р]+'</svg>';
+function обновитьПилюли(){const р=РЕЖИМЫ.find(x=>x.id===режим);$('режимКнопка').innerHTML=значок(режим);$('режимКнопка').append(р.имя);$('режимКнопка').insertAdjacentHTML('beforeend',стрелка);
+ $('модельКнопка').hidden=режим==='nnl';$('модельКнопка').textContent=подписьМодели();$('модельКнопка').insertAdjacentHTML('beforeend',стрелка);
+ $('подпись').textContent=режим==='nnl'?'Ядро работает без моделей: считает статьи и показывает критерии из документа':'Это опора для визита к врачу, а не диагноз'}
+
+/* ---------- всплывающие меню ---------- */
+let меню={якорь:null,пункты:[]};
+function закрытьМеню(){$('меню').hidden=true;$('меню2').hidden=true;if(меню.якорь)меню.якорь.classList.remove('on');меню.якорь=null}
+function строкиМеню(контейнер,пункты,вложенный){контейнер.textContent='';пункты.forEach((п,i)=>{
+ if(п.раздел){контейнер.append(el('div',{class:'раздел',текст:п.раздел}));return}
+ if(п.разделитель){контейнер.append(el('hr'));return}
+ const правая=п.вложенное?el('span',{class:'пр',текст:'›'}):el('span',{class:'пр'+(п.выбрано?' гал':''),текст:п.выбрано?'✓':(п.номер||'')});
+ const r=el('div',{class:'п'},el('div',{class:'т'},п.текст,п.под?el('span',{class:'под',текст:п.под}):null),правая);
+ r.onclick=e=>{e.stopPropagation();if(п.вложенное){открытьВложенное(r,п.вложенное,п.поиск)}else{закрытьМеню();if(п.действие)п.действие()}};
+ if(п.вложенное)r.onmouseenter=()=>открытьВложенное(r,п.вложенное,п.поиск);else if(!вложенный)r.onmouseenter=()=>{$('меню2').hidden=true};
+ контейнер.append(r)})}
+function открытьВложенное(строка,пункты,поиск){const м=$('меню2');
+ if(!поиск){строкиМеню(м,пункты,true);позиция(м,строка,'право');return}
+ m_поиск(м,пункты,строка)}
+function m_поиск(м,пункты,строка){m_рисовать(м,пункты,'');позиция(м,строка,'право')}
+function m_рисовать(м,пункты,запрос){м.textContent='';const q=запрос.toLowerCase();const поле=el('input',{type:'text',placeholder:'Найти модель',style:'width:100%;margin:2px 0 6px'});поле.value=запрос;
+ const список=el('div',{style:'max-height:52vh;overflow:auto'});
+ const показать=()=>{const f=поле.value.toLowerCase();const внутри=пункты.filter(п=>п.раздел||!f||(п.текст||'').toLowerCase().includes(f));
+  // разделы без моделей не показываем
+  const чистые=[];внутри.forEach((п,i)=>{if(п.раздел){const след=внутри[i+1];if(след&&!след.раздел)чистые.push(п)}else чистые.push(п)});строкиМеню(список,чистые,true)};
+ поле.oninput=показать;м.append(поле,список);показать();setTimeout(()=>поле.focus(),0)}
+function позиция(м,якорь,куда){м.hidden=false;const r=якорь.getBoundingClientRect(),w=м.offsetWidth,h=м.offsetHeight;
+ let x=куда==='право'?r.right+6:Math.min(r.left,innerWidth-w-8),y=куда==='право'?Math.min(r.top-6,innerHeight-h-8):r.top-h-8;
+ if(куда==='право'&&x+w>innerWidth-8)x=r.left-w-6;м.style.left=Math.max(8,x)+'px';м.style.top=Math.max(8,y)+'px'}
+function открытьМеню(якорь,пункты){if(меню.якорь===якорь){закрытьМеню();return}закрытьМеню();меню.якорь=якорь;якорь.classList.add('on');меню.пункты=пункты;строкиМеню($('меню'),пункты);позиция($('меню'),якорь,'вверх')}
+document.addEventListener('mousedown',e=>{if(!e.target.closest('.меню')&&!e.target.closest('.пилюля'))закрытьМеню()});
+document.addEventListener('keydown',e=>{if($('меню').hidden)return;if(e.key==='Escape')закрытьМеню();else if(/^[1-9]$/.test(e.key)){const x=меню.пункты.find(y=>y.номер==e.key);if(x){закрытьМеню();x.действие()}}});
+$('режимКнопка').onclick=()=>открытьМеню($('режимКнопка'),РЕЖИМЫ.map(р=>({текст:р.имя,под:р.под,выбрано:р.id===режим,действие:()=>сменитьРежим(р.id)})));
+$('модельКнопка').onclick=()=>{const есть=new Set(МОДЕЛИ.модели.filter(м=>м.ключ).map(м=>м.id));const избр=ИЗБРАННЫЕ.filter(id=>есть.has(id));
+ const пунктМодели=(id,номер)=>({текст:красиво(id),выбрано:!!выбор&&выбор.тип==='модель'&&выбор.id===id,номер,действие:()=>выбратьМодель({тип:'модель',id})});
+ const другие=[{раздел:'Наборы по ролям'}].concat(Object.keys(МОДЕЛИ.пресеты).map(н=>({текст:'Набор «'+н+'»',под:'разбор · вопросы · итог · речь',выбрано:!!выбор&&выбор.тип==='пресет'&&выбор.имя===н,действие:()=>выбратьМодель({тип:'пресет',имя:н})})));
+ const по={};МОДЕЛИ.модели.filter(м=>м.ключ&&!избр.includes(м.id)).forEach(м=>(по[м.провайдер]=по[м.провайдер]||[]).push(м));
+ Object.entries(по).forEach(([п,мс])=>{другие.push({раздел:провайдерИмя(п)+' · '+мс.length});мс.forEach(м=>другие.push(пунктМодели(м.id)))});
+ открытьМеню($('модельКнопка'),избр.map((id,i)=>пунктМодели(id,i+1)).concat([{разделитель:1},{текст:'Другие модели',под:(МОДЕЛИ.модели.filter(м=>м.ключ).length-избр.length)+' шт., с поиском',вложенное:другие,поиск:true}]))};
+function выбратьМодель(в){выбор=в;LS.set('выбор',в);обновитьПилюли()}
+function сменитьРежим(р){if(р===режим)return;режим=р;LS.set('режим',р);обновитьПилюли();сброс()}
+
+/* ---------- панели справа ---------- */
+let активнаяПанель=null;
+function показатьПанель(имя){активнаяПанель=имя;$('панель').hidden=!имя;document.querySelectorAll('#панелиКнопки button[data-п]').forEach(b=>b.classList.toggle('on',b.dataset.п===имя));
+ document.querySelectorAll('.вкл button[data-п]').forEach(b=>b.classList.toggle('on',b.dataset.п===имя));document.querySelectorAll('.вид').forEach(v=>v.classList.toggle('on',v.id==='вид-'+имя));
+ if(имя==='читалка'&&!статьиСписок.length)загрузитьСписок()}
+document.querySelectorAll('#панелиКнопки button[data-п]').forEach(b=>b.onclick=()=>показатьПанель(активнаяПанель===b.dataset.п?null:b.dataset.п));
+document.querySelectorAll('.вкл button[data-п]').forEach(b=>b.onclick=()=>показатьПанель(b.dataset.п));$('панельЗакрыть').onclick=()=>{LS.set('панельЗакрыта',true);показатьПанель(null)};
+
+/* ---------- вкладки страницы ---------- */
+document.querySelectorAll('#вкладки button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#вкладки button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.экран').forEach(e=>e.classList.toggle('on',e.id==='э-'+b.dataset.в));
+ $('панелиКнопки').hidden=b.dataset.в!=='диалог';if(b.dataset.в==='бенч')бенчОткрыть();if(b.dataset.в==='система')системаОбновить()});
+
+/* ---------- текст со ссылками на статьи ---------- */
+const РЕФ=/(?:ст\.|статья|статьи|статье|статью|статей)\s*(\d{1,2}(?:\s*(?:,|и)\s*\d{1,2})*)(?:\s*,?\s*п(?:\.|ункт\w*)\s*[«"]?([а-е])[»"]?)?/gi;
+function жирный(t,род){t.split(/(\*\*[^*]+\*\*)/).forEach(ч=>{if(ч.startsWith('**')&&ч.endsWith('**')&&ч.length>4)род.append(el('strong',{текст:ч.slice(2,-2)}));else род.append(document.createTextNode(ч))})}
+function сСсылками(род,t,ссылки){let посл=0,m;РЕФ.lastIndex=0;ссылки=ссылки||[];
+ while((m=РЕФ.exec(t))){жирный(t.slice(посл,m.index),род);const номера=m[1].match(/\d+/g),буква=(m[2]||'').toLowerCase();
+  const плохие=номера.map(н=>ссылки.find(с=>с.статья===н&&(с.пункт||'')===(н===номера[номера.length-1]?буква:''))).filter(с=>с&&!с.ок);
+  const a=el('a',{class:'ссылка'+(плохие.length?' плохая':''),текст:m[0],title:плохие.length?плохие.map(с=>с.причина).join('; '):(ссылки.find(с=>с.статья===номера[0])||{}).название?('Ст. '+номера[0]+'. '+ссылки.find(с=>с.статья===номера[0]).название):'открыть в Расписании'});
+  a.onclick=()=>открытьСтатью(номера[0],номера.length===1?буква:'');род.append(a);посл=m.index+m[0].length}
+ жирный(t.slice(посл),род)}
+
+/* ---------- диалог ---------- */
+const ленты=()=>$('лента');
+function прокрутить(){$('прокрутка').scrollTop=$('прокрутка').scrollHeight}
+const колонкаЭл=()=>document.querySelector('.колонка');
+function сообщениеЯ(t){ленты().append(el('div',{class:'м я',текст:t}));прокрутить()}
+function тегКат(t){const m=(t||'').match(/^(Б-3|А|Б|В|Г|Д)/);return el('span',{class:'кат кат-'+(m?m[1]:'иное'),текст:(t||'—').trim()})}
+function рисоватьОтвет(род,t,ссылки){let абзац=[],выд=null;
+ const сброс=()=>{if(абзац.length){const p=el('p');сСсылками(p,абзац.join('\n'),ссылки);род.append(p);абзац=[]}};
+ t.split('\n').forEach(l=>{const m=l.match(/^\s+п\.\s*«([а-е])»:\s*(.*?)(?:\s*→\s*категория\s+(\S+))?\s*$/);
+  if(m){сброс();if(!выд){выд=el('div',{class:'выдержка'});род.append(выд)}выд.append(el('div',{class:'пункт'},el('span',{class:'буква',текст:m[1]}),el('span',{текст:m[2]}),m[3]?тегКат(m[3]):el('span')))}
+  else{выд=null;if(l.trim()==='')сброс();else абзац.push(l)}});сброс()}
+function сообщениеОни(t,мета,ссылки){const d=el('div',{class:'м они'});рисоватьОтвет(d,t,ссылки);if(мета)d.append(el('span',{class:'мета',текст:мета}));ленты().append(d);прокрутить();return d}
+const ПРИВЕТСТВИЯ={nnl:'Без моделей: ядро посчитает, какие статьи подходят к вашим словам, и покажет критерии из документа.',
+ ядро:'Расскажите своими словами. Ядро сверит это с Расписанием болезней и подскажет, что уточнить у врача.',
+ база:'Отвечает одна модель, без ядра и без документа. Режим нужен для сравнения.'};
+const приветствие=()=>el('div',{class:'м они приветствие',текст:ПРИВЕТСТВИЯ[режим]});
+function сброс(){сессия=crypto.randomUUID();счёт={х:0,мс:0,вызовов:0,токены:0,чужие:0,ссылок:0,битых:0};ленты().textContent='';ленты().append(el('div',{class:'м они приветствие',текст:ПРИВЕТСТВИЯ[режим]}));рисоватьПоле(null);итоги();
+ ['решение','рейтинг','выбор','улики','вызовы','охрана'].forEach(i=>{$(i).textContent='—'});$('реплика').focus()}
+async function отправить(т){$('отпр').disabled=true;сообщениеЯ(т);const ждёт=el('div',{class:'м они мут'},el('span',{class:'точки',текст:'думаю'}));ленты().append(ждёт);прокрутить();
+ try{const r=await J('/api/turn',{сессия,режим,текст:т,роли:режим==='nnl'?undefined:роли()});if(r.ошибка)throw new Error(r.ошибка);ждёт.remove();
+  const мета=(r.мс/1000).toFixed(r.мс<1000?3:1)+' с'+(режим==='nnl'?' · без моделей':' · вызовов '+r.вызовов_модели+' · токенов '+r.токены)+(r.действие?' · '+r.действие:'');
+  сообщениеОни(r.ответ,мета,r.ссылки);учесть(r);if(режим!=='база')показать(r);if(режим!=='база'&&innerWidth>=1180&&!LS.get('панельЗакрыта',false)&&(!активнаяПанель||(активнаяПанель==='читалка'&&!открытая)))показатьПанель('ядро')}
+ catch(e){ждёт.className='м они bad';ждёт.textContent='Ошибка: '+e.message}
+ знак();итоги()}
+function учесть(t){const с=счёт;с.х++;с.мс+=t.мс;с.вызовов+=t.вызовов_модели;с.токены+=t.токены;с.чужие+=((t.охрана_чисел||{}).нет_в_источнике||[]).length;с.ссылок+=(t.ссылки||[]).length;с.битых+=(t.ссылки||[]).filter(x=>!x.ок).length}
+const стр=(...я)=>{const tr=el('tr');я.forEach(c=>tr.append(el('td',null,c==null?'':c)));return tr};
+const КОЛОН=11,СТРОК=8;
+function рисоватьПоле(все){const к=$('карта88');if(!к)return;const ш=40,R=11.5;const s=sv('svg',{viewBox:'0 0 '+(КОЛОН*ш)+' '+(СТРОК*ш),xmlns:NS,role:'img','aria-label':'Карта 88 статей'});
+ const имена=Object.fromEntries((статьиСписок||[]).map(a=>[a.ид,a.название]));let макс=0,лучшая=null;
+ for(let i=0;i<88;i++){const ид=String(i+1),p=все?(все[ид]!=null?все[ид]:0.03):0.03;if(p>макс){макс=p;лучшая=ид}
+  const x=(i%КОЛОН)*ш+ш/2,y=Math.floor(i/КОЛОН)*ш+ш/2,я=все?Math.min(1,Math.sqrt(Math.max(0,p-0.03)/0.97)):0;
+  const g=sv('g',{class:'шип',opacity:(0.16+0.84*я).toFixed(2)},sv('title',null,'ст. '+ид+(имена[ид]?' · '+имена[ид]:'')+(все?' · '+p.toFixed(2):'')),
+   sv('circle',{cx:x,cy:y,r:R,fill:я>0.55?цвет('--acc'):цвет('--ink')}),sv('circle',{cx:x,cy:y,r:R-4,fill:'none',stroke:цвет('--bg'),'stroke-opacity':.28,'stroke-width':1.4}));
+  g.onclick=()=>открытьСтатью(ид);s.append(g)}
+ к.textContent='';к.append(s);$('карта-итог').textContent=все&&лучшая&&макс>0.06?('ярче всех: ст. '+лучшая+' · '+макс.toFixed(2)):'пока тихо'}
+function показать(t){рисоватьПоле(t.все_p);const р=$('решение');р.textContent='';р.className='';
+ [['действие',t.действие],['причина',t.причина],['ворота области',t.ворота?('здоровье '+t.ворота.здоровье+' · право '+t.ворота.право):''],['задано вопросов',t.задано_вопросов]].forEach(([а,б])=>р.append(el('div',{class:'строкаФакт'},el('b',{текст:а}),el('span',{текст:б==null?'':String(б)}))));
+ const рт=$('рейтинг');рт.textContent='';const значимые=(t.рейтинг||[]).filter((r,i)=>i===0||r.p>0.06);const фон=(t.рейтинг||[]).length-значимые.length;
+ значимые.forEach((r,i)=>{const шкала=el('div',{class:'полоса'},el('i'));шкала.firstChild.style.width=(r.p*100)+'%';
+  рт.append(el('div',{class:'вер'+(i===0?' первая':'')},el('a',{class:'номер',текст:r.статья,onclick:()=>открытьСтатью(r.статья)}),el('div',null,el('div',{class:'вер-имя',текст:r.название,title:r.название}),шкала),el('span',{class:'вер-знач',текст:r.p.toFixed(2)})))});
+ if(фон>0)рт.append(el('div',{class:'мут',style:'font-size:12.5px',текст:'остальные статьи на уровне исходной вероятности (0,03)'}));
+ const в=$('выбор');в.textContent='';if(t.вопрос)в.append(el('div',{текст:'→ '+t.вопрос.текст+' ('+t.вопрос.причина+')'}));
+ if((t.вопросы_разбор||[]).length){const tb=el('table');tb.append(el('tr',null,el('th',{текст:'ст.'}),el('th',{текст:'вопрос'}),el('th',{текст:'EIG, нат'})));t.вопросы_разбор.forEach(q=>tb.append(стр(q.статья,q.текст,q.eig!=null?q.eig:(q.отказ||'значение'))));в.append(tb)}
+ const у=$('улики');у.textContent='';(t.улики||[]).slice().reverse().forEach(x=>{const сд=(x.сдвиги||[]).map(s=>'ст.'+s.статья+' '+s.до+'→'+s.после).join(', ');у.append(el('div',{style:'margin-bottom:4px',текст:(x.тип==='упоминание'?x.термин+' ['+x.статус+(x.уточнение?', '+x.уточнение:'')+']':'ответ «'+x.ответ+'» на «'+x.вопрос+'»')+(сд?' · '+сд:'')}))});
+ const вз=$('вызовы');вз.textContent='';if((t.вызовы||[]).length){const tb=el('table');tb.append(el('tr',null,el('th',{текст:'модель'}),el('th',{class:'ч',текст:'мс'}),el('th',{class:'ч',текст:'токены'})));t.вызовы.forEach(c=>tb.append(el('tr',null,el('td',{текст:c.модель+(c.кэш?' (кэш)':'')}),el('td',{class:'ч',текст:c.мс}),el('td',{class:'ч',текст:(c.вход||0)+'/'+(c.выход||0)}))));вз.append(tb)}else вз.textContent='ни одного вызова модели';
+ const о=$('охрана');о.textContent='';const ох=t.охрана_чисел||{};const бит=(t.ссылки||[]).filter(x=>!x.ок);
+ о.append(el('div',{class:(ох.нет_в_источнике||[]).length?'warn':'ok',текст:'числа: '+(ох.чисел_с_единицами!=null?ох.чисел_с_единицами+' с единицами; нет в источнике: '+((ох.нет_в_источнике||[]).join(', ')||'нет'):'не проверялись')}),
+  el('div',{class:бит.length?'bad':'ok',текст:'ссылки на статьи: '+(t.ссылки||[]).length+(бит.length?'; несуществующих: '+бит.map(x=>x.причина).join('; '):'; все существуют')}));
+ if(ох.вердикт_разрешён!=null)о.append(el('div',{class:ох.вердикт_разрешён?'ok':'warn',текст:'категория: '+(ох.вердикт_разрешён?'разрешена, есть подтверждение врача':'запрещена, врач не подтвердил')+(ох.перегенерировано_без_категории?' · текст переписан':'')}))}
+function итоги(){const и=$('итого');и.textContent='';const с=счёт;if(!с.х)return;
+ [['ходов',с.х],['секунд на ход',(с.мс/с.х/1000).toFixed(с.мс/с.х<1000?3:1)],['вызовов модели',с.вызовов],['токенов',с.токены],['чисел без источника',с.чужие],['ссылок / несуществующих',с.ссылок+' / '+с.битых]].forEach(([а,б])=>и.append(el('span',{текст:а}),el('b',{текст:б})))}
+$('новый').onclick=сброс;
+const поле=$('реплика');
+function знак(){$('отпр').disabled=!поле.value.trim()}
+поле.oninput=()=>{поле.style.height='auto';поле.style.height=Math.min(220,поле.scrollHeight)+'px';знак()};
+поле.onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('отпр').click()}};
+$('отпр').onclick=()=>{const x=поле.value.trim();if(!x)return;поле.value='';поле.style.height='auto';знак();отправить(x)};
+
+/* ---------- читалка Расписания ---------- */
+let статьиСписок=[],открытая=null,выделено='';
+async function загрузитьСписок(){статьиСписок=await J('/api/статьи');рисоватьСписок(статьиСписок)}
+function рисоватьСписок(л){const к=$('ок-список');к.textContent='';л.forEach(а=>к.append(el('div',{class:открытая&&открытая.ид===а.ид?'on':'',текст:'ст. '+а.ид+' · '+а.название,onclick:()=>открытьСтатью(а.ид)})))}
+let таймерПоиска;$('ок-поиск').oninput=e=>{clearTimeout(таймерПоиска);const q=e.target.value.trim();таймерПоиска=setTimeout(async()=>{рисоватьСписок(q?await J('/api/поиск?q='+encodeURIComponent(q)):статьиСписок)},200)};
+async function открытьСтатью(ид,буква,цитаты){показатьПанель('читалка');const а=await J('/api/статья?ид='+encodeURIComponent(ид));const т=$('ок-тело');
+ if(а.ошибка){т.textContent='';т.append(el('div',{class:'bad',текст:'В Расписании нет статьи '+ид+'.'}));return}
+ открытая=а;$('вид-читалка').classList.remove('безСтатьи');т.textContent='';т.append(el('h3',null,el('span',{текст:'Ст. '+а.ид}),а.название));
+ const tb=el('table');tb.append(el('tr',null,el('th',{текст:'п.'}),el('th',{текст:'описание'}),el('th',{текст:'I (призывник)',title:'графа I, при призыве'}),el('th',{текст:'II · III'})));
+ а.пункты.forEach(п=>tb.append(el('tr',{id:'п-'+п.буква,class:буква&&п.буква===буква?'выбран':''},el('td',{текст:п.буква}),el('td',{class:'описание',текст:п.описание}),el('td',{class:'г1'},п.графы[0]?тегКат(п.графы[0]):'—'),el('td',{class:'гд',текст:п.графы.slice(1).join(' · ')}))));
+ т.append(tb);if(а.примечания.length){т.append(el('h4',{style:'margin:14px 0 4px;font-weight:600',текст:'Примечания'}));а.примечания.forEach(п=>т.append(el('p',{class:'примечание',style:'margin:4px 0;font-size:13.5px',текст:п})))}
+ if(!статьиСписок.length)await загрузитьСписок();else рисоватьСписок(статьиСписок);if(цитаты)подсветить(цитаты);if(буква){const e=$('п-'+буква);if(e)e.scrollIntoView({block:'center'})}}
+const нормТекст=s=>s.toLowerCase().replace(/ё/g,'е').replace(/[«»"'‘’“”]/g,'');
+function подсветить(цитаты){document.querySelectorAll('#ок-тело .описание,#ок-тело .примечание').forEach(яч=>{const исх=яч.textContent;const исхН=исх.toLowerCase().replace(/ё/g,'е');const диап=[];
+ цитаты.forEach(ц=>{const q=нормТекст(ц);if(q.length<8)return;const j=исхН.indexOf(q);if(j>=0)диап.push([j,j+q.length])});if(!диап.length)return;
+ диап.sort((a,b)=>a[0]-b[0]);яч.textContent='';let п=0;диап.forEach(([a,b])=>{if(a<п)return;яч.append(исх.slice(п,a),el('mark',{текст:исх.slice(a,b)}));п=b});яч.append(исх.slice(п))})}
+document.addEventListener('mouseup',e=>{const с=window.getSelection();const т=с?String(с):'';const в=с&&с.anchorNode&&$('ок-тело').contains(с.anchorNode);
+ if(в&&т.trim().length>3){выделено=т.trim().slice(0,600);const r=с.getRangeAt(0).getBoundingClientRect();const п=$('плав');п.style.display='flex';п.style.left=Math.max(8,Math.min(r.left,innerWidth-200))+'px';п.style.top=Math.max(8,r.top-44)+'px'}
+ else if(!e.target.closest('#плав'))$('плав').style.display='none'});
+$('пл-спросить').onclick=()=>{$('ок-выделено').hidden=false;$('ок-выделено').textContent='Выделено: «'+выделено+'»';$('плав').style.display='none';$('ок-вопрос').focus()};
+$('пл-диалог').onclick=()=>вДиалог(выделено);$('ок-вдиалог').onclick=()=>вДиалог(выделено||'');
+function вДиалог(ф){if(!открытая)return;поле.value=('[ст. '+открытая.ид+'] '+(ф?'«'+ф+'» ':'')+($('ок-вопрос').value||'')).trim();$('плав').style.display='none';поле.oninput();document.querySelector('#вкладки button[data-в=диалог]').click();поле.focus()}
+function модельЧиталки(){const р=роли();const п=р&&р.речь;if(режим!=='nnl'&&п)return п[0]+':'+п[1];const м=МОДЕЛИ.модели.find(x=>x.id==='alibaba:qwen3.8-flash'&&x.ключ)||МОДЕЛИ.модели.find(x=>x.ключ);return м?м.id:''}
+$('ок-спросить').onclick=async()=>{if(!открытая){$('ок-инфо').textContent='сначала откройте статью';return}const в=$('ок-вопрос').value.trim();if(!в)return;
+ const кн=$('ок-спросить');кн.disabled=true;$('ок-инфо').textContent='думаю…';const о=$('ок-ответ');о.textContent='';
+ try{const р=await J('/api/читатель',{ид:открытая.ид,вопрос:в,выделено,модель:модельЧиталки()});if(р.ошибка)throw new Error(р.ошибка);
+  const б=el('div',{style:'white-space:pre-wrap'});сСсылками(б,р.ответ,р.ссылки);о.append(б);
+  р.цитаты.forEach(ц=>о.append(el('div',{class:'цитата '+(ц.подтверждена?'ok':'bad')},el('span',{class:'бейдж '+(ц.подтверждена?'ok':'bad'),текст:ц.подтверждена?'цитата найдена в статье':'такой цитаты в статье нет'}),' п. '+ц.пункт+': «'+ц.текст+'»')));
+  const нет=(р.охрана_чисел.нет_в_источнике||[]);if(нет.length)о.append(el('div',{class:'warn',текст:'Числа без источника в статье: '+нет.join(', ')}));
+  const бит=(р.ссылки||[]).filter(x=>!x.ок);if(бит.length)о.append(el('div',{class:'bad',текст:бит.map(x=>x.причина).join('; ')}));
+  $('ок-инфо').textContent=(р.мс/1000).toFixed(1)+' с · '+р.токены+' токенов · '+красиво(р.модель);подсветить(р.цитаты.filter(ц=>ц.подтверждена).map(ц=>ц.текст))}
+ catch(e){$('ок-инфо').textContent='ошибка: '+e.message}кн.disabled=false};
+
+/* ---------- бенчмарки ---------- */
+const палитра=()=>['--c1','--c2','--c3','--c4','--c5','--c6','--c7','--c8'].map(цвет);
+let бТесты={},бВыбор=new Set(),бТестыВыбор=new Set(['пороги','отказ','скорость']),текущийПрогон=null,таймерБ=null,бИстория=[],бЗагружено=false;
+const доля=р=>Math.round(р*1000)/10;
+async function бенчОткрыть(){if(!бЗагружено){МОДЕЛИ=await J('/api/модели');бЗагружено=true}await рисоватьТесты();рисоватьКандидатов()}
+function рисоватьКандидатов(){const к=$('б-кандидаты');к.textContent='';const по={};const фильтр=($('б-найти').value||'').toLowerCase();МОДЕЛИ.модели.filter(м=>!фильтр||м.id.toLowerCase().includes(фильтр)||бВыбор.has(м.id)).forEach(м=>(по[м.провайдер]=по[м.провайдер]||[]).push(м));
+ const добавить=(id,подпись,откл)=>к.append(el('label',null,el('input',{type:'checkbox',checked:бВыбор.has(id)?'':null,disabled:откл?'':null,onchange:e=>{e.target.checked?бВыбор.add(id):бВыбор.delete(id)}}),подпись));
+ Object.entries(по).forEach(([п,мс])=>{к.append(el('div',{class:'гр',текст:провайдерИмя(п)+' · '+мс.length+(мс[0].ключ?'':' · нет ключа')}));мс.forEach(м=>добавить(м.id,м.модель,!м.ключ))});
+ const свои=[...бВыбор].filter(id=>!МОДЕЛИ.модели.some(м=>м.id===id)&&!id.startsWith('пресет:'));if(свои.length){к.append(el('div',{class:'гр',текст:'свои'}));свои.forEach(id=>добавить(id,id))}
+ к.append(el('div',{class:'гр',текст:'наборы по ролям (только «Вся система»)'}));Object.keys(МОДЕЛИ.пресеты).forEach(н=>добавить('пресет:'+н,'набор '+н))}
+$('б-найти').oninput=рисоватьКандидатов;
+$('б-все').onclick=()=>{МОДЕЛИ.модели.filter(м=>м.ключ).forEach(м=>бВыбор.add(м.id));рисоватьКандидатов()};
+$('б-никого').onclick=()=>{бВыбор.clear();рисоватьКандидатов()};
+$('б-быстро').onclick=()=>{бВыбор.clear();['alibaba:qwen3.8-flash','alibaba:qwen3.7-max','groq:openai/gpt-oss-120b','groq:qwen/qwen3.8-27b','gemini:gemini-3.1-flash-lite'].forEach(id=>{const м=МОДЕЛИ.модели.find(x=>x.id===id);if(м&&м.ключ)бВыбор.add(id)});рисоватьКандидатов()};
+$('б-добавить').onclick=()=>{const v=$('б-свой').value.trim();if(v.includes(':')){бВыбор.add(v);$('б-свой').value='';рисоватьКандидатов()}};
+async function рисоватьТесты(){const и=await J('/api/бенч/история');бТесты=и.тесты;бИстория=и.прогоны;const к=$('б-тесты');к.textContent='';
+ Object.entries(бТесты).forEach(([id,т])=>к.append(el('label',{class:'тест'},el('input',{type:'checkbox',checked:бТестыВыбор.has(id)?'':null,onchange:e=>{e.target.checked?бТестыВыбор.add(id):бТестыВыбор.delete(id)}}),el('span',null,el('b',{текст:т.название,style:'font-weight:500'}),el('small',{текст:т.что})))));рисоватьИсторию()}
+async function обновитьИсторию(){const и=await J('/api/бенч/история');бИстория=и.прогоны;рисоватьИсторию()}
+function рисоватьИсторию(){const к=$('б-история');к.textContent='';if(!бИстория.length){к.textContent='пока пусто';return}
+ бИстория.slice(0,12).forEach(п=>к.append(el('div',{style:'display:flex;gap:8px;align-items:center;margin:4px 0'},el('button',{class:'чип',текст:'открыть',onclick:()=>загрузитьПрогон(п.файл)}),el('span',{style:'font-size:13px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap',title:п.файл,текст:(п.метка||'')+' · '+(п.начато||'').slice(5,16)+' · '+(п.кандидаты||[]).length+' мод.'}))))}
+$('б-обновить').onclick=обновитьИсторию;
+async function загрузитьПрогон(файл){const д=await J('/api/бенч/прогон?файл='+encodeURIComponent(файл));if(д.ошибка)return;текущийПрогон=д;показатьПрогон()}
+$('б-пуск').onclick=async()=>{const кандидаты=[...бВыбор],тесты=[...бТестыВыбор];$('б-ход').hidden=false;if(!кандидаты.length||!тесты.length){$('б-текст').textContent='выберите модели и тесты';return}
+ const р=await J('/api/бенч/запуск',{кандидаты,тесты,метка:$('б-метка').value});if(р.ошибка){$('б-текст').textContent=р.ошибка;return}
+ $('б-пуск').disabled=true;clearInterval(таймерБ);const старт=Date.now();
+ таймерБ=setInterval(async()=>{const с=await J('/api/бенч/статус?id='+р.id);if(с.ошибка)return;$('б-полоса').style.width=(100*с.сделано/Math.max(1,с.всего))+'%';
+  $('б-текст').textContent=с.состояние+' · '+с.сделано+' из '+с.всего+' случаев · '+Math.round((Date.now()-старт)/1000)+' с'+(с.ошибки.length?' · ошибок: '+с.ошибки.length:'');
+  текущийПрогон={метка:с.метка,начато:с.начато,кандидаты:с.кандидаты,тесты:с.тесты,результаты:с.результаты,ошибки:с.ошибки};показатьПрогон(true);
+  if(с.состояние==='готово'){clearInterval(таймерБ);$('б-пуск').disabled=false;обновитьИсторию();показатьПрогон()}},1500)};
+
+/* --- графики: SVG с явными цветами, годятся для экспорта --- */
+const NS='http://www.w3.org/2000/svg';
+const sv=(tag,attrs,...d)=>{const e=document.createElementNS(NS,tag);if(attrs)for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);d.flat().forEach(x=>{if(x!=null)e.append(x.nodeType?x:document.createTextNode(String(x)))});return e};
+const цвКандидата=(к,все)=>палитра()[все.indexOf(к)%8];
+const кратко=к=>ИМЕНА[к]?ИМЕНА[к]:к.replace(/^(alibaba|groq|gemini):/,'$1·').replace(/openai\//,'').replace(/qwen\//,'');
+const FONT='Aptos,Segoe UI,sans-serif';
+function столбцы(заголовок,строки,{макс=100,формат=v=>v+'%'}={}){const Ш=560,ряд=26,верх=32,лев=190,H=верх+строки.length*ряд+10;const s=sv('svg',{viewBox:'0 0 '+Ш+' '+H,xmlns:NS,role:'img','aria-label':заголовок});
+ s.append(sv('rect',{width:Ш,height:H,fill:цвет('--surf'),rx:4}),sv('text',{x:12,y:21,fill:цвет('--ink'),'font-size':13,'font-weight':600,'font-family':FONT},заголовок));
+ строки.forEach((r,i)=>{const y=верх+i*ряд,w=Math.max(0,Math.min(1,r.значение/макс))*(Ш-лев-80);
+  s.append(sv('text',{x:лев-8,y:y+16,'text-anchor':'end',fill:цвет('--ink'),'font-size':12,'font-family':FONT},кратко(r.имя).slice(0,30)),
+   sv('rect',{x:лев,y:y+4,width:Ш-лев-80,height:14,fill:цвет('--surf2'),rx:4}),sv('rect',{x:лев,y:y+4,width:w,height:14,fill:r.цвет,rx:4}),
+   sv('text',{x:лев+w+6,y:y+16,fill:цвет('--mut'),'font-size':11.5,'font-family':FONT},r.подпись||формат(r.значение)))});return s}
+function точки(заголовок,пт){const Ш=560,H=330,л=52,п=20,в=36,н=44;const maxX=Math.max(1000,...пт.map(p=>p.x))*1.1;const s=sv('svg',{viewBox:'0 0 '+Ш+' '+H,xmlns:NS,role:'img','aria-label':заголовок});
+ s.append(sv('rect',{width:Ш,height:H,fill:цвет('--surf'),rx:4}),sv('text',{x:12,y:21,fill:цвет('--ink'),'font-size':13,'font-weight':600,'font-family':FONT},заголовок));
+ for(let i=0;i<=4;i++){const y=в+(H-в-н)*i/4;s.append(sv('line',{x1:л,x2:Ш-п,y1:y,y2:y,stroke:цвет('--line')}),sv('text',{x:л-6,y:y+4,'text-anchor':'end','font-size':11,fill:цвет('--mut'),'font-family':FONT},(100-25*i)+'%'));
+  const x=л+(Ш-л-п)*i/4;s.append(sv('text',{x,y:H-н+16,'text-anchor':'middle','font-size':11,fill:цвет('--mut'),'font-family':FONT},(maxX*i/4/1000).toFixed(1)+' с'))}
+ s.append(sv('text',{x:(л+Ш-п)/2,y:H-8,'text-anchor':'middle','font-size':11.5,fill:цвет('--mut'),'font-family':FONT},'медианная задержка на случай →  (лучше: левее и выше)'));
+ пт.forEach(p=>{const x=л+(Ш-л-п)*p.x/maxX,y=в+(H-в-н)*(1-p.y);s.append(sv('circle',{cx:x,cy:y,r:7,fill:p.цвет,opacity:.9},sv('title',null,p.имя+': '+доля(p.y)+'% · '+(p.x/1000).toFixed(1)+' с')),sv('text',{x:x+10,y:y+4,'font-size':11,fill:цвет('--ink'),'font-family':FONT},кратко(p.имя).slice(0,24)))});return s}
+function тепло(прогон){const кандидаты=прогон.кандидаты.filter(к=>прогон.результаты.some(р=>р.кандидат===к));const колонки=[];
+ прогон.тесты.forEach(т=>{const любой=прогон.результаты.find(р=>р.тест===т);if(любой)любой.случаи.forEach((c,i)=>колонки.push({тест:т,i,id:c.id}))});
+ const Ш=Math.max(560,190+колонки.length*16+20),ряд=22,верх=90,H=верх+кандидаты.length*ряд+10;const s=sv('svg',{viewBox:'0 0 '+Ш+' '+H,xmlns:NS,role:'img'});
+ s.append(sv('rect',{width:Ш,height:H,fill:цвет('--surf'),rx:4}),sv('text',{x:12,y:21,fill:цвет('--ink'),'font-size':13,'font-weight':600,'font-family':FONT},'Карта случаев: зелёный верно, красный ошибка, серый нет данных'));
+ колонки.forEach((c,j)=>{const x=190+j*16;s.append(sv('text',{x:x+8,y:верх-6,'font-size':9.5,fill:цвет('--mut'),'font-family':FONT,transform:'rotate(-60 '+(x+8)+' '+(верх-6)+')'},(c.тест[0]+'·'+c.id).slice(0,16)))});
+ кандидаты.forEach((к,i)=>{const y=верх+i*ряд;s.append(sv('text',{x:182,y:y+14,'text-anchor':'end','font-size':11.5,fill:цвет('--ink'),'font-family':FONT},кратко(к).slice(0,28)));
+  колонки.forEach((c,j)=>{const р=прогон.результаты.find(r=>r.кандидат===к&&r.тест===c.тест);const сл=р&&р.случаи[c.i];const цв=!сл?цвет('--line'):сл.верно?цвет('--ok'):цвет('--bad');
+   s.append(sv('rect',{x:190+j*16,y:y+2,width:14,height:ряд-4,fill:цв,rx:3,opacity:сл?.9:.5},sv('title',null,кратко(к)+' · '+c.тест+' · '+c.id+(сл?'\nожидалось: '+сл.ожидалось+'\nполучено: '+(сл.получено||сл.ошибка||'—'):''))))})});return s}
+const ТЕСТ_МОДЕЛЬНЫЕ=['пороги','отказ','скорость'];
+function агрегат(п){const по={};п.результаты.forEach(р=>{(по[р.кандидат]=по[р.кандидат]||{})[р.тест]=р});return по}
+function оценкаЯчейки(р){const t=доля(р.доля);const k=t>=90?'ok':t>=60?'warn':'bad';return el('span',{class:'ячейка бейдж '+k,текст:р.верно+'/'+р.n,title:'точность '+t+'%, медиана '+(р.мс_медиана/1000).toFixed(1)+' с, токенов '+р.токены+(р.ошибок?', ошибок вызова '+р.ошибок:'')})}
+function показатьПрогон(живой){const прогон=текущийПрогон;const к=$('б-итоги');if(!прогон||!прогон.результаты.length){if(!живой)к.textContent='';return}
+ к.textContent='';const по=агрегат(прогон);const кандидаты=прогон.кандидаты.filter(x=>по[x]);const тесты=прогон.тесты.filter(т=>прогон.результаты.some(р=>р.тест===т));
+ к.append(el('div',{class:'карта'},el('h3',null,'Прогон «'+(прогон.метка||'')+'» · '+(прогон.начато||''),el('span',{class:'строка'},
+   el('button',{class:'чип',текст:'JSON',onclick:()=>скачать('nnl_бенч.json',JSON.stringify(прогон,null,1),'application/json')}),
+   el('button',{class:'чип',текст:'CSV сводка',onclick:()=>скачать('nnl_бенч_сводка.csv',csvСводка(прогон),'text/csv')}),
+   el('button',{class:'чип',текст:'CSV случаи',onclick:()=>скачать('nnl_бенч_случаи.csv',csvСлучаи(прогон),'text/csv')}),
+   el('button',{class:'кнопка гл',текст:'Отчёт HTML с диаграммами',onclick:()=>отчётHTML(прогон)}))),
+  таблицаСводки(прогон,по,кандидаты,тесты),(прогон.ошибки||[]).length?el('div',{class:'bad',style:'margin-top:6px;font-size:12.5px',текст:'Ошибки запуска: '+прогон.ошибки.join(' | ')}):null));
+ const г=el('div',{class:'графики'});к.append(г);const добавитьГрафик=(св,имя)=>г.append(el('div',{class:'карта график'},el('h3',null,имя,el('button',{class:'чип',текст:'PNG',onclick:()=>png(св,имя)})),св));
+ тесты.forEach(т=>{const строки=кандидаты.filter(x=>по[x][т]).map(x=>({имя:x,значение:доля(по[x][т].доля),цвет:цвКандидата(x,кандидаты),подпись:доля(по[x][т].доля)+'%  ('+по[x][т].верно+'/'+по[x][т].n+')'})).sort((a,b)=>b.значение-a.значение);
+  добавитьГрафик(столбцы('Точность: '+бТесты[т].название,строки),'Точность · '+бТесты[т].название)});
+ const мсСтроки=кандидаты.map(x=>{const р=Object.values(по[x]).filter(r=>r.мс_медиана);return{имя:x,значение:р.length?р.reduce((a,r)=>a+r.мс_медиана,0)/р.length/1000:0,цвет:цвКандидата(x,кандидаты)}}).sort((a,b)=>a.значение-b.значение);
+ добавитьГрафик(столбцы('Медианная задержка на случай, с (меньше лучше)',мсСтроки,{макс:Math.max(1,...мсСтроки.map(r=>r.значение)),формат:v=>v.toFixed(1)+' с'}),'Задержка');
+ const пт=кандидаты.map(x=>{const р=Object.values(по[x]).filter(r=>ТЕСТ_МОДЕЛЬНЫЕ.includes(r.тест)||r.тест==='система');return р.length?{имя:x,x:р.reduce((a,r)=>a+r.мс_медиана,0)/р.length,y:р.reduce((a,r)=>a+r.доля,0)/р.length,цвет:цвКандидата(x,кандидаты)}:null}).filter(Boolean);
+ if(пт.length>1)добавитьГрафик(точки('Точность против скорости (среднее по тестам)',пт),'Точность против скорости');
+ const токСтроки=кандидаты.map(x=>({имя:x,значение:Object.values(по[x]).reduce((a,r)=>a+r.токены,0),цвет:цвКандидата(x,кандидаты)})).sort((a,b)=>a.значение-b.значение);
+ добавитьГрафик(столбцы('Токены за прогон (меньше дешевле)',токСтроки,{макс:Math.max(1,...токСтроки.map(r=>r.значение)),формат:v=>v.toLocaleString('ru')}),'Токены');
+ const карта=тепло(прогон);карта.style.width=Math.max(560,+карта.getAttribute('viewBox').split(' ')[2])+'px';карта.style.maxWidth='none';
+ к.append(el('div',{class:'карта график',style:'margin-top:14px;overflow:auto'},el('h3',null,'Карта случаев',el('button',{class:'чип',текст:'PNG',onclick:()=>png(карта,'карта_случаев')})),карта));
+ к.append(разборОшибок(прогон));к.append(сравнениеБлок(прогон,по))}
+function таблицаСводки(прогон,по,кандидаты,тесты){const tb=el('table',{style:'margin-top:6px'});const h=el('tr',null,el('th',{текст:'кандидат'}));тесты.forEach(т=>h.append(el('th',{текст:бТесты[т]?бТесты[т].название:т})));h.append(el('th',{class:'ч',текст:'медиана, с'}),el('th',{class:'ч',текст:'токены'}));tb.append(h);
+ const лучший={};тесты.forEach(т=>{лучший[т]=Math.max(...кандидаты.filter(x=>по[x][т]).map(x=>по[x][т].доля))});
+ кандидаты.forEach(x=>{const tr=el('tr',null,el('td',null,el('i',{style:'display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:6px;background:'+цвКандидата(x,кандидаты)}),кратко(x)));
+  тесты.forEach(т=>{const р=по[x][т];tr.append(el('td',null,р?[оценкаЯчейки(р),р.доля===лучший[т]?' ★':'',р.доп&&р.доп.на_границе?el('div',{class:'мут',style:'font-size:11.5px',текст:'на границе '+р.доп.на_границе}):null,р.доп&&р.доп.ложных_да?el('div',{class:'мут',style:'font-size:11.5px',текст:'ложных «да» '+р.доп.ложных_да}):null,р.доп&&р.доп.токенов_в_секунду?el('div',{class:'мут',style:'font-size:11.5px',текст:р.доп.токенов_в_секунду+' ток/с'}):null]:'—'))});
+  const р=Object.values(по[x]).filter(r=>r.мс_медиана);tr.append(el('td',{class:'ч',текст:р.length?(р.reduce((a,r)=>a+r.мс_медиана,0)/р.length/1000).toFixed(1):'—'}),el('td',{class:'ч',текст:Object.values(по[x]).reduce((a,r)=>a+r.токены,0).toLocaleString('ru')}));tb.append(tr)});return tb}
+function разборОшибок(прогон){const к=el('div',{class:'карта',style:'margin-top:14px'},el('h3',{текст:'Где ошиблись (первые 40)'}));const строки=[];
+ прогон.результаты.forEach(р=>р.случаи.forEach(c=>{if(!c.верно)строки.push([кратко(р.кандидат),р.тест,c.id,c.ожидалось,c.ошибка?('сбой: '+c.ошибка):(c.получено||'—')+(c.проверки?' · '+c.проверки.filter(p=>!p.ок).map(p=>p.имя+' ('+p.заметка+')').join('; '):'')])}));
+ if(!строки.length){к.append(el('div',{class:'ok',текст:'Ошибок нет.'}));return к}
+ const tb=el('table');tb.append(el('tr',null,...['кандидат','тест','случай','ожидалось','получено'].map(x=>el('th',{текст:x}))));строки.slice(0,40).forEach(с=>tb.append(стр(...с)));к.append(tb);return к}
+function сравнениеБлок(прогон,по){const к=el('div',{class:'карта',style:'margin-top:14px'},el('h3',{текст:'Сравнить с прошлым прогоном'}));const s=el('select',null,el('option',{value:'',текст:'выберите прогон'}));бИстория.forEach(п=>s.append(el('option',{value:п.файл,текст:(п.метка||'')+' · '+(п.начато||'').slice(5,16)})));
+ const рез=el('div',{style:'margin-top:8px'});s.onchange=async()=>{рез.textContent='';if(!s.value)return;const д=await J('/api/бенч/прогон?файл='+encodeURIComponent(s.value));if(д.ошибка)return;
+  const было=агрегат(д),tb=el('table');tb.append(el('tr',null,...['кандидат','тест','было','стало','Δ точность','Δ медиана'].map(x=>el('th',{текст:x}))));let есть=false;
+  Object.keys(по).forEach(x=>Object.keys(по[x]).forEach(т=>{const н=по[x][т],с=(было[x]||{})[т];if(!с)return;есть=true;const dд=доля(н.доля)-доля(с.доля),dм=(н.мс_медиана-с.мс_медиана)/1000;
+   tb.append(el('tr',null,el('td',{текст:кратко(x)}),el('td',{текст:т}),el('td',{текст:с.верно+'/'+с.n}),el('td',{текст:н.верно+'/'+н.n}),el('td',{class:'дельта '+(dд>0?'плюс':dд<0?'минус':''),текст:(dд>0?'+':'')+dд.toFixed(1)+' п.п.'}),el('td',{class:'дельта '+(dм<0?'плюс':dм>0?'минус':''),текст:(dм>0?'+':'')+dм.toFixed(1)+' с'})))}));
+  рез.append(есть?tb:el('div',{class:'мут',текст:'В том прогоне нет тех же пар «модель + тест».'}))};
+ к.append(s,рез);return к}
+function скачать(имя,содержимое,тип){const a=el('a',{href:URL.createObjectURL(new Blob(['﻿'+содержимое],{type:тип+';charset=utf-8'})),download:имя});document.body.append(a);a.click();a.remove()}
+const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+const csvСводка=п=>['кандидат;тест;n;верно;доля;мс_среднее;мс_медиана;мс_p95;токены;ошибок'].concat(п.результаты.map(р=>[р.кандидат,р.тест,р.n,р.верно,р.доля,р.мс_среднее,р.мс_медиана,р.мс_p95,р.токены,р.ошибок].map(q).join(';'))).join('\r\n');
+const csvСлучаи=п=>['кандидат;тест;случай;ожидалось;получено;верно;мс;токены;ошибка'].concat(п.результаты.flatMap(р=>р.случаи.map(c=>[р.кандидат,р.тест,c.id,c.ожидалось,c.получено,c.верно?1:0,c.мс,c.токены,c.ошибка].map(q).join(';')))).join('\r\n');
+function png(svgEl,имя){const s=svgEl.cloneNode(true);s.setAttribute('xmlns',NS);const[,,w,h]=s.getAttribute('viewBox').split(' ').map(Number);s.setAttribute('width',w*2);s.setAttribute('height',h*2);s.style.cssText='';
+ const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=w*2;c.height=h*2;c.getContext('2d').drawImage(img,0,0);c.toBlob(b=>{const a=el('a',{href:URL.createObjectURL(b),download:имя.replace(/[^\wа-я]+/gi,'_')+'.png'});document.body.append(a);a.click();a.remove()})};
+ img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(s))}
+function отчётHTML(прогон){const по=агрегат(прогон),кандидаты=прогон.кандидаты.filter(x=>по[x]),тесты=прогон.тесты.filter(т=>прогон.результаты.some(р=>р.тест===т));const сер=s=>new XMLSerializer().serializeToString(s);
+ const графики=[];тесты.forEach(т=>графики.push(сер(столбцы('Точность: '+бТесты[т].название,кандидаты.filter(x=>по[x][т]).map(x=>({имя:x,значение:доля(по[x][т].доля),цвет:цвКандидата(x,кандидаты),подпись:доля(по[x][т].доля)+'% ('+по[x][т].верно+'/'+по[x][т].n+')'})).sort((a,b)=>b.значение-a.значение)))));
+ const мс=кандидаты.map(x=>{const р=Object.values(по[x]).filter(r=>r.мс_медиана);return{имя:x,значение:р.length?р.reduce((a,r)=>a+r.мс_медиана,0)/р.length/1000:0,цвет:цвКандидата(x,кандидаты)}}).sort((a,b)=>a.значение-b.значение);
+ графики.push(сер(столбцы('Медианная задержка на случай, с',мс,{макс:Math.max(1,...мс.map(r=>r.значение)),формат:v=>v.toFixed(1)+' с'})));графики.push(сер(тепло(прогон)));
+ const html='<!doctype html><html lang="ru"><meta charset="utf-8"><title>Отчёт NNL · '+(прогон.метка||'')+'</title><style>body{font:14px system-ui,sans-serif;margin:24px auto;max-width:1000px;color:#1f1e1d;background:#faf9f5}table{border-collapse:collapse;width:100%}td,th{border-bottom:1px solid #e4e1d6;padding:5px 8px;text-align:left}svg{max-width:100%;height:auto;margin:10px 0;border:1px solid #e4e1d6;border-radius:8px}.бейдж{padding:1px 8px;border-radius:99px}.ok{background:#e5f0e4}.warn{background:#f5ead2}.bad{background:#f6e1dd}.мут{color:#76746d}</style>'
+ +'<h1>Отчёт бенчмарка NNL</h1><p class="мут">Прогон «'+(прогон.метка||'')+'» · '+(прогон.начато||'')+'. Истина в тестах вычислена кодом из текста Расписания болезней (ПП РФ № 565), не моделью.</p><h2>Сводка</h2>'+таблицаСводки(прогон,по,кандидаты,тесты).outerHTML+'<h2>Диаграммы</h2>'+графики.join('')
+ +'<h2>Тесты</h2><ul>'+тесты.map(т=>'<li><b>'+бТесты[т].название+'</b>: '+бТесты[т].что+'</li>').join('')+'</ul></html>';скачать('nnl_отчёт.html',html,'text/html')}
+
+/* ---------- система ---------- */
+async function системаОбновить(){const[т,ж,м]=await Promise.all([J('/api/totals'),J('/api/журнал'),J('/api/модели')]);
+ const п=$('с-пров');п.textContent='';const tb=el('table');tb.append(el('tr',null,...['провайдер','вызовов','из кэша','ошибок','токены вх/вых','мс среднее'].map(x=>el('th',{текст:x}))));
+ Object.entries(т).forEach(([н,с])=>tb.append(el('tr',null,el('td',{текст:н}),el('td',{class:'ч',текст:с.вызовов}),el('td',{class:'ч',текст:с.из_кэша}),el('td',{class:'ч '+(с.ошибок?'bad':''),текст:с.ошибок}),el('td',{class:'ч',текст:(с.токены_вход||0)+' / '+(с.токены_выход||0)}),el('td',{class:'ч',текст:с.вызовов?Math.round(с.мс/Math.max(1,с.вызовов-с.из_кэша)):'—'}))));
+ п.append(Object.keys(т).length?tb:el('div',{class:'мут',текст:'вызовов пока не было'}));
+ const ж2=$('с-журнал');ж2.textContent='';const t2=el('table');t2.append(el('tr',null,...['провайдер','модель','мс','вх','вых','кэш'].map(x=>el('th',{текст:x}))));ж.slice().reverse().forEach(в=>t2.append(el('tr',null,el('td',{текст:в.провайдер}),el('td',{текст:в.модель}),el('td',{class:'ч',текст:в.мс}),el('td',{class:'ч',текст:в.вход}),el('td',{class:'ч',текст:в.выход}),el('td',{текст:в.кэш?'да':''}))));ж2.append(ж.length?t2:el('div',{class:'мут',текст:'пока пусто'}));
+ window._журнал=ж;const к=$('с-ключи');к.textContent='';const по={};м.модели.forEach(x=>по[x.провайдер]=x.ключ);Object.entries(по).forEach(([н,есть])=>к.append(el('div',{class:есть?'ok':'bad',текст:(есть?'● ':'○ ')+н+(есть?' — ключ найден':' — ключа нет')})))}
+$('с-обновить').onclick=системаОбновить;
+$('с-csv').onclick=()=>скачать('nnl_журнал_вызовов.csv',['провайдер;модель;мс;вход;выход;кэш'].concat((window._журнал||[]).map(в=>[в.провайдер,в.модель,в.мс,в.вход,в.выход,в.кэш?1:0].map(q).join(';'))).join('\r\n'),'text/csv');
+
+/* ---------- старт ---------- */
+(async()=>{const[к,м]=await Promise.all([J('/api/config'),J('/api/модели')]);конфиг=к;МОДЕЛИ=м;
+ режим=LS.get('режим','ядро');if(!РЕЖИМЫ.some(x=>x.id===режим))режим='ядро';
+ выбор=LS.get('выбор',null);const есть=new Set(м.модели.filter(x=>x.ключ).map(x=>x.id));
+ if(!выбор||(выбор.тип==='модель'&&!есть.has(выбор.id))||(выбор.тип==='пресет'&&!м.пресеты[выбор.имя]))выбор=есть.has('alibaba:qwen3.8-flash')?{тип:'модель',id:'alibaba:qwen3.8-flash'}:{тип:'пресет',имя:к.пресет};
+ обновитьПилюли();сброс();if(innerWidth>=1180&&!LS.get('панельЗакрыта',false))показатьПанель('ядро');загрузитьСписок().then(()=>рисоватьПоле(null));const ок=м.модели.some(x=>x.ключ);$('состояние').className=ок?'жив':'нет';$('состояние').title=ок?'связь с провайдерами есть: '+м.модели.filter(x=>x.ключ).length+' моделей':'нет ни одного ключа провайдера'})();
+</script></body></html>

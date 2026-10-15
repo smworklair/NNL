@@ -1,0 +1,6 @@
+{
+ "ошибка": "HTTP 413: {\"error\":{\"message\":\"Request too large for model `qwen/qwen3.8-27b` in organization `org_01m4nnep18efx9rd4ndpgq5pcz` service tier `on_demand` on input tokens per minute (ITPM): Limit 7000, Requested 7133, please reduce your message size and try again. Need more tokens? Upgrade to Dev Tier ",
+ "режим": "свободно",
+ "тест": "3",
+ "прогон": 1
+}

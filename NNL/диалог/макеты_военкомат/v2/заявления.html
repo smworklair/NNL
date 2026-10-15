@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f5f5f3" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme:dark)">
+<title>Заявления — Справка по годности</title>
+<style>
+:root{
+  --шрифт:Aptos,"Segoe UI Variable Text","Segoe UI",Roboto,sans-serif;
+  --фон:#f5f5f3;--пов:#fff;--пов2:#ecece9;--поле:#fff;--пуз:#ecece9;
+  --чернила:#141414;--чер2:#4d4d4a;--тих:#8a8a85;--тише:#9c9c97;
+  --вол:rgba(0,0,0,.1);--вол2:rgba(0,0,0,.2);--навед:rgba(0,0,0,.06);
+  --сам:#8a6400;--сбой:#c62828;--шип:rgba(0,0,0,.06);color-scheme:light}
+@media(prefers-color-scheme:dark){:root{
+  --фон:#121212;--пов:#1a1a1a;--пов2:#232323;--поле:#1f1f1f;--пуз:#282826;
+  --чернила:#f1f1ef;--чер2:#b9b9b6;--тих:#85857f;--тише:#6f6f68;
+  --вол:rgba(255,255,255,.09);--вол2:rgba(255,255,255,.2);--навед:rgba(255,255,255,.07);
+  --сам:#f5cf2e;--сбой:#ff6b6b;--шип:rgba(255,255,255,.05);color-scheme:dark}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{font:16px/1.5 var(--шрифт);background:var(--фон);color:var(--чернила);display:flex;justify-content:center;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--чернила);outline-offset:2px;border-radius:8px}
+.и{width:16px;height:16px;display:block;flex:none}
+.т{width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;background:var(--фон);position:relative;overflow:hidden}
+@media(min-width:700px){.т{max-width:680px}}
+.ш{flex:none;display:flex;align-items:center;gap:8px;padding:calc(8px + env(safe-area-inset-top)) 10px 8px 14px}
+.лого{display:flex;align-items:center;gap:9px;min-width:0}
+.лого svg{width:26px;height:20px;flex:none}
+.лого h1{font-size:15px;font-weight:700;letter-spacing:.02em;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.кш{min-height:44px;padding:0 12px;border-radius:12px;color:var(--чер2);font-size:14px}
+.кш:hover{background:var(--навед);color:var(--чернила)}
+.сегмент{flex:none;display:flex;gap:4px;margin:0 12px 8px;padding:4px;border-radius:16px;background:var(--пуз);border:1px solid var(--вол)}
+.сегмент a{flex:1;min-height:40px;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:13.5px;color:var(--тих);text-decoration:none}
+.сегмент a:hover{color:var(--чернила)}
+.сегмент a[aria-current="page"]{background:var(--пов);color:var(--чернила);font-weight:650;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.тело{flex:1;overflow-y:auto;padding:6px 16px calc(20px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.карт{background:var(--пов);border:1px solid var(--вол);border-radius:18px;padding:14px;margin:0 0 12px}
+.карт h2{margin:0 0 4px;font-size:15.5px;font-weight:650}
+.подп{margin:0 0 12px;font-size:12.5px;color:var(--тих)}
+.поле-б{display:flex;flex-direction:column;gap:5px;margin-bottom:10px}
+.поле-б:last-of-type{margin-bottom:0}
+.метка{font-size:12px;color:var(--тих)}
+.поле-б input{min-height:48px;width:100%;border:1px solid var(--вол2);border-radius:13px;background:var(--поле);color:var(--чернила);font:16px var(--шрифт);padding:0 12px;outline:none}
+.поле-б input:focus{border-color:var(--чернила)}
+.заг{margin:18px 4px 8px;font-size:15.5px;font-weight:650}
+.шаб-кн{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--пов);border:1px solid var(--вол);border-radius:16px;padding:12px 14px;margin:0 0 8px;min-height:56px}
+.шаб-кн:hover{background:var(--навед)}
+.шаб-т{flex:1;font-size:14.5px;font-weight:600;line-height:1.35}
+.шаб-п{display:block;font-weight:400;font-size:12.5px;color:var(--тих);margin-top:2px}
+.шаб-стр{color:var(--тише)}
+.кн{min-height:44px;padding:0 16px;border-radius:13px;font-size:14.5px;border:1px solid var(--вол2);background:var(--пов);color:var(--чернила)}
+.кн.гл{background:var(--чернила);color:var(--фон);border-color:transparent}
+.кн:hover{background:var(--навед)}
+.снос{margin:14px 4px 0;text-align:center;color:var(--тише);font-size:11.5px;line-height:1.5}
+.фон{position:absolute;inset:0;z-index:40;background:rgba(10,10,10,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+.фон.в{opacity:1;pointer-events:auto}
+.лист{position:absolute;left:0;right:0;bottom:0;z-index:41;display:flex;flex-direction:column;background:var(--пов);
+  border-radius:22px 22px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.3);transform:translateY(105%);transition:transform .25s cubic-bezier(.3,.9,.3,1);top:0;max-height:none}
+.лист.от{transform:none}
+.шл{flex:none;display:flex;align-items:center;gap:8px;padding:calc(6px + env(safe-area-inset-top)) 12px 8px 8px}
+.шл h2{font-size:15.5px;font-weight:650;margin:0;flex:1;min-width:0;line-height:1.25}
+.lt{overflow-y:auto;padding:0 18px calc(22px + env(safe-area-inset-bottom))}
+.предупр{margin:8px 0 6px;font-size:12.5px;color:var(--сам)}
+.бланк{white-space:pre-wrap;font-size:13.5px;line-height:1.65;background:var(--пов2);border-radius:14px;padding:14px;margin:4px 0 12px;overflow-wrap:break-word}
+.подск{margin-top:16px;padding-top:12px;border-top:1px solid var(--вол)}
+.подск h3{margin:0 0 8px;font-size:11.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--тише)}
+.подск p{margin:0 0 8px;font-size:13px;color:var(--чер2);line-height:1.55;padding-left:16px;text-indent:-16px}
+.тост{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(8px);background:var(--чернила);color:var(--фон);border-radius:12px;padding:10px 16px;font-size:13.5px;opacity:0;pointer-events:none;transition:.2s;z-index:60;white-space:nowrap}
+.тост.в{opacity:1;transform:translateX(-50%)}
+@media(prefers-reduced-motion:reduce){.тост,.фон,.лист{transition:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="и-знак" viewBox="0 0 26 20"><rect y="7" width="26" height="13" rx="2" fill="currentColor"/><circle cx="7" cy="4" r="3.4" fill="currentColor"/><circle cx="19" cy="4" r="3.4" fill="var(--сам)"/></symbol>
+<symbol id="и-крест" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" fill="none"/></symbol>
+<symbol id="и-назад" viewBox="0 0 24 24"><path d="M14.5 5.5 8 12l6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+<symbol id="и-вперёд" viewBox="0 0 24 24"><path d="m9.5 5.5 6.5 6.5-6.5 6.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+</defs></svg>
+
+<main class="т">
+  <header class="ш">
+    <span class="лого"><svg><use href="#и-знак"/></svg><h1>Справка по годности</h1></span>
+  </header>
+  <nav class="сегмент" aria-label="Разделы">
+    <a href="index.html">Разбор</a>
+    <a href="дневник.html">Дневник</a>
+    <a href="заявления.html" aria-current="page">Заявления</a>
+  </nav>
+  <div class="тело">
+    <section class="карт">
+      <h2>Ваши данные</h2>
+      <p class="подп">Подставятся в текст заявления. Хранятся только на этом устройстве.</p>
+      <label class="поле-б"><span class="метка">ФИО</span><input id="д-фио" autocomplete="name" placeholder="Иванов Иван Иванович"></label>
+      <label class="поле-б"><span class="метка">Дата рождения</span><input type="date" id="д-др"></label>
+      <label class="поле-б"><span class="метка">Адрес для ответа</span><input id="д-адрес" autocomplete="street-address" placeholder="Город, улица, дом, квартира"></label>
+      <label class="поле-б"><span class="метка">Военкомат</span><input id="д-вк" placeholder="Военный комиссариат … района"></label>
+    </section>
+    <h2 class="заг">Заявления</h2>
+    <button class="шаб-кн" data-шаб="0">
+      <span class="шаб-т">Копия решения призывной комиссии<span class="шаб-п">Если решение приняли, а копию не выдали</span></span>
+      <svg class="и шаб-стр"><use href="#и-вперёд"/></svg>
+    </button>
+    <button class="шаб-кн" data-шаб="1">
+      <span class="шаб-т">Дополнительное медобследование<span class="шаб-п">Когда нужен точный диагноз</span></span>
+      <svg class="и шаб-стр"><use href="#и-вперёд"/></svg>
+    </button>
+    <button class="шаб-кн" data-шаб="2">
+      <span class="шаб-т">Приобщение меддокументов<span class="шаб-п">Чтобы документы не потерялись</span></span>
+      <svg class="и шаб-стр"><use href="#и-вперёд"/></svg>
+    </button>
+    <p class="снос">Это шаблоны, а не юридическая консультация. Проверьте текст перед подачей.</p>
+  </div>
+  <div class="фон" id="фон"></div>
+  <section class="лист" id="лист" aria-label="Текст заявления"></section>
+</main>
+<div class="тост" id="тост" role="status"></div>
+<script>
+(function(){
+"use strict";
+function $(ид){return document.getElementById(ид)}
+var фон=$('фон'),лист=$('лист'),тостЭ=$('тост');
+var КЛЮЧ='справка_заявления_v2';
+var открыт=null,тостТ=null;
+function э(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function и(имя){return '<svg class="и" aria-hidden="true"><use href="#'+имя+'"/></svg>'}
+function тост(т){тостЭ.textContent=т;тостЭ.classList.add('в');clearTimeout(тостТ);тостТ=setTimeout(function(){тостЭ.classList.remove('в')},2200)}
+/* --- данные --- */
+var поля={фио:$('д-фио'),др:$('д-др'),адрес:$('д-адрес'),вк:$('д-вк')};
+function чтение(){try{var с=JSON.parse(localStorage.getItem(КЛЮЧ)||'{}');return с&&typeof с==='object'?с:{}}catch(е){return{}}}
+function запись(){try{localStorage.setItem(КЛЮЧ,JSON.stringify(данные))}catch(е){}}
+var данные=чтение();
+Object.keys(поля).forEach(function(к){
+  if(данные[к])поля[к].value=данные[к];
+  поля[к].addEventListener('input',function(){
+    данные[к]=поля[к].value;
+    запись();
+    if(открыт!==null)обновитьБланк();
+  });
+});
+function неполно(){return !(данные.фио&&данные.др&&данные.адрес&&данные.вк)}
+function датаРус(с){var ч=String(с).split('-');return ч.length===3?ч[2]+'.'+ч[1]+'.'+ч[0]:с}
+/* --- шаблоны --- */
+var ШАБЛОНЫ=[
+{н:'Копия решения призывной комиссии',п:'Если решение приняли, а копию не выдали',
+текст:'В [ВОЕНКОМАТ]\n\nот [ФИО],\nдата рождения [ДР],\nадрес для ответа: [АДРЕС]\n\nЗАЯВЛЕНИЕ\n\nПрошу выдать мне заверенную копию решения призывной комиссии, принятого в отношении меня «___» __________ 20__ г.\n\nОснование: пункт 6 статьи 28 Федерального закона от 28.03.1998 № 53-ФЗ «О воинской обязанности и военной службе».\n\nКопию решения прошу выдать на руки либо направить по адресу: [АДРЕС].\n\n«___» __________ 20__ г.          ______________ / [ФИО] /',
+пода:['Приготовьте два экземпляра заявления.','На вашем экземпляре попросите поставить отметку о приёме и дату.','Если принимать отказываются — отправьте заказным письмом с описью вложения и уведомлением.']},
+{н:'Дополнительное медобследование',п:'Когда нужен точный диагноз',
+текст:'В [ВОЕНКОМАТ]\n\nот [ФИО],\nдата рождения [ДР],\nадрес: [АДРЕС]\n\nЗАЯВЛЕНИЕ\n\nПри медицинском освидетельствовании у меня выявлено: ______________________. Для уточнения диагноза требуется дополнительное медицинское обследование.\n\nОснование: пункт 4 статьи 5.1 Федерального закона от 28.03.1998 № 53-ФЗ «О воинской обязанности и военной службе».\n\nПрошу направить меня на дополнительное медицинское обследование.\n\nКопию направления прошу выдать на руки.\n\n«___» __________ 20__ г.          ______________ / [ФИО] /',
+пода:['Два экземпляра, отметка о приёме — на вашем.','Что именно выявлено — впишите своими словами в пустую строку.','Копии имеющихся медицинских документов приложите к заявлению.']},
+{н:'Приобщение меддокументов',п:'Чтобы документы не потерялись',
+текст:'В [ВОЕНКОМАТ]\n\nот [ФИО],\nдата рождения [ДР],\nадрес: [АДРЕС]\n\nЗАЯВЛЕНИЕ\n\nПрошу приобщить к моему личному делу призывника следующие медицинские документы:\n\n1. ______________________\n2. ______________________\n3. ______________________\n\nКопии документов прилагаю. Оригиналы готов предъявить лично.\n\n«___» __________ 20__ г.          ______________ / [ФИО] /',
+пода:['Перечислите каждый документ: справки, выписки, результаты обследований.','Копии оставьте в личном деле, оригиналы возьмите с собой.','На вашем экземпляре — отметка о приёме.']}
+];
+function подставить(с){
+  return с.replace(/\[ФИО\]/g,данные.фио||'[ФИО]')
+          .replace(/\[ДР\]/g,данные.др?датаРус(данные.др):'[ДР]')
+          .replace(/\[АДРЕС\]/g,данные.адрес||'[АДРЕС]')
+          .replace(/\[ВОЕНКОМАТ\]/g,данные.вк||'[ВОЕНКОМАТ]');
+}
+/* --- лист --- */
+function открыть(и2){
+  открыт=и2;var ш=ШАБЛОНЫ[и2];
+  лист.innerHTML='<div class="шл"><button class="кш" data-закр aria-label="Назад">'+и('и-назад')+'</button><h2>'+э(ш.н)+'</h2><button class="кш" data-закр aria-label="Закрыть">'+и('и-крест')+'</button></div>'
+  +'<div class="lt">'
+  +(неполно()?'<p class="предупр">Незаполненные места остались в [квадратных скобках].</p>':'')
+  +'<div class="бланк" id="бланк">'+э(подставить(ш.текст))+'</div>'
+  +'<button class="кн гл" style="width:100%" data-копия>Скопировать текст</button>'
+  +'<div class="подск"><h3>Как подать</h3>'+ш.пода.map(function(с){return '<p>— '+э(с)+'</p>'}).join('')+'</div>'
+  +'</div>';
+  фон.classList.add('в');лист.classList.add('от');
+}
+function обновитьБланк(){var б=$('бланк');if(б&&открыт!==null)б.textContent=подставить(ШАБЛОНЫ[открыт].текст)}
+function закр(){фон.classList.remove('в');лист.classList.remove('от');открыт=null}
+function копировать(){
+  if(открыт===null)return;
+  var текст=подставить(ШАБЛОНЫ[открыт].текст);
+  function ок(){тост('Текст скопирован')}
+  function фолбэк(){
+    try{
+      var т=document.createElement('textarea');т.value=текст;т.setAttribute('readonly','');
+      т.style.position='fixed';т.style.left='-9999px';
+      document.body.appendChild(т);т.select();document.execCommand('copy');
+      document.body.removeChild(т);ок();
+    }catch(е){тост('Не удалось скопировать — выделите текст вручную')}
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(текст).then(ок,фолбэк)}
+  else фолбэк();
+}
+/* --- события --- */
+document.addEventListener('click',function(е){
+  var ц=е.target;
+  if(ц.closest('[data-закр]')){закр();return}
+  if(ц.classList&&ц.classList.contains('фон')){закр();return}
+  var ш=ц.closest('[data-шаб]');if(ш){открыть(+ш.getAttribute('data-шаб'));return}
+  if(ц.closest('[data-копия]')){копировать();return}
+});
+document.addEventListener('keydown',function(е){if(е.key==='Escape')закр()});
+})();
+</script>
+</body></html>
