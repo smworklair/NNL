@@ -1,22 +1,37 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { умныйПоиск, type Ответ } from "@/lib/api";
+import { всеСтатьи, нижний, type СтатьяСписка } from "@/lib/статьи";
+import { читатьДело, type Отметка } from "@/lib/дело";
+import { ДОКУМЕНТЫ } from "@/data/документы";
 
+type Вкладка = "статьи" | "документы" | "дело";
+const ВКЛАДКИ: [Вкладка, string][] = [["статьи", "Статьи"], ["документы", "Документы"], ["дело", "Дело"]];
 const близость = (p: number) => (p >= 0.85 ? "очень близко" : p >= 0.6 ? "близко" : p >= 0.35 ? "возможно" : "слабое совпадение");
+const коротко = (с: string, n: number) => (с.length > n ? с.slice(0, n - 1).trim() + "…" : с);
 
-/* Поиск на весь экран: поле внизу над клавиатурой, результаты сверху. Ответ приходит от Python-ядра. */
+/* Поиск на весь экран: вкладки сверху, поле внизу над клавиатурой. Умный поиск отвечает от Python-ядра. */
 export default function Sieve({ начальный, закрыть }: { начальный: string; закрыть: () => void }) {
   const [q, setQ] = useState(начальный);
+  const [вкладка, setВкладка] = useState<Вкладка>("статьи");
   const [ответ, setОтвет] = useState<Ответ | null>(null);
   const [ждём, setЖдём] = useState(false);
   const [сбой, setСбой] = useState(false);
+  const [статьи, setСтатьи] = useState<СтатьяСписка[] | null>(null);
+  const [дело, setДело] = useState<Отметка[]>([]);
   const ввод = useRef<HTMLInputElement>(null);
 
-  useEffect(() => { ввод.current?.focus({ preventScroll: true }); }, []);
+  useEffect(() => {
+    ввод.current?.focus({ preventScroll: true });
+    setДело(читатьДело());
+  }, []);
+  useEffect(() => {
+    всеСтатьи().then(setСтатьи).catch(() => setСтатьи([]));
+  }, []);
 
   useEffect(() => {
     const текст = q.trim();
-    if (текст.length < 2) { setОтвет(null); setСбой(false); return; }
+    if (вкладка !== "статьи" || текст.length < 2) { setОтвет(null); setСбой(false); return; }
     const стоп = new AbortController();
     const таймер = setTimeout(() => {
       setЖдём(true); setСбой(false);
@@ -25,40 +40,86 @@ export default function Sieve({ начальный, закрыть }: { нача
         .catch((е: unknown) => { if ((е as Error).name !== "AbortError") { setСбой(true); setЖдём(false); } });
     }, 350);
     return () => { clearTimeout(таймер); стоп.abort(); };
-  }, [q]);
+  }, [q, вкладка]);
 
-  const статьи = (ответ?.статьи ?? []).slice(0, 8);
+  const ф = нижний(q.trim());
+  const названия = (статьи ?? []).filter((а) => !ф || нижний(а.название).includes(ф) || а.ид === ф);
+  const кандидаты = (ответ?.статьи ?? []).slice(0, 8);
+  const документы = ДОКУМЕНТЫ.filter((д) => !ф || нижний(`${д.имя} ${д.лид} ${д.куда} ${д.вид}`).includes(ф));
+  const названиеСтатьи = (ид: string) => статьи?.find((а) => а.ид === ид)?.название ?? "статья Расписания";
+
   return (
     <div className="sieve" role="dialog" aria-label="Поиск">
+      <nav className="tabs" aria-label="Раздел">
+        {ВКЛАДКИ.map(([к, имя]) => (
+          <button key={к} className={`tab ${вкладка === к ? "on" : ""}`} onClick={() => setВкладка(к)}>{имя}</button>
+        ))}
+      </nav>
       <div className="sieve-body">
-        {ответ?.расшифровано?.length ? (
-          <p className="note">Понял: {ответ.расшифровано.map((р) => `«${р.сокращение}» = ${р.значение}`).join(", ")}</p>
-        ) : null}
-        {ответ?.предложения && ответ.предложения.length > 1 ? (
+        {вкладка === "статьи" && (
           <>
-            <h2>Разобрал по предложениям</h2>
-            {ответ.предложения.map((п, i) => (
-              <p key={i} className="note" style={{ margin: "4px 2px" }}>«{п.текст}» → ст. {п.статья}</p>
+            {ответ?.расшифровано?.length ? (
+              <p className="note">Понял: {ответ.расшифровано.map((р) => `«${р.сокращение}» = ${р.значение}`).join(", ")}</p>
+            ) : null}
+            {ответ?.предложения && ответ.предложения.length > 1 ? (
+              <>
+                <h2>Разобрал по предложениям</h2>
+                {ответ.предложения.map((п, i) => (
+                  <p key={i} className="note" style={{ margin: "4px 2px" }}>«{коротко(п.текст, 60)}» → ст. {п.статья}</p>
+                ))}
+              </>
+            ) : null}
+            {кандидаты.length ? <h2>Ближе всего по смыслу</h2> : null}
+            {кандидаты.map((а) => {
+              const p = а.p_показ ?? а.p;
+              const пр = Math.max(2, Math.round(p * 100));
+              return (
+                <button key={а.ид} type="button" className="hit">
+                  <span className="t"><b>ст. {а.ид}</b><span>{коротко(а.название, 110)}</span></span>
+                  <span className="bar"><u style={{ width: `${пр}%` }} /></span>
+                  <em>{близость(p)} · {пр} %{а.пункт ? ` · ближе всего пункт «${а.пункт}»` : ""}</em>
+                </button>
+              );
+            })}
+            {ждём && !ответ ? <p className="note">Разбираю предложения…</p> : null}
+            {сбой ? <p className="note">Ядро сейчас не отвечает. Показываю поиск по названиям.</p> : null}
+            {ответ && !кандидаты.length && !ждём ? <p className="note">По смыслу ничего не нашлось. Опишите подробнее.</p> : null}
+            <h2>{ф ? "Совпадения в названиях" : `Все статьи Расписания болезней · ${статьи?.length ?? 88}`}</h2>
+            {статьи === null ? <p className="note">Загружаю статьи…</p> : null}
+            {статьи && !названия.length ? <p className="note">В названиях такого нет.</p> : null}
+            {названия.map((а) => (
+              <button key={а.ид} type="button" className="row"><b>ст. {а.ид}</b><span>{коротко(а.название, 110)}</span></button>
             ))}
           </>
-        ) : null}
-        {статьи.length ? <h2>Ближе всего по смыслу</h2> : null}
-        {статьи.map((а) => {
-          const p = а.p_показ ?? а.p, пр = Math.max(2, Math.round(p * 100));
-          return (
-            <button key={а.ид} type="button" className="hit">
-              <span className="t"><b>ст. {а.ид}</b><span>{а.название}</span></span>
-              <span className="bar"><u style={{ width: `${пр}%` }} /></span>
-              <em>{близость(p)} · {пр} %{а.пункт ? ` · ближе всего пункт «${а.пункт}»` : ""}</em>
-            </button>
-          );
-        })}
-        {!статьи.length && !ждём && !сбой && q.trim().length < 2 ? (
-          <p className="note">Опишите своими словами, что беспокоит: «давление 160 на 100», «минус 7 на оба глаза», «болит колено».</p>
-        ) : null}
-        {ждём && !ответ ? <p className="note">Разбираю предложения…</p> : null}
-        {сбой ? <p className="note">Ядро сейчас не отвечает. Попробуйте ещё раз через минуту.</p> : null}
-        {ответ && !статьи.length && !ждём ? <p className="note">Ничего не нашлось. Опишите подробнее.</p> : null}
+        )}
+        {вкладка === "документы" && (
+          <>
+            {!документы.length ? <p className="note">Такого бланка нет. Все бланки: очистите поле поиска.</p> : <h2>Бланки · {документы.length}</h2>}
+            {документы.map((д) => (
+              <button key={д.н} type="button" className="row">
+                <b>{д.вид}</b><span>{д.имя}</span><em>{д.куда}. {д.лид}</em>
+              </button>
+            ))}
+          </>
+        )}
+        {вкладка === "дело" &&
+          (дело.length === 0 ? (
+            <div className="empty">
+              <h3>Дело пока пусто</h3>
+              <p>Найдите статью и нажмите «Добавить в моё дело». Здесь соберутся ваши отметки, следующий шаг и нужные бланки.</p>
+              <button type="button" className="cta" onClick={() => setВкладка("статьи")}>К статьям</button>
+            </div>
+          ) : (
+            <>
+              <h2>В деле · {дело.length}</h2>
+              {дело.filter((з) => !ф || нижний(названиеСтатьи(з.ид)).includes(ф) || з.ид === ф).map((з) => (
+                <button key={з.ид} type="button" className="row">
+                  <b>ст. {з.ид}</b><span>{коротко(названиеСтатьи(з.ид), 90)}</span>
+                  <em>{з.статус === "врач" ? "от врача" : "со слов"}</em>
+                </button>
+              ))}
+            </>
+          ))}
       </div>
       <form className="sieve-bar" onSubmit={(е) => е.preventDefault()}>
         <input ref={ввод} value={q} onChange={(е) => setQ(е.target.value)} enterKeyHint="search"
