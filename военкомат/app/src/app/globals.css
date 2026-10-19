@@ -158,3 +158,8 @@ input{font:inherit}
 .csum{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;font-size:13px}
 .csum ul{margin:6px 0 0;padding-left:18px;color:var(--quiet);line-height:1.5}
 .csum li.ok{color:var(--ok)}
+
+/* переход список → статья: заголовок «перетекает» на своё место */
+::view-transition-group(.morph){animation-duration:380ms;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+.hit,.row{text-decoration:none;color:inherit}
+@media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}

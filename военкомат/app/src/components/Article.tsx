@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ViewTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Карточка, Статья } from "@/lib/карточка";
 import { категорияПризыва } from "@/lib/карточка";
@@ -33,7 +33,7 @@ export default function Article({ статья, карточка }: { стать
         <i />
       </header>
       <div className="scroll art">
-        <h1 className="art-title">{статья.название}</h1>
+        <ViewTransition name={`art-${статья.ид}`} share="morph" default="none"><h1 className="art-title">{статья.название}</h1></ViewTransition>
         <p className="label" style={{ margin: "14px 0 8px" }}>Ступени · категория для призывника</p>
         <div className="steps">
           {статья.пункты.map((п) => (
