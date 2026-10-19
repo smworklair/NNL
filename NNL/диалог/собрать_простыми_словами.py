@@ -19,7 +19,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 import простыми_словами as ПС  # noqa: E402
 
-КАТАЛОГ = os.path.join(os.path.dirname(os.path.abspath(__file__)), "макеты")
+КАТАЛОГ = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "военкомат", "макеты")
 ДАННЫЕ = os.path.join(КАТАЛОГ, "справочник_данные.js")
 ВЫХОД = os.path.join(КАТАЛОГ, "простыми_словами.js")
 ЧИСЛО = re.compile(r"\d+(?:[.,]\d+)?")

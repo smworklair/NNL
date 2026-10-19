@@ -8,7 +8,7 @@ sys.dont_write_bytecode = True
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 ЗДЕСЬ = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(ЗДЕСЬ))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(ЗДЕСЬ)), "NNL", "диалог"))   # знания.py лежат в ядре диалога
 import знания as З  # noqa: E402
 
 

@@ -47,6 +47,7 @@ import наблюдение as Н  # noqa: E402
 import пороги as ПР  # noqa: E402
 
 КАТАЛОГ = os.path.dirname(os.path.abspath(__file__))
+САЙТ = os.path.join(os.path.dirname(os.path.dirname(КАТАЛОГ)), "военкомат")   # макеты сайта вынесены из ядра
 СТРАНИЦА = os.path.join(КАТАЛОГ, "стенды", "стенд.html")
 СИСТЕМА = None
 СЕССИИ = {}
@@ -492,27 +493,27 @@ class Обработчик(http.server.BaseHTTPRequestHandler):
                 with open(СТРАНИЦА, "rb") as f:
                     return self._ответ(200, "text/html; charset=utf-8", f.read())
             if путь == "/военкомат.html":
-                п_сайта = os.path.join(КАТАЛОГ, "макеты", "военкомат.html")
+                п_сайта = os.path.join(САЙТ, "макеты", "военкомат.html")
                 if not os.path.exists(п_сайта):
                     п_сайта = os.path.join(КАТАЛОГ, "военкомат.html")
                 with open(п_сайта, "rb") as f:
                     return self._ответ(200, "text/html; charset=utf-8", f.read())
             if путь.startswith("/сайт/"):                # страницы сайта «Справка по годности» из макеты_военкомат/v2 (только имя файла, без вложенных путей)
                 имя = os.path.basename(путь[len("/сайт/"):])
-                п_файла = os.path.join(КАТАЛОГ, "макеты", "v2", имя)
+                п_файла = os.path.join(САЙТ, "макеты", "v2", имя)
                 if имя.endswith(".html") and os.path.isfile(п_файла):
                     with open(п_файла, "rb") as f:
                         return self._ответ(200, "text/html; charset=utf-8", f.read())
             if путь == "/вариант" or путь.startswith("/вариант/"):  # второй вариант главной страницы (макеты_военкомат/вариант)
                 имя = "index.html" if путь.rstrip("/") == "/вариант" else os.path.basename(путь[len("/вариант/"):])
-                п_файла = os.path.join(КАТАЛОГ, "макеты", "вариант", имя)
+                п_файла = os.path.join(САЙТ, "макеты", "вариант", имя)
                 if имя.endswith(".html") and os.path.isfile(п_файла):
                     with open(п_файла, "rb") as f:
                         return self._ответ(200, "text/html; charset=utf-8", f.read())
             if путь.startswith("/макет/"):              # страницы макета «Справка по годности» из макеты_военкомат (только имя файла: .html/.css/.js)
                 имя = os.path.basename(путь[len("/макет/"):])
                 вид = {".html": "text/html", ".css": "text/css", ".js": "application/javascript"}.get(os.path.splitext(имя)[1].lower())
-                п_файла = os.path.join(КАТАЛОГ, "макеты", имя)
+                п_файла = os.path.join(САЙТ, "макеты", имя)
                 if вид and os.path.isfile(п_файла):
                     with open(п_файла, "rb") as f:
                         return self._ответ(200, вид + "; charset=utf-8", f.read())
