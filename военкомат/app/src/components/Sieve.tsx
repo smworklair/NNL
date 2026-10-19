@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { умныйПоиск, type Ответ } from "@/lib/api";
 import { всеСтатьи, нижний, type СтатьяСписка } from "@/lib/статьи";
 import { читатьДело, type Отметка } from "@/lib/дело";
@@ -12,6 +13,8 @@ const коротко = (с: string, n: number) => (с.length > n ? с.slice(0, n
 
 /* Поиск на весь экран: вкладки сверху, поле внизу над клавиатурой. Умный поиск отвечает от Python-ядра. */
 export default function Sieve({ начальный, закрыть }: { начальный: string; закрыть: () => void }) {
+  const роутер = useRouter();
+  const открыть = (ид: string) => роутер.push(`/a/${ид}`);
   const [q, setQ] = useState(начальный);
   const [вкладка, setВкладка] = useState<Вкладка>("статьи");
   const [ответ, setОтвет] = useState<Ответ | null>(null);
@@ -74,7 +77,7 @@ export default function Sieve({ начальный, закрыть }: { нача
               const p = а.p_показ ?? а.p;
               const пр = Math.max(2, Math.round(p * 100));
               return (
-                <button key={а.ид} type="button" className="hit">
+                <button key={а.ид} type="button" className="hit" onClick={() => открыть(а.ид)}>
                   <span className="t"><b>ст. {а.ид}</b><span>{коротко(а.название, 110)}</span></span>
                   <span className="bar"><u style={{ width: `${пр}%` }} /></span>
                   <em>{близость(p)} · {пр} %{а.пункт ? ` · ближе всего пункт «${а.пункт}»` : ""}</em>
@@ -88,7 +91,7 @@ export default function Sieve({ начальный, закрыть }: { нача
             {статьи === null ? <p className="note">Загружаю статьи…</p> : null}
             {статьи && !названия.length ? <p className="note">В названиях такого нет.</p> : null}
             {названия.map((а) => (
-              <button key={а.ид} type="button" className="row"><b>ст. {а.ид}</b><span>{коротко(а.название, 110)}</span></button>
+              <button key={а.ид} type="button" className="row" onClick={() => открыть(а.ид)}><b>ст. {а.ид}</b><span>{коротко(а.название, 110)}</span></button>
             ))}
           </>
         )}
@@ -113,7 +116,7 @@ export default function Sieve({ начальный, закрыть }: { нача
             <>
               <h2>В деле · {дело.length}</h2>
               {дело.filter((з) => !ф || нижний(названиеСтатьи(з.ид)).includes(ф) || з.ид === ф).map((з) => (
-                <button key={з.ид} type="button" className="row">
+                <button key={з.ид} type="button" className="row" onClick={() => открыть(з.ид)}>
                   <b>ст. {з.ид}</b><span>{коротко(названиеСтатьи(з.ид), 90)}</span>
                   <em>{з.статус === "врач" ? "от врача" : "со слов"}</em>
                 </button>

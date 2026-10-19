@@ -14,3 +14,12 @@ export function читатьДело(): Отметка[] {
     return [];
   }
 }
+
+export const естьВДеле = (ид: string) => читатьДело().some((з) => з.ид === ид);
+
+export function добавитьВДело(ид: string, статус: "врач" | "слово" = "слово") {
+  try {
+    const было = читатьДело().filter((з) => з.ид !== ид);
+    localStorage.setItem(КЛЮЧ, JSON.stringify([...было, { ид, статус, в: Date.now(), шагЗакрыт: false }]));
+  } catch { /* хранилище недоступно: дело не сохранится */ }
+}
