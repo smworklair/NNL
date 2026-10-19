@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#121212">
+<title>Военкомат · телефонная композиция из стенда</title>
+<style>
+/* Токены — те же, что в стенд.html. Новая только компоновка под телефон. */
+:root{
+  --bg:#121212;--raise:#1a1a1a;--raise2:#232323;--field:#1f1f1f;--hair:rgba(255,255,255,.09);--hover:rgba(255,255,255,.07);
+  --ink:#f1f1ef;--ink2:#b9b9b6;--mut:#85857f;--acc:#f5cf2e;
+  --шрифт:Aptos,"Segoe UI Variable Text","Segoe UI",sans-serif;color-scheme:dark}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 var(--шрифт);display:flex;justify-content:center;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:8px}
+/* --- новая композиция: телефонная колонка 390 --- */
+.т{width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;background:var(--bg);position:relative;overflow:hidden}
+@media(min-width:540px){body{padding:16px 0}.т{height:calc(100dvh - 32px);border:1px solid var(--hair);border-radius:28px}}
+/* 1. шапка: лого+точка / история / новый — вкладок Бенч/Система нет, это призывник */
+.ш{flex:none;display:flex;align-items:center;gap:4px;padding:calc(8px + env(safe-area-inset-top)) 8px 8px 14px;border-bottom:1px solid var(--hair)}
+.лого{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15.5px;letter-spacing:.03em}
+.лого i{width:6px;height:6px;border-radius:50%;background:var(--ok,#5fd08a)}
+.ш .пр{margin-left:auto;display:flex;gap:2px}
+.ш .пр button{height:44px;min-width:44px;padding:0 10px;border-radius:12px;color:var(--mut);font-size:14px}
+.ш .пр button:hover{background:var(--hover);color:var(--ink)}
+/* 2. задача одной строкой */
+.зад{flex:none;text-align:center;color:var(--mut);font-size:12.5px;padding:10px 20px 0}
+/* 3. лента */
+.лента{flex:1;min-height:0;overflow:auto;padding:14px 16px 12px;display:flex;flex-direction:column;gap:18px}
+.лента.пусто{justify-content:center}
+.прив{color:var(--ink2);font-size:15.5px;line-height:1.7}
+.прив b{color:var(--ink)}
+.пр-бы button{display:flex;justify-content:space-between;gap:10px;width:100%;text-align:left;font-size:14.5px;padding:13px 2px;border-top:1px solid var(--hair);min-height:52px}
+.пр-бы button:last-child{border-bottom:1px solid var(--hair)}
+.пр-бы button span{color:var(--mut)}
+.м.я{align-self:flex-end;max-width:82%;background:var(--raise2);padding:9px 16px;border-radius:18px 18px 6px 18px;white-space:pre-wrap}
+.м.они{font-size:15.5px;line-height:1.7}
+.цит{border-left:2px solid var(--acc);padding:2px 12px;margin:10px 0;font-size:13.5px;color:var(--ink2)}
+.цит small{display:block;color:var(--mut);font-size:12px;margin-top:4px}
+/* 4. композер — тот же, прибит к низу с safe-area */
+.ко{flex:none;padding:6px 12px calc(10px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--hair)}
+.полоса{max-width:100%;margin:0 auto;background:var(--field);border:1px solid var(--hair);border-radius:28px;padding:12px 10px 8px 20px}
+.полоса textarea{width:100%;border:0;outline:0;resize:none;background:none;max-height:120px;min-height:28px;font-size:16px;line-height:1.5;padding:0 10px 6px 0;color:var(--ink)}
+.полоса textarea::placeholder{color:var(--mut)}
+.низ{display:flex;align-items:center;gap:2px;min-height:40px}
+.пил{height:34px;padding:0 12px;border-radius:999px;color:var(--ink2);font-size:13.5px;white-space:nowrap}
+.пил:hover,.пил.on{background:var(--hover);color:var(--ink)}
+.круг{width:36px;height:36px;margin-left:6px;border-radius:50%;background:var(--hover);color:var(--mut);display:grid;place-items:center;flex:none}
+.круг.гот{background:var(--ink);color:var(--bg)}
+.круг svg{width:17px;height:17px}
+.под{max-width:100%;margin:8px auto 0;text-align:center;color:var(--mut);font-size:12px}
+/* 5. панель-шторка: те же Ядро/Расписание, но нижний лист 92dvh */
+.фон{position:absolute;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:40}
+.фон.виден{opacity:1;pointer-events:auto}
+.лист{position:absolute;left:0;right:0;bottom:0;top:5dvh;z-index:41;background:var(--raise);border-radius:22px 22px 0 0;display:flex;flex-direction:column;transform:translateY(103%);transition:transform .25s cubic-bezier(.3,.9,.3,1)}
+.лист.открыт{transform:none}
+.руч{width:40px;height:5px;border-radius:3px;background:var(--hair);margin:8px auto 0;flex:none}
+.вкл{display:flex;gap:2px;padding:8px 12px 4px;align-items:center}
+.вкл button{height:36px;padding:0 12px;border-radius:9px;color:var(--mut);font-size:14px}
+.вкл button.on{background:var(--hover);color:var(--ink)}
+.вкл .з{margin-left:auto;color:var(--mut);font-size:16px;min-height:44px;min-width:44px}
+.вид{flex:1;min-height:0;display:none;flex-direction:column}
+.вид.on{display:flex}
+.прок{flex:1;overflow:auto;padding:10px 20px 30px}
+.сек{margin-bottom:22px}.сек h3{margin:0 0 10px;font-size:12px;font-weight:500;color:var(--mut)}
+.шипсет{display:grid;grid-template-columns:repeat(11,1fr);gap:5px}
+.шипсет i{aspect-ratio:1;border-radius:4px;background:var(--hover)}
+.шипсет i.гор{background:var(--acc)}
+.рейт{display:grid;gap:10px;font-size:14px}
+.рейт .ст{display:grid;grid-template-columns:1fr auto;gap:2px 10px}
+.рейт .ст small{color:var(--mut);grid-column:1/-1}
+.рейт .пол{height:3px;background:var(--hover);border-radius:2px;grid-column:1/-1}.рейт .пол i{display:block;height:100%;background:var(--acc);border-radius:2px}
+.поиск{display:grid;gap:8px;padding:2px 0 12px}
+.поиск input{background:var(--bg);border:1px solid transparent;border-radius:12px;padding:11px 12px;color:var(--ink);font-size:15px;outline:0}
+.поиск input:focus{border-color:var(--hair)}
+.список{max-height:150px;overflow:auto;border-radius:12px;background:var(--bg)}
+.список div{padding:10px 12px;font-size:14px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.статья h3{margin:0 0 10px;font-size:18px}
+.статья table{width:100%;border-collapse:collapse;font-size:14px}
+.статья td{padding:9px 8px 9px 0;border-top:1px solid var(--hair);vertical-align:top}
+.статья tr.нуж td{background:rgba(245,207,46,.1)}
+.вопрос textarea{width:100%;background:var(--bg);border:1px solid var(--hair);border-radius:12px;padding:10px 12px;color:var(--ink);font-size:15px;resize:none}
+.строка{display:flex;gap:8px;margin-top:10px}
+.кн{background:var(--hover);border-radius:10px;height:44px;padding:0 16px;font-size:14.5px}
+.кн.гл{background:var(--ink);color:var(--bg);font-weight:600}
+</style>
+</head>
+<body>
+<div class="т">
+  <header class="ш">
+    <span class="лого">NNL <i></i></span>
+    <span class="пр">
+      <button id="к-ист">История</button>
+      <button id="к-ядро">Ядро</button>
+      <button id="к-чит">Расписание</button>
+      <button id="к-нов" aria-label="Новый диалог" style="font-size:20px">+</button>
+    </span>
+  </header>
+  <div class="зад">По словам находит статью Расписания болезней · категорию — только при подтверждении врача</div>
+  <main class="лента пусто" id="лента"></main>
+  <div class="ко">
+    <div class="полоса">
+      <textarea id="реп" rows="1" placeholder="Опишите, что случилось"></textarea>
+      <div class="низ">
+        <button class="пил" id="р-я">ядро</button>
+        <button class="пил" id="р-м">ПП-565 · 2026</button>
+        <span style="flex:1"></span>
+        <button class="круг" id="отпр" aria-label="Отправить" disabled><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M8 13V3M3.5 7.5 8 3l4.5 4.5"/></svg></button>
+      </div>
+    </div>
+    <div class="под">Опора для визита к врачу, а не диагноз</div>
+  </div>
+  <div class="фон" id="фон"></div>
+  <section class="лист" id="лист" aria-label="Панель">
+    <div class="руч"></div>
+    <div class="вкл">
+      <button id="в-ядро" class="on">Ядро</button>
+      <button id="в-чит">Расписание</button>
+      <button class="з" id="в-закр" aria-label="Закрыть">✕</button>
+    </div>
+    <div class="вид on" id="вид-ядро"><div class="прок">
+      <div class="сек"><h3>Карта статей · каждый шип — одна статья</h3>
+        <div class="шипсет" id="шипы"></div></div>
+      <div class="сек"><h3>Вероятность, что относится к человеку</h3>
+        <div class="рейт" id="рейт"><span style="color:var(--mut)">—</span></div></div>
+    </div></div>
+    <div class="вид" id="вид-чит"><div class="прок">
+      <div class="поиск"><input id="п" type="text" placeholder="Поиск по названию и тексту статей">
+        <div class="список" id="сп"></div></div>
+      <div class="статья" id="ст"></div>
+      <div class="вопрос"><textarea id="вт" rows="2" placeholder="Вопрос по этой статье"></textarea>
+        <div class="строка"><button class="кн гл">Спросить</button><button class="кн">В диалог</button></div></div>
+    </div></div>
+  </section>
+</div>
+<script>
+var лента=document.getElementById('лента'),реп=document.getElementById('реп'),отпр=document.getElementById('отпр'),
+фон=document.getElementById('фон'),лист=document.getElementById('лист');
+var ПРИМЕРЫ=["Окулист после капель написал: −7 на оба глаза","Сам решил, что минус семь, к врачу не ходил","Давление дома 150/95, мерил сам"];
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function пусто(){лента.classList.add('пусто');лента.innerHTML='<div class="прив"><b>Здравствуйте!</b> Опишите своими словами, что со здоровьем или что написал врач, — найду статью Расписания болезней.<div class="пр-бы" style="margin-top:14px;border-top:0">'
++ПРИМЕРЫ.map(function(x){return '<button data-x="'+esc(x)+'">'+esc(x)+'<span>→</span></button>'}).join('')+'</div></div>';}
+function маршрут(s){s=s.toLowerCase().replace(/ё/g,'е');
+if(/давлен|тонометр|гипертон/.test(s)&&!/окулист|дптр|зрен|близорук/.test(s))return 'дав';
+if(!/(зрен|глаз|окулист|дптр|близорук|минус|давлен|врач|диагноз|комисси|годност)/.test(s))return 'мимо';
+if(/(сам |не был|не ходил|дома|без врача)/.test(s)&&!/(окулист|написал|после капель|заключен)/.test(s))return 'сам';return 'врач';}
+function ответ(k){
+if(k==='мимо')return 'Разбираю только здоровье и призыв. Опишите жалобы, диагноз или что написал врач.';
+if(k==='врач')return 'Похоже на <b>ст. 34, пункт «в» — категория В</b> (ограниченно годен). −7 попадает в «более 6,0 и до 8,0 дптр», замер после капель — подтверждение врача.'
++'<div class="цит">«близорукость любого глаза на одном из меридианов более 6,0 дптр и до 8,0 дптр» — пункт «в», графа I.<small>ПП РФ № 565, Расписание болезней, ст. 34</small></div>';
+if(k==='сам')return 'Похоже на <b>ст. 34</b>, но <b>категорию назвать нельзя</b> — «сам решил» не подтверждение. Нужен окулист и замер после капель; подтвердит −7 — будет В.'
++'<div class="цит">Вид и степень — только в состоянии циклоплегии.<small>Примечание к ст. 34</small></div>';
+return 'Похоже на <b>ст. 43 «Гипертония»</b>, но домашнего тонометра мало: нужны стационар и наблюдение от 6 месяцев с СМАД.'
++'<div class="цит">«…подтверждено обследованием в стационаре и наблюдением не менее 6 месяцев…»<small>Примечание к ст. 43</small></div>';}
+function шипы(){var h='';for(var i=0;i<88;i++)h+='<i class="'+(i===33?'гор':'')+'"></i>';document.getElementById('шипы').innerHTML=h;}
+function сп(){document.getElementById('сп').innerHTML='<div>34. Нарушения рефракции и аккомодации</div><div>43. Гипертоническая болезнь</div>';
+document.getElementById('ст').innerHTML='<h3>Статья 34. Нарушения рефракции и аккомодации</h3><table><tr><td>а)</td><td>более 12,0 дптр…</td></tr><tr><td>б)</td><td>более 8,0 и до 12,0 дптр…</td></tr><tr class="нуж"><td>в)</td><td>более 6,0 и до 8,0 дптр…</td></tr><tr><td>г)</td><td>более 3,0 и до 6,0 дптр…</td></tr></table>';}
+function послать(x){var v=(x!=null?x:реп.value).trim();if(!v)return;
+лента.classList.remove('пусто');лента.innerHTML='<div class="м я">'+esc(v)+'</div><div class="м они" style="color:var(--mut)">Разбираю…</div>';реп.value='';upd();
+setTimeout(function(){лента.innerHTML='<div class="м я">'+esc(v)+'</div><div class="м они">'+ответ(маршрут(v))+'</div>';лента.scrollTop=лента.scrollHeight;},700);}
+function upd(){отпр.disabled=!реп.value.trim();отпр.classList.toggle('гот',!!реп.value.trim());}
+реп.addEventListener('input',upd);отпр.addEventListener('click',function(){послать()});
+лента.addEventListener('click',function(e){var b=e.target.closest('[data-x]');if(b)послать(b.getAttribute('data-x'));});
+function открыть(вид){лист.classList.add('открыт');фон.classList.add('виден');
+document.getElementById('в-ядро').classList.toggle('on',вид==='ядро');
+document.getElementById('в-чит').classList.toggle('on',вид==='чит');
+document.getElementById('вид-ядро').classList.toggle('on',вид==='ядро');
+document.getElementById('вид-чит').classList.toggle('on',вид==='чит');}
+function закрыть(){лист.classList.remove('открыт');фон.classList.remove('виден');}
+document.getElementById('к-ядро').onclick=function(){открыть('ядро')};
+document.getElementById('к-чит').onclick=function(){открыть('чит')};
+document.getElementById('р-я').onclick=function(){открыть('ядро')};
+document.getElementById('р-м').onclick=function(){открыть('чит')};
+document.getElementById('в-ядро').onclick=function(){открыть('ядро')};
+document.getElementById('в-чит').onclick=function(){открыть('чит')};
+document.getElementById('в-закр').onclick=закрыть;фон.onclick=закрыть;
+document.getElementById('к-нов').onclick=function(){закрыть();пусто();};
+document.getElementById('к-ист').onclick=function(){открыть('ядро')};
+пусто();шипы();сп();upd();
+</script>
+</body></html>

@@ -1,0 +1,190 @@
+/* «Сито»: полноэкранная панель, которая ложится на весь интерфейс. Без отступов, рамок и скруглений: на телефоне клавиатура и так
+   съедает экран. Сверху три вкладки, внизу поле поиска и над клавиатурой переключатель режимов. Контейнер .телефон уже подгоняется
+   под видимую область (--вв-высота), поэтому поле поднимается вместе с клавиатурой. Матовое стекло с перфорацией: сквозь него смутно
+   виден интерфейс. Появление: стекло «фокусируется», панель опускается на интерфейс по оси Z, сетка отверстий сгущается. */
+.сито{position:absolute;inset:0;z-index:60;display:flex;flex-direction:column;pointer-events:none;overflow:hidden;visibility:hidden;
+  background:color-mix(in srgb,var(--фон) 78%,transparent);
+  -webkit-backdrop-filter:blur(0) saturate(1);backdrop-filter:blur(0) saturate(1);
+  opacity:0;transform:scale(1.045);transform-origin:50% 40%;
+  transition:opacity .28s ease,transform .3s ease,-webkit-backdrop-filter .3s ease,backdrop-filter .3s ease,visibility 0s linear .3s}
+.сито.открыто{visibility:visible;pointer-events:auto;opacity:1;transform:none;
+  -webkit-backdrop-filter:blur(24px) saturate(1.5);backdrop-filter:blur(24px) saturate(1.5);
+  transition:opacity .38s ease,transform .62s cubic-bezier(.16,1.1,.3,1),-webkit-backdrop-filter .7s ease,backdrop-filter .7s ease,visibility 0s}
+
+.сито-сетка{position:absolute;inset:0;pointer-events:none;opacity:0;
+  background-image:radial-gradient(circle at 50% 50%,transparent 0,transparent 1.6px,color-mix(in srgb,var(--чернила) 22%,transparent) 1.8px,color-mix(in srgb,var(--чернила) 22%,transparent) 2.3px,transparent 2.5px);
+  background-size:30px 30px;
+  -webkit-mask-image:linear-gradient(to bottom,#000 0,rgba(0,0,0,.35) 40%,transparent 80%);mask-image:linear-gradient(to bottom,#000 0,rgba(0,0,0,.35) 40%,transparent 80%);
+  transition:opacity .3s ease,background-size .3s ease}
+.сито.открыто .сито-сетка{opacity:.34;background-size:12px 12px;transition:opacity .8s ease .08s,background-size .85s cubic-bezier(.22,1,.36,1)}
+.сито>*:not(.сито-сетка){position:relative}
+
+/* верх: вырез под часы, язычок и три вкладки с иконками */
+.сито-верх{flex:none;height:calc(env(safe-area-inset-top) + 20px);touch-action:none}
+.сито-верх::after{content:"";position:absolute;left:50%;top:calc(env(safe-area-inset-top) + 8px);width:42px;height:5px;margin-left:-21px;border-radius:5px;background:var(--волосок2)}
+.сито-вкладки{flex:none;display:flex;gap:8px;padding:2px 14px 10px}
+.сито-вкладки[hidden]{display:none}
+.сито-вкладка{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:10px 4px 9px;border:1px solid transparent;border-radius:16px;background:none;color:var(--тихий);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}
+.сито-вкладка svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.сито-вкладка.он{color:var(--чернила);background:var(--вставка);border-color:var(--волосок2)}
+
+/* тело: списки и тест */
+.сито-тело{flex:1;min-height:0;overflow-y:auto;padding:4px 16px 18px;text-align:left;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.сито-подпись-т{margin:14px 2px 8px;font-size:10.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--тише)}
+.сито-пусто-т{margin:18px 2px;font-size:14px;line-height:1.5;color:var(--тихий)}
+.сито-подсказка{margin:12px 2px;font-size:12.5px;line-height:1.45;color:var(--тише)}
+.сито-сноска{margin:22px 2px 6px;font-size:11.5px;line-height:1.45;color:var(--тише)}
+.сито-мелко{font-size:12px;line-height:1.4;color:var(--тише)}
+
+.сито-ряд{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;align-items:baseline;width:100%;padding:13px 4px;border:0;border-bottom:1px solid var(--волосок);background:none;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.сито-ряд b{font-size:12px;font-weight:700;color:var(--тихий);white-space:nowrap}
+.сито-ряд span{font-size:14.5px;line-height:1.35;color:var(--чернила)}
+.сито-ряд em{grid-column:2;font-style:normal;font-size:12px;line-height:1.4;color:var(--тихий)}
+.сито-ряд:active{background:var(--вставка)}
+.сито-канд{border:1px solid var(--волосок2);border-radius:14px;margin-bottom:8px;padding:12px 14px;background:color-mix(in srgb,var(--поверхность) 60%,transparent)}
+.сито-канд.первый{border-color:var(--тихий)}
+.сито-шкала{grid-column:1/-1;display:block;height:4px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden;margin-top:2px}
+.сито-шкала u{display:block;height:100%;border-radius:4px;background:var(--сам);text-decoration:none}
+.сито-канд.первый .сито-шкала u{background:var(--подтв)}
+.сито-канд em{grid-column:1/-1}
+.сито-док{grid-template-columns:auto 1fr}
+.сито-ничто{display:block;text-align:center;color:var(--тихий);border-bottom:0;font-size:14px}
+.сито-предл{list-style:none;margin:0 0 4px;padding:0;display:flex;flex-direction:column;gap:6px}
+.сито-предл li{display:flex;justify-content:space-between;gap:12px;font-size:13.5px;color:var(--тихий)}
+.сито-предл b{color:var(--чернила);white-space:nowrap}
+.сито-право{margin:0 0 8px;padding:12px 14px;border-radius:14px;border:1px dashed var(--волосок2)}
+.сито-право b{display:block;font-size:14px;margin-bottom:4px}
+.сито-право span{font-size:13px;line-height:1.45;color:var(--тихий)}
+
+/* контакты */
+.сито-контакт{margin:0 0 10px;padding:14px;border-radius:16px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 60%,transparent)}
+.сито-контакт b{display:block;font-size:15.5px}
+.сито-контакт>span{display:block;margin:4px 0 12px;font-size:13px;line-height:1.45;color:var(--тихий)}
+.сито-связи{display:flex;flex-wrap:wrap;gap:8px}
+.сито-связь{display:flex;flex-direction:column;gap:2px;padding:9px 14px;border-radius:12px;background:var(--вставка);color:var(--чернила);text-decoration:none;font-size:14px;font-weight:600}
+.сито-связь small{font-size:11.5px;font-weight:400;color:var(--тихий)}
+
+/* расследование: карточки теста */
+.сито-карта{margin:12px 0;padding:18px 16px;border-radius:18px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 70%,transparent)}
+.сито-карта h3{margin:0 0 10px;font-size:15.5px;line-height:1.35;font-weight:700}
+.сито-карта-т{font-size:15px;line-height:1.5;color:var(--чернила)}
+.сито-карта-т b{font-weight:600}
+.сито-нет{margin:8px 0 12px;padding:0 0 0 18px;display:flex;flex-direction:column;gap:6px;font-size:14px;line-height:1.4}
+.сито-кн{display:flex;gap:10px;margin-top:16px}
+.сито-кн button{flex:1;min-height:50px;padding:10px 8px;border-radius:14px;border:1px solid var(--волосок2);background:var(--вставка);color:var(--чернила);font:inherit;font-size:14.5px;font-weight:600;cursor:pointer}
+.сито-кн button:active{filter:brightness(1.25)}
+.сито-прогресс{height:4px;border-radius:4px;background:rgba(127,127,127,.22);overflow:hidden;margin:6px 2px 0}
+.сито-прогресс i{display:block;height:100%;border-radius:4px;background:var(--подтв);transition:width .35s ease}
+.сито-ссылка{display:block;margin:14px auto 0;border:0;background:none;color:var(--тихий);font:inherit;font-size:13.5px;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;cursor:pointer}
+.сито-примеры{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.сито-пример{padding:12px 14px;border-radius:14px;border:1px dashed var(--волосок2);background:none;color:var(--тихий);font:inherit;font-size:14px;text-align:left;cursor:pointer}
+.сито-совет{margin:0 0 10px;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--поверхность) 60%,transparent);border:1px solid var(--волосок)}
+.сито-совет p{margin:0 0 12px;font-size:14px;line-height:1.5}
+.сито-бланк{display:flex;flex-direction:column;align-items:flex-start;gap:3px;width:100%;margin-top:8px;padding:12px 14px;border-radius:12px;border:1px solid var(--подтв);background:var(--подтв-фон);color:var(--чернила);font:inherit;text-align:left;cursor:pointer}
+.сито-бланк b{font-size:14px;color:var(--подтв)}
+.сито-бланк span{font-size:13px;line-height:1.35}
+
+/* переключатель режимов над клавиатурой; после первого запроса сворачивается */
+.сито-режимы{flex:none;display:flex;justify-content:center;gap:4px;margin:0 auto;padding:4px;max-height:60px;overflow:hidden;border-radius:999px;
+  background:color-mix(in srgb,var(--поверхность) 80%,transparent);border:1px solid var(--волосок2);
+  transition:max-height .35s ease,opacity .25s ease,margin .35s ease,padding .35s ease,border-width .35s ease}
+.сито-режимы.скрыт{max-height:0;opacity:0;margin-top:-6px;padding-top:0;padding-bottom:0;border-width:0;pointer-events:none}
+.сито-режим{border:0;background:none;color:var(--тихий);font:inherit;font-size:14px;font-weight:600;padding:9px 18px;border-radius:999px;cursor:pointer;transition:background .2s ease,color .2s ease}
+.сито-режим.он{background:var(--фон);color:var(--чернила);box-shadow:0 0 0 1px var(--волосок2)}
+
+/* поле поиска: прижато к низу панели, над клавиатурой; снизу запас под «домашнюю» полосу телефона */
+.сито-низ{flex:none;display:flex;align-items:center;gap:10px;margin:0;padding:10px 14px max(14px,env(safe-area-inset-bottom))}
+.сито-поле{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:50px;padding:0 18px;border-radius:999px;border:1px solid var(--стекло-грань,var(--волосок2));
+  background:linear-gradient(180deg,var(--стекло-л,rgba(255,255,255,.07)),var(--стекло-т,rgba(255,255,255,.03)))}
+.сито-поле input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--чернила);font:16px var(--шрифт,system-ui,sans-serif)}
+.сито-поле input::placeholder{color:var(--тише)}
+.сито-очист{flex:none;border:0;background:none;color:var(--тише);font-size:16px;padding:6px;cursor:pointer}
+.сито-отмена{flex:none;border:0;background:none;color:var(--чернила);font:inherit;font-size:15px;font-weight:600;padding:10px 2px;cursor:pointer}
+
+/* пока сито открыто, страница под ним не прокручивается, а курсор в поле не сдвигает контейнер телефона */
+html.сито-открыто .телефон{overflow:clip}
+
+@media(prefers-reduced-motion:reduce){
+  .сито,.сито.открыто{transition:none;transform:none}
+  .сито-сетка,.сито.открыто .сито-сетка,.сито-режимы,.сито-прогресс i{transition:none}
+}
+
+/* расследование: заставка «скоро» */
+.сито-скоро{display:flex;flex-direction:column;align-items:flex-start;padding:26px 6px 10px}
+.сито-скоро-метка{display:inline-block;padding:5px 12px;border-radius:999px;border:1px solid var(--сам);background:var(--сам-фон);color:var(--сам);font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+.сито-скоро h2{margin:16px 0 8px;font-size:30px;line-height:1.1;font-weight:700;letter-spacing:-.02em}
+.сито-скоро>p{margin:0;max-width:34em;font-size:15px;line-height:1.55;color:var(--тихий)}
+.сито-путь{list-style:none;margin:30px 0 24px;padding:0;position:relative;display:flex;flex-direction:column;gap:22px;width:100%}
+.сито-путь::before{content:"";position:absolute;left:13px;top:14px;bottom:14px;width:2px;background:var(--волосок2)}
+.сито-путь li{position:relative;display:flex;align-items:center;gap:14px;font-size:15px;line-height:1.35;opacity:0;transform:translateY(10px);animation:сито-вход .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:calc(var(--н) * .16s + .25s)}
+.сито-путь i{position:relative;z-index:1;flex:none;width:28px;height:28px;box-sizing:border-box;border-radius:50%;border:2px solid var(--волосок2);background:var(--фон);display:flex;align-items:center;justify-content:center}
+.сито-путь i svg{width:15px;height:15px;fill:none;stroke:var(--фон);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.сито-путь li.готов i{border-color:var(--подтв);background:var(--подтв)}
+.сито-путь li.идёт i{border-color:var(--сам)}
+.сито-путь li.идёт i u{display:block;width:10px;height:10px;border-radius:50%;background:var(--сам);animation:сито-пульс 1.8s ease-in-out infinite}
+.сито-путь li.ждёт{color:var(--тише)}
+.сито-путь li.ждёт i{border-style:dashed}
+.сито-скоро-низ{margin:0 0 14px;font-size:13px;color:var(--тише)}
+.сито-скоро-кн{width:auto;align-self:flex-start;padding:13px 22px}
+@keyframes сито-вход{to{opacity:1;transform:none}}
+@keyframes сито-пульс{0%,100%{transform:scale(.7);opacity:.7}50%{transform:scale(1.15);opacity:1}}
+@media(prefers-reduced-motion:reduce){.сито-путь li{opacity:1;transform:none;animation:none}.сито-путь li.идёт i u{animation:none}}
+
+/* расследование: схема ядра, карточки «что внутри», цифры */
+.сито-скоро-лид{margin:0;max-width:34em;font-size:15px;line-height:1.55;color:var(--тихий)}
+.сито-скоро-подп{margin:30px 0 4px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--тише)}
+.сито-схема{position:relative;width:100%;margin:26px 0 0;padding:18px 6px 10px;border-radius:18px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 55%,transparent);overflow:hidden}
+.сито-схема::before{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+  background-image:radial-gradient(circle,color-mix(in srgb,var(--чернила) 16%,transparent) 1px,transparent 1.6px);background-size:12px 12px}
+.сито-схема ol{position:relative;list-style:none;margin:0;padding:0;display:flex;justify-content:space-between}
+.сито-схема li{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.сито-схема li b{width:14px;height:14px;border-radius:50%;border:2px solid var(--волосок2);background:var(--фон);animation:сито-узел 7s ease-in-out infinite;animation-delay:calc(var(--н) * 1s)}
+.сито-схема li span{font-size:12.5px;font-weight:700;color:var(--чернила)}
+.сито-схема li small{font-size:10.5px;line-height:1.25;color:var(--тише);max-width:70px}
+.сито-схема-линия{position:absolute;left:8%;right:8%;top:25px;height:2px;background:var(--волосок2)}
+.сито-схема-линия i{position:absolute;top:-4px;left:0;width:10px;height:10px;border-radius:50%;background:var(--подтв);box-shadow:0 0 0 5px color-mix(in srgb,var(--подтв) 22%,transparent);animation:сито-сигнал 7s linear infinite}
+@keyframes сито-сигнал{0%{left:0;opacity:0}6%{opacity:1}88%{opacity:1}100%{left:calc(100% - 10px);opacity:0}}
+@keyframes сито-узел{0%,100%{border-color:var(--волосок2);background:var(--фон)}8%,22%{border-color:var(--подтв);background:var(--подтв)}34%{border-color:var(--волосок2);background:var(--фон)}}
+
+.сито-св{width:100%;display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.сито-св-к{display:flex;gap:14px;padding:14px;border-radius:16px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 55%,transparent);opacity:0;transform:translateY(12px);animation:сито-вход .6s cubic-bezier(.22,1,.36,1) forwards;animation-delay:calc(var(--н) * .14s + 1s)}
+.сито-св-к i{flex:none;width:38px;height:38px;border-radius:12px;background:var(--вставка);display:flex;align-items:center;justify-content:center}
+.сито-св-к svg{width:20px;height:20px;fill:none;stroke:var(--чернила);stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.сито-св-к b{display:block;font-size:14.5px;margin-bottom:3px}
+.сито-св-к span{display:block;font-size:13px;line-height:1.5;color:var(--тихий)}
+
+.сито-цифры{width:100%;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:18px 0 6px}
+.сито-цифры div{padding:12px 4px 10px;border-radius:14px;background:var(--вставка);text-align:center}
+.сито-цифры b{display:block;font-size:22px;line-height:1.1;font-weight:700;letter-spacing:-.02em}
+.сито-цифры span{display:block;margin-top:4px;font-size:10.5px;line-height:1.25;color:var(--тихий)}
+.сито-скоро-низ{margin-top:20px}
+@media(prefers-reduced-motion:reduce){.сито-схема li b,.сито-схема-линия i{animation:none}.сито-св-к{opacity:1;transform:none;animation:none}}
+
+/* вкладка «Дело» */
+.сито-вкладка{position:relative}
+.сито-бдж{position:absolute;top:6px;right:calc(50% - 26px);min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:9px;background:var(--подтв);color:var(--фон);font-style:normal;font-size:11px;font-weight:700;line-height:18px;text-align:center}
+.сито-бдж[hidden]{display:none}
+.сито-дело-шапка{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:10px 0 4px;padding:16px;border-radius:20px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 60%,transparent)}
+.сито-дело-число{display:flex;align-items:baseline;gap:10px}
+.сито-дело-число b{font-size:44px;line-height:1;font-weight:700;letter-spacing:-.03em}
+.сито-дело-число span{font-size:13px;line-height:1.25;color:var(--тихий);max-width:6em}
+.сито-дело-чипы{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.сито-чип{padding:5px 11px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--волосок2);background:var(--вставка);color:var(--чернила)}
+.сито-чип.вр{border-color:var(--подтв);background:var(--подтв-фон);color:var(--подтв)}
+.сито-чип.сл{border-color:var(--сам);background:var(--сам-фон);color:var(--сам)}
+.сито-шаг{margin:12px 0 4px;padding:16px;border-radius:18px;border:1px solid var(--сам);background:var(--сам-фон)}
+.сито-шаг-метка{display:block;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--сам)}
+.сито-шаг p{margin:8px 0 2px;font-size:14.5px;line-height:1.5;color:var(--чернила)}
+.сито-дело-к{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"н имя" "ст ст" "под под";gap:6px 12px;align-items:baseline;width:100%;margin:0 0 8px;padding:14px;border-radius:16px;border:1px solid var(--волосок2);background:color-mix(in srgb,var(--поверхность) 60%,transparent);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.сито-дело-к .н{grid-area:н;font-size:12px;font-weight:700;color:var(--тихий);white-space:nowrap}
+.сито-дело-к .имя{grid-area:имя;font-size:14.5px;line-height:1.35;font-weight:600}
+.сито-дело-к .под{grid-area:под;font-size:12px;color:var(--тихий)}
+.сито-ступени{grid-area:ст;display:flex;gap:5px;margin-top:2px}
+.сито-ступени i{flex:1;height:5px;border-radius:3px;border:1px dashed var(--волосок2)}
+.сито-ступени i.он{border:0;background:var(--сам)}
+.сито-ступени i.вр{background:var(--подтв)}
+.сито-дело-пусто{display:flex;flex-direction:column;align-items:center;text-align:center;padding:34px 10px 10px}
+.сито-дело-пусто i{width:68px;height:68px;border-radius:22px;background:var(--вставка);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.сито-дело-пусто svg{width:32px;height:32px;fill:none;stroke:var(--тихий);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.сито-дело-пусто h3{margin:0 0 8px;font-size:18px;font-weight:700}
+.сито-дело-пусто p{margin:0 0 18px;max-width:22em;font-size:14px;line-height:1.55;color:var(--тихий)}

@@ -1,0 +1,128 @@
+﻿<!DOCTYPE html>
+<html lang="ru" data-вид="кирпичи">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f6f6f2" media="(prefers-color-scheme:light)">
+<meta name="theme-color" content="#121211" media="(prefers-color-scheme:dark)">
+<title>Справка по годности · кирпичи · десктоп</title>
+<link rel="stylesheet" href="макет.css?v=101">
+<link rel="stylesheet" href="сито.css?v=8">
+<style>
+.задача{display:none}
+.привет{display:none}
+@media(max-width:899px){
+  .шапка{padding:calc(6px + env(safe-area-inset-top)) 8px 6px 12px;gap:6px}
+  .шапка h1{font-size:14px}
+  .шапка-вес{width:38px}
+  .к-шапка{width:38px;height:38px;border-radius:10px}
+  .задача{padding:0 14px 8px;font-size:12px}
+  .лента{padding:10px 14px 134px}
+  .лента.пустая{justify-content:flex-start;padding-bottom:134px}
+  .привет-текст{margin:0 0 12px;font-size:14.5px;line-height:1.5}
+  .мини{gap:6px;margin:0 0 8px}
+  .мини-подпись{margin:0 0 14px;font-size:11px}
+  .чипы{gap:6px}
+  .чип{min-height:38px;padding:6px 12px;border-radius:12px;font-size:13.5px}
+  .думает{font-size:14px}
+  .м.чел{font-size:15px;padding:8px 12px;margin:0 0 12px}
+  .м .главное{font-size:16px;margin:0 0 6px}
+  .м .пояснение{font-size:14px}
+  .ещё{font-size:13px;margin-top:6px}
+  .низ{padding:0 10px calc(8px + env(safe-area-inset-bottom))}
+  .поле{min-height:48px;border-radius:24px;padding:5px 5px 5px 14px}
+  .низ-таб{margin:10px 0 0}
+  .таблист{padding:4px}
+  .режим{flex:1 1 auto;min-height:36px;line-height:36px;padding:0 6px;font-size:13px;white-space:nowrap}
+  .шапка{position:relative;min-height:54px}
+  .шарик{width:46px;height:46px}
+  .тост{bottom:calc(118px + env(safe-area-inset-bottom))}
+  .поле textarea{padding:8px 0;min-height:22px;scrollbar-width:none}
+  .поле textarea::-webkit-scrollbar{display:none}
+  .отпр{width:38px;height:38px}
+  .отпр svg{width:15px;height:15px}
+  .полка-подпись{font-size:11px;margin:0 2px 5px}
+  .легенда{font-size:10px;gap:9px;margin:0 2px 6px}
+  .кирпич{min-height:56px}
+  .разбор-список b{width:92px}
+  .д-скрытые{margin:2px 14px 0}
+}
+@media(min-width:641px) and (max-width:899px){
+  body{background:var(--фон);background-image:none;align-items:stretch;gap:0;padding:0}
+  .телефон{width:100%;max-width:480px;height:100dvh;border-radius:0;transform:none;box-shadow:none}
+}
+@media(min-width:900px){
+  body{background:var(--фон);background-image:none;align-items:center;padding:24px}
+  .телефон{width:100%;max-width:1240px;height:calc(100dvh - 48px);display:grid;grid-template-columns:minmax(0,1fr) 360px;grid-template-rows:auto auto minmax(0,1fr) auto auto;grid-template-areas:"шапка шапка" "задача сборка" "лента сборка" "поле сборка" "низ-таб сборка";border:1px solid var(--волосок);border-radius:24px;box-shadow:0 24px 80px rgba(0,0,0,.32)}
+  .телефон::after{content:"";grid-area:сборка;background:var(--поверхность);border-left:1px solid var(--волосок);pointer-events:none;z-index:-1}
+  .шапка{grid-area:шапка;border-bottom:1px solid var(--волосок);padding:12px 24px}
+  .шапка h1{font-size:16px}
+  .задача{grid-area:задача;padding:14px max(28px,calc((100% - 720px)/2)) 0}
+  .лента{grid-area:лента;padding:20px max(28px,calc((100% - 720px)/2)) 8px}
+  .лента.пустая{justify-content:flex-start;padding-bottom:20px}
+  .низ{display:contents}
+  .поиск-значок{right:calc(360px + 14px);bottom:67px}
+  .поиск-строка{right:calc(360px + 68px);bottom:67px;width:calc(100% - 360px - 82px)}
+  #полка{grid-area:сборка;align-self:start;padding:20px 24px 0}
+  .низ-таб{grid-area:низ-таб;margin:0 max(28px,calc((100% - 720px)/2)) 16px;justify-content:center}
+  .таблист{flex:none}
+  .поле{grid-area:поле;margin:0 max(28px,calc((100% - 720px)/2)) 10px}
+  [data-вид="кирпичи"] .полка{flex-direction:column;gap:8px;margin:0;align-items:stretch}
+  [data-вид="кирпичи"] .полка .кирпич{flex-direction:row;align-items:center;gap:10px;width:100%;min-height:50px;padding:0 14px;background:var(--тлф);border:1.5px solid transparent;border-radius:12px}
+  [data-вид="кирпичи"] .полка .кирпич.с-пусто{border:1.5px dashed var(--нет)}
+  [data-вид="кирпичи"] .полка .кирпич .к-верх{flex:1;justify-content:flex-start;width:auto;background:none;border:0;border-radius:0;padding:0;position:static}
+  [data-вид="кирпичи"] .полка .кирпич .к-верх::before,[data-вид="кирпичи"] .полка .кирпич .к-верх::after{content:none}
+  [data-вид="кирпичи"] .полка .кирпич .к-низ{font-size:10px;padding:0;white-space:nowrap}
+  .лист{top:0;bottom:0;left:auto;right:0;width:min(540px,calc(100% - 80px));max-height:none;border-radius:22px 0 0 22px;transform:translateX(105%);box-shadow:-14px 0 44px rgba(0,0,0,.22)}
+  .лист.открыт{transform:none}
+  .лист.разбор{height:auto;width:min(480px,calc(100% - 80px))}
+  .лист-полный{width:min(620px,calc(100% - 80px));border-radius:22px 0 0 22px}
+  .ручка{display:none}
+}
+</style>
+</head>
+<body>
+<main class="телефон">
+  <header class="шапка">
+    <button class="круг" id="к-история" aria-label="История разговоров"><svg class="и" aria-hidden="true"><use href="#и-история"/></svg></button>
+    <h1 id="заголовок">Справка по годности</h1>
+    <button class="круг" id="к-пом" aria-label="Подключение помощника"><svg class="и" aria-hidden="true"><use href="#и-ключ"/></svg></button>
+  </header>
+  <p class="задача" id="задача">Найду статью Расписания болезней по вашим словам и покажу, откуда взялась категория.</p>
+  <div class="лента" id="лента"></div>
+  <section class="экран-документация" id="экран-документация" aria-label="Документация"></section>
+  <section class="экран-бумаги" id="экран-бумаги" aria-label="Бумаги"></section>
+  <section class="экран-дело" id="экран-дело" aria-label="Моё дело"></section>
+  <div class="низ">
+    <div id="полка" hidden></div>
+    <button class="поиск-значок" id="к-поиск" aria-label="Поиск"><svg class="и" aria-hidden="true"><use href="#и-поиск"/></svg></button>
+    <div class="поиск-строка" id="поиск-строка">
+      <input id="поиск-ввод" type="text" placeholder="Жалобы своими словами: колет сердце, минус 7…" autocomplete="off" spellcheck="false" enterkeyhint="search" aria-label="Поиск по справочнику">
+      <button type="button" id="поиск-очист" hidden aria-label="Очистить">✕</button>
+    </div>
+    <div class="поле">
+      <textarea id="реплика" rows="1" placeholder="Что со здоровьем или что сказал врач…" aria-label="Сообщение"></textarea>
+      <button class="отпр" id="отпр" aria-label="Отправить"><svg aria-hidden="true"><use href="#и-отпр"/></svg></button>
+    </div>
+    <div class="низ-таб">
+      <div class="таблист" role="tablist" aria-label="Режим работы">
+        <span class="режим-фон" aria-hidden="true"></span>
+        <button class="режим он" data-режим="документация" role="tab" aria-selected="true">Расследование</button>
+        <button class="режим" data-режим="чат" role="tab" aria-selected="false">Помощник<span class="альфа">α</span></button>
+      </div>
+      <button class="круг шарик" id="к-новый" aria-label="Новый разговор"><svg class="и" aria-hidden="true"><use href="#и-новый"/></svg></button>
+    </div>
+  </div>
+  <div class="фон" id="фон"></div>
+  <section class="лист разбор" id="лист-разбор" aria-label="Что система поняла"></section>
+  <section class="лист лист-полный" id="лист-статья" aria-label="Статья Расписания болезней"></section>
+  <section class="лист" id="лист-история" aria-label="Разговоры"></section>
+  <section class="лист" id="лист-подключение" aria-label="Подключение помощника"></section>
+</main>
+<script src="справочник_данные.js?v=31"></script>
+<script src="простыми_словами.js?v=2"></script>
+<script src="макет.js?v=100"></script>
+<script src="сито_данные.js?v=3"></script>
+<script src="сито.js?v=11"></script>
+</body>
+</html>

@@ -4,8 +4,52 @@
     {
       "name": "nnl-stand",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-X", "utf8", "C:/ЯДРО-ОПЫТ/NNL/диалог/сервер.py", "8090"],
+      "runtimeArgs": [
+        "-X",
+        "utf8",
+        "C:/ЯДРО-ОПЫТ/NNL/диалог/сервер.py",
+        "8090"
+      ],
       "port": 8090
+    },
+    {
+      "name": "maket-static",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-X",
+        "utf8",
+        "-m",
+        "http.server",
+        "8123",
+        "--directory",
+        "C:/ЯДРО-ОПЫТ/NNL/диалог/макеты_военкомат"
+      ],
+      "port": 8123
+    },
+    {
+      "name": "nnl-stand-8091",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-X",
+        "utf8",
+        "C:/ЯДРО-ОПЫТ/NNL/диалог/сервер.py",
+        "8091"
+      ],
+      "port": 8091
+    },
+    {
+      "name": "maket-8130",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "-X",
+        "utf8",
+        "-m",
+        "http.server",
+        "8130",
+        "--directory",
+        "C:/ЯДРО-ОПЫТ/NNL/диалог/макеты_военкомат"
+      ],
+      "port": 8130
     }
   ]
 }

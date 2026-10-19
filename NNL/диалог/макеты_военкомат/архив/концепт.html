@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Справочник · концепт</title>
+<link rel="stylesheet" href="концепт.css?v=2">
+</head>
+<body>
+<main class="прил" id="прил">
+  <div class="мета" id="мета">
+    <span>Концепт · вход:</span>
+    <div class="мета-к" id="мета-к">
+      <button data-вход="поиск">А · Слова</button>
+      <button data-вход="тело">Б · Тело</button>
+      <button data-вход="исход">В · Исход</button>
+    </div>
+  </div>
+  <header class="шапка">
+    <h1>Справка по годности</h1>
+    <span class="ядро" id="ядро" title="Ядро NNL на вашем сервере"><i></i><span>NNL</span></span>
+  </header>
+  <div class="экран" id="экран"></div>
+
+  <div class="низ" id="низ">
+    <label class="поиск" id="поиск">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.2"/><path d="m16 16 4.2 4.2"/></svg>
+      <input id="запрос" type="search" autocomplete="off" enterkeyhint="search" placeholder="Что беспокоит? Например: диабет" aria-label="Поиск по справочнику">
+      <button class="очист" id="очист" hidden aria-label="Очистить"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    </label>
+    <nav class="табы" aria-label="Разделы">
+      <button class="таб он" data-таб="справочник">Справочник</button>
+      <button class="таб" data-таб="бумаги">Бумаги</button>
+      <button class="таб" data-таб="дело">Дело</button>
+      <button class="таб" data-таб="помощник">Помощник<span class="а">α</span></button>
+    </nav>
+  </div>
+
+  <div class="фон-л" id="фон-л"></div>
+  <section class="лист" id="лист" aria-modal="true"><div class="ручка"></div><div class="лист-шапка"><h2 id="лист-з"></h2><span id="лист-п"></span></div><div class="лист-тело" id="лист-т"></div></section>
+
+  <section class="статья" id="статья" aria-label="Статья">
+    <div class="ст-шапка">
+      <button class="назад" id="назад"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg>Назад</button>
+      <span class="ст-путь" id="ст-путь"></span>
+      <div class="ст-нав"><button id="пред" aria-label="Предыдущая"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 5-7 7 7 7"/></svg></button><button id="след" aria-label="Следующая"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5 7 7-7 7"/></svg></button></div>
+    </div>
+    <div class="ст-тело" id="ст-тело"></div>
+    <div class="ст-низ" id="ст-низ"></div>
+  </section>
+  <div class="тост" id="тост"></div>
+</main>
+<script src="справочник_данные.js?v=31"></script>
+<script src="концепт.js?v=3"></script>
+</body>
+</html>

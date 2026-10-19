@@ -17,6 +17,7 @@
 import hashlib
 import json
 import os
+import contextvars
 import re
 import threading
 import time
@@ -122,8 +123,54 @@ def есть_ключ(провайдер):
     return ключ_провайдера(провайдер) is not None
 
 
+_личный = contextvars.ContextVar("личный_ключ", default=None)   # (провайдер, ключ) на время ОДНОГО запроса человека: ни на диск, ни в журнал, ни в кэш не попадает
+
+
+class личный_ключ:
+    """Контекст «свой ключ человека»: пока он открыт, вызовы идут только с этим ключом и только к этому провайдеру.
+    Ключ сервера (файл ключей, переменные среды) в это время не используется вообще, кэш ответов выключен."""
+
+    def __init__(self, провайдер, ключ):
+        self._значение = (провайдер, ключ)
+        self._метка = None
+
+    def __enter__(self):
+        self._метка = _личный.set(self._значение)
+        return self
+
+    def __exit__(self, *_):
+        _личный.reset(self._метка)
+
+
+def личный_ключ_включён():
+    return _личный.get() is not None
+
+
 def ключ_провайдера(провайдер):
+    л = _личный.get()
+    if л is not None:
+        return л[1] if л[0] == провайдер else None
     return _ключи().get(провайдер)
+
+
+def проверить_ключ(провайдер, ключ, таймаут=20):
+    """Проверка чужого ключа без расхода токенов: список моделей провайдера (GET /models). Возвращает {"ок": bool, "модели": [...]} или {"ок": False, "ошибка": ...}.
+    Ключ в ответ и в сообщения об ошибке не попадает."""
+    cfg = конфиг_провайдера(провайдер)
+    if cfg is None or cfg.get("подключён") is False or not cfg.get("base_url") or not cfg.get("авторизация"):
+        return {"ок": False, "ошибка": "провайдер недоступен для подключения"}
+    req = urllib.request.Request(str(cfg["base_url"]).rstrip("/") + "/models", headers=dict(UA, Authorization="Bearer " + ключ))
+    try:
+        with urllib.request.urlopen(req, timeout=таймаут) as r:
+            данные = json.load(r)
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            return {"ок": False, "ошибка": "провайдер не принял ключ (HTTP %s)" % e.code}
+        return {"ок": False, "ошибка": "провайдер ответил HTTP %s" % e.code}
+    except Exception as e:  # noqa: BLE001
+        return {"ок": False, "ошибка": _скрыть_ключ("%s" % type(e).__name__, ключ)}
+    список = sorted({str(m.get("id", "")).replace("models/", "") for m in (данные.get("data") or данные.get("models") or []) if isinstance(m, dict)})
+    return {"ок": True, "модели": [x for x in список if x]}
 
 
 def _загрузить_кэш():
@@ -263,6 +310,8 @@ def спросить(провайдер, модель, система, исто�
     """История: [(роль, текст)] где роль user|model, либо готовые dict сообщения OpenAI (нужны для инструментов).
     Возвращает dict: текст, данные (если была схема), tool_calls (если модель вернула вызовы), токены_вход/выход, мс, из_кэша.
     на_часть(частичный_текст) — только для свободного текста без схемы: зовётся по мере генерации (поток SSE), итог на странице виден сразу."""
+    if _личный.get() is not None:
+        кэш = False                       # ответы по чужому ключу в общий кэш на диске не пишем и из него не читаем
     if "|" in str(модель):
         return _пул(провайдер, str(модель).split("|"), система, история, схема, температура, макс_токенов, таймаут, кэш, размышление,
                      tools=tools, tool_choice=tool_choice, extra_body=extra_body, на_часть=на_часть)

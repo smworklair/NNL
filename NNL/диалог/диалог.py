@@ -11,6 +11,7 @@
      перегенерация, а если снова нет — пометка в самом тексте.
 Модель не хранит истину и не ведёт счёт: если её убрать, остаются вероятности, вопросы-кандидаты и досье."""
 import concurrent.futures
+import contextvars
 import json
 import os
 import re
@@ -902,8 +903,9 @@ class Сессия:
                     строка = "%s. %s" % (ном, строка)
             return строка, К.вызовы_после(метка)
 
+        контекст = contextvars.copy_context()      # личный ключ человека должен дойти и до потоков пула
         with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
-            результаты = list(ex.map(обработать, единицы))
+            результаты = list(ex.map(lambda е: контекст.copy().run(обработать, е), единицы))
         ответ = "\n".join(с_ for с_, _ in результаты)
         вызовы = [в for _, вв in результаты for в in вв]
         self.св_история += [("user", текст), ("model", ответ)]

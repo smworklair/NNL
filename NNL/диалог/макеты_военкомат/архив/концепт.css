@@ -1,0 +1,229 @@
+/* Концепт «Справочник — главная»: три входа и новая страница статьи. Отдельно от макет.css, живой макет не трогает. */
+:root{
+  --шрифт:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --фон:#f6f6f2;--пов:#ffffff;--вст:#ececE6;--чернила:#17171a;--тихий:#54545c;--тише:#6b6b72;
+  --волосок:rgba(20,20,25,.10);--волосок2:rgba(20,20,25,.18);
+  --стекло-л:rgba(255,255,255,.80);--стекло-т:rgba(255,255,255,.62);--стекло-блеск:rgba(255,255,255,.9);
+  --тень:0 1px 2px rgba(20,20,25,.05),0 10px 28px -10px rgba(20,20,25,.16);
+  --кА:#0f6b3d;--кБ:#4b7a0a;--кВ:#8a6500;--кГ:#1d63a8;--кД:#b3261e;
+  --акцент:#e0b400;
+  color-scheme:light;
+}
+@media(prefers-color-scheme:dark){:root{
+  --фон:#121211;--пов:#1c1c1b;--вст:#242423;--чернила:#f1f1ee;--тихий:#a9a9a4;--тише:#8b8b86;
+  --волосок:rgba(255,255,255,.10);--волосок2:rgba(255,255,255,.18);
+  --стекло-л:rgba(38,38,37,.72);--стекло-т:rgba(24,24,23,.58);--стекло-блеск:rgba(255,255,255,.14);
+  --тень:0 1px 2px rgba(0,0,0,.30),0 10px 26px -12px rgba(0,0,0,.55);
+  --кА:#7fe0a0;--кБ:#b9e36f;--кВ:#f2c94c;--кГ:#7cc4ff;--кД:#ff8f86;
+  --акцент:#f5cf2e;color-scheme:dark}}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%;margin:0}
+body{font:16px/1.5 var(--шрифт);background:var(--фон);color:var(--чернила);-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;display:flex;justify-content:center;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--чернила);outline-offset:2px;border-radius:8px}
+p{margin:0;text-wrap:pretty}
+h1,h2,h3{margin:0;text-wrap:balance}
+.к-А{--к:var(--кА)}.к-Б{--к:var(--кБ)}.к-В{--к:var(--кВ)}.к-Г{--к:var(--кГ)}.к-Д{--к:var(--кД)}
+.прил{position:relative;width:100%;max-width:480px;height:100dvh;display:flex;flex-direction:column;overflow:hidden;background:var(--фон)}
+@media(min-width:700px){.прил{height:min(880px,calc(100dvh - 32px));margin-top:16px;border-radius:36px;border:1px solid var(--волосок);box-shadow:0 30px 80px rgba(0,0,0,.35)}}
+
+/* переключатель вариантов — служебный, не часть дизайна */
+.мета{flex:none;display:flex;align-items:center;gap:6px;padding:7px 12px;background:color-mix(in srgb,var(--акцент) 14%,var(--фон));border-bottom:1px dashed color-mix(in srgb,var(--акцент) 60%,transparent);font:600 10.5px/1 ui-monospace,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase;color:var(--тихий)}
+.мета b{color:var(--чернила);font-weight:700}
+.мета-к{margin-left:auto;display:flex;gap:4px}
+.мета-к button{padding:6px 10px;border-radius:8px;border:1px solid var(--волосок2);font:inherit;letter-spacing:inherit;text-transform:inherit;color:var(--тихий)}
+.мета-к button.он{background:var(--чернила);color:var(--фон);border-color:var(--чернила)}
+
+.шапка{flex:none;display:flex;align-items:center;gap:10px;padding:14px 18px 6px}
+.шапка h1{font-size:15px;font-weight:650;letter-spacing:.01em}
+.ядро{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--тише)}
+.ядро i{width:7px;height:7px;border-radius:50%;background:var(--тише)}
+.ядро.жив i{background:var(--кА);box-shadow:0 0 0 3px color-mix(in srgb,var(--кА) 25%,transparent)}
+.экран{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 18px 190px;scrollbar-width:thin;scrollbar-color:var(--волосок2) transparent}
+.экран::-webkit-scrollbar{width:6px}.экран::-webkit-scrollbar-thumb{background:var(--волосок2);border-radius:9px}
+
+/* герой входа */
+.герой{padding:16px 0 18px}
+.герой h2{font-size:30px;line-height:1.1;font-weight:750;letter-spacing:-.025em}
+.герой p{margin-top:10px;font-size:15px;color:var(--тихий);max-width:340px}
+.чипы{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.чип{min-height:40px;padding:0 15px;border-radius:999px;border:1px solid var(--волосок2);background:var(--пов);font-size:14px;box-shadow:var(--тень)}
+.чип:active{transform:scale(.97)}
+.сек{margin:24px 0 10px;font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише)}
+.сек .н{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:7px;background:var(--вст);font-size:10px;letter-spacing:.08em;vertical-align:1px}
+
+/* полоса категорий А–Д */
+.полоса{display:flex;gap:3px;height:6px}
+.полоса i{flex:1;border-radius:3px;background:var(--волосок)}
+.полоса i.есть{background:var(--к)}
+.полоса.крупная{height:10px;gap:4px}
+
+/* области */
+.области{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.обл{display:flex;flex-direction:column;gap:9px;min-height:96px;padding:13px 14px;text-align:left;border-radius:18px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень)}
+.обл b{font-size:15px;font-weight:700;line-height:1.2}
+.обл span{font-size:12px;color:var(--тише)}
+.обл .полоса{margin-top:auto}
+.обл:active{transform:scale(.98)}
+
+/* вход «Тело» */
+.тело{position:relative;width:100%;max-width:380px;margin:4px auto 0;aspect-ratio:300/420}
+.тело svg.силуэт{position:absolute;inset:0;width:100%;height:100%}
+.тело .нить{stroke:var(--волосок2);stroke-width:1;fill:none}
+.точка{position:absolute;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--акцент);box-shadow:0 0 0 4px color-mix(in srgb,var(--акцент) 30%,transparent);animation:пульс 2.6s ease-in-out infinite;pointer-events:none}
+@keyframes пульс{50%{box-shadow:0 0 0 8px color-mix(in srgb,var(--акцент) 8%,transparent)}}
+.метка{position:absolute;transform:translateY(-50%);min-height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--волосок2);background:linear-gradient(180deg,var(--стекло-л),var(--стекло-т));backdrop-filter:blur(14px) saturate(1.6);-webkit-backdrop-filter:blur(14px) saturate(1.6);font-size:12.5px;font-weight:600;white-space:nowrap;box-shadow:inset 0 1px 0 var(--стекло-блеск),var(--тень)}
+.метка.л{left:0}.метка.п{right:0}
+.метка:active{transform:translateY(-50%) scale(.96)}
+.общее{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px}
+
+/* вход «Исход» */
+.исходы{display:flex;flex-direction:column;gap:10px}
+.исход{display:grid;grid-template-columns:48px 1fr;gap:14px;align-items:center;padding:14px 16px 14px 14px;text-align:left;border-radius:20px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень);position:relative;overflow:hidden}
+.исход::before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:var(--к)}
+.исход .бук{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:23px;font-weight:800;color:var(--к);background:color-mix(in srgb,var(--к) 15%,transparent)}
+.исход b{display:block;font-size:16px;font-weight:700;line-height:1.25}
+.исход span{display:block;margin-top:2px;font-size:12.5px;color:var(--тихий);line-height:1.4}
+.исход .шкала{height:5px;border-radius:3px;background:var(--волосок);margin-top:9px;overflow:hidden}
+.исход .шкала i{display:block;height:100%;background:var(--к);border-radius:3px}
+.исход:active{transform:scale(.99)}
+
+/* списки */
+.список{display:flex;flex-direction:column;gap:9px}
+.карт{position:relative;display:flex;flex-direction:column;gap:5px;padding:13px 90px 13px 15px;text-align:left;border-radius:16px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень)}
+.карт .н{font-size:10.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--тише)}
+.карт .т{font-size:15px;font-weight:700;line-height:1.3}
+.карт .ф{font-size:12px;color:var(--тише);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.карт .полоса{position:absolute;top:14px;right:14px;width:62px}
+.карт .сх{position:absolute;top:30px;right:14px;font-size:10.5px;font-weight:700;color:var(--тихий)}
+.карт.лучшая{border-color:color-mix(in srgb,var(--кА) 55%,transparent)}
+.карт.лучшая .сх{color:var(--кА)}
+.карт:active{transform:scale(.99)}
+.права{display:flex;flex-direction:column;gap:9px}
+.право{padding:13px 15px;border-radius:16px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень)}
+.право summary{list-style:none;cursor:pointer;font-weight:700;font-size:15px;line-height:1.3;display:flex;gap:8px;align-items:baseline}
+.право summary::-webkit-details-marker{display:none}
+.право summary small{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--тише);font-weight:650}
+.право p{margin-top:9px;font-size:13.5px;line-height:1.55;color:var(--тихий)}
+.пусто{padding:18px 0;font-size:14px;color:var(--тихий)}
+
+/* нижняя плавающая панель */
+.низ{position:absolute;left:0;right:0;bottom:0;z-index:6;padding:0 12px calc(10px + env(safe-area-inset-bottom));pointer-events:none}
+.низ>*{position:relative;z-index:1;pointer-events:auto}
+.низ::before,.низ::after{content:"";position:absolute;left:0;right:0;bottom:0;top:-46px;pointer-events:none;z-index:0}
+.низ::before{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 45%);mask-image:linear-gradient(to bottom,transparent,#000 45%)}
+.низ::after{backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--фон) 45%,transparent));-webkit-mask-image:linear-gradient(to bottom,transparent 30%,#000 80%);mask-image:linear-gradient(to bottom,transparent 30%,#000 80%)}
+.поиск{display:flex;align-items:center;gap:10px;min-height:52px;margin:0 0 10px;padding:3px 8px 3px 18px;border-radius:26px;border:1px solid var(--волосок);background:linear-gradient(180deg,var(--стекло-л),var(--стекло-т));backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8);box-shadow:inset 0 1px 0 var(--стекло-блеск),var(--тень);cursor:text}
+.поиск svg{width:18px;height:18px;flex:none;color:var(--тише)}
+.поиск input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--чернила);font:16px/1.4 var(--шрифт);padding:10px 0}
+.поиск input::placeholder{color:var(--тише)}
+.поиск .очист{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--тише)}
+.табы{display:flex;gap:4px;padding:5px;border-radius:999px;border:1px solid var(--волосок);background:linear-gradient(180deg,var(--стекло-л),var(--стекло-т));backdrop-filter:blur(22px) saturate(1.8);-webkit-backdrop-filter:blur(22px) saturate(1.8);box-shadow:inset 0 1px 0 var(--стекло-блеск),var(--тень)}
+.таб{position:relative;flex:1;min-width:0;min-height:38px;padding:0 2px;border-radius:999px;font-size:12.5px;color:var(--тихий);white-space:nowrap;transition:background-color .2s,color .2s}
+.таб.он{background:var(--чернила);color:var(--фон);font-weight:600}
+.таб .а{display:inline-block;margin-left:3px;padding:1px 4px;border-radius:5px;background:color-mix(in srgb,var(--акцент) 30%,transparent);font-size:9px;font-weight:800;letter-spacing:.05em;vertical-align:1px}
+.таб.он .а{background:color-mix(in srgb,var(--фон) 30%,transparent)}
+.тост{position:absolute;left:50%;bottom:170px;transform:translate(-50%,10px);padding:10px 16px;border-radius:12px;background:var(--чернила);color:var(--фон);font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:30;white-space:nowrap}
+.тост.он{opacity:1;transform:translate(-50%,0)}
+
+/* лист выбора зоны тела / исхода */
+.фон-л{position:absolute;inset:0;z-index:20;background:rgba(10,10,9,.5);opacity:0;pointer-events:none;transition:opacity .22s;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+.фон-л.он{opacity:1;pointer-events:auto}
+.лист{position:absolute;left:0;right:0;bottom:0;z-index:21;max-height:82%;display:flex;flex-direction:column;border-radius:26px 26px 0 0;background:var(--пов);box-shadow:0 -14px 50px rgba(0,0,0,.35);transform:translateY(105%);transition:transform .3s cubic-bezier(.3,.9,.3,1);visibility:hidden}
+.лист.он{transform:none;visibility:visible}
+.лист .ручка{width:40px;height:5px;border-radius:3px;background:var(--волосок2);margin:9px auto 0;flex:none}
+.лист-шапка{flex:none;display:flex;align-items:baseline;gap:10px;padding:12px 20px 6px}
+.лист-шапка h2{font-size:20px;font-weight:750;letter-spacing:-.01em}
+.лист-шапка span{font-size:12.5px;color:var(--тише)}
+.лист-тело{overflow-y:auto;padding:6px 18px 28px}
+.подгл{margin:14px 0 8px;font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише)}
+.подгл:first-child{margin-top:4px}
+
+/* страница статьи */
+.статья{position:absolute;inset:0;z-index:15;display:flex;flex-direction:column;background:var(--фон);transform:translateX(104%);transition:transform .32s cubic-bezier(.3,.9,.3,1);visibility:hidden}
+.статья.он{transform:none;visibility:visible}
+.ст-шапка{flex:none;display:flex;align-items:center;gap:8px;padding:12px 12px 6px}
+.назад{display:inline-flex;align-items:center;gap:4px;min-height:44px;padding:0 14px 0 8px;border-radius:14px;font-size:15px}
+.назад svg{width:20px;height:20px}
+.ст-путь{margin-left:auto;margin-right:8px;font-size:10.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ст-нав{display:flex;gap:2px}
+.ст-нав button{width:40px;height:40px;border-radius:12px;display:grid;place-items:center}
+.ст-нав button[disabled]{opacity:.3}
+.ст-тело{flex:1;min-height:0;overflow-y:auto;padding:4px 18px 170px;scrollbar-width:thin}
+.ст-над{font-size:11px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише)}
+.ст-тело h1{margin:8px 0 6px;font-size:26px;line-height:1.15;font-weight:780;letter-spacing:-.02em}
+.ст-ф{font-size:12.5px;line-height:1.5;color:var(--тише)}
+.шкала-кат{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:18px 0 0}
+.шк{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 0 8px;border-radius:14px;border:1px solid var(--волосок);background:var(--пов);opacity:.45}
+.шк b{font-size:18px;font-weight:800;color:var(--к)}
+.шк small{font-size:10px;color:var(--тише);letter-spacing:.02em}
+.шк.есть{opacity:1;background:color-mix(in srgb,var(--к) 13%,var(--пов));border-color:color-mix(in srgb,var(--к) 40%,transparent)}
+.шк.мерцает{box-shadow:0 0 0 2px var(--к)}
+.подпись-шкалы{margin-top:8px;font-size:12px;color:var(--тише)}
+.блок{margin-top:22px;padding:16px;border-radius:22px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень)}
+.блок h3{font-size:16px;font-weight:700;letter-spacing:-.005em}
+.блок .под{margin-top:3px;font-size:12.5px;color:var(--тише);line-height:1.45}
+.ползунок{margin-top:16px}
+.значение{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:6px}
+.значение b{font-size:34px;font-weight:800;letter-spacing:-.03em}
+.значение span{font-size:13px;color:var(--тише)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:36px;background:none;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:8px;border-radius:5px;background:var(--трек,var(--волосок))}
+input[type=range]::-moz-range-track{height:8px;border-radius:5px;background:var(--трек,var(--волосок))}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;margin-top:-11px;border-radius:50%;background:var(--чернила);border:3px solid var(--пов);box-shadow:0 3px 10px rgba(0,0,0,.4)}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--чернила);border:3px solid var(--пов)}
+.итог{display:flex;gap:12px;align-items:center;margin-top:12px;padding:12px 14px;border-radius:16px;background:color-mix(in srgb,var(--к,var(--тише)) 14%,transparent)}
+.итог .бук{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-size:21px;font-weight:800;color:var(--к,var(--тихий));background:color-mix(in srgb,var(--к,var(--тише)) 18%,transparent);flex:none}
+.итог b{display:block;font-size:14.5px;line-height:1.3}
+.итог span{display:block;font-size:12.5px;color:var(--тихий);margin-top:2px;line-height:1.4}
+
+/* лесенка */
+.лесенка{margin-top:22px}
+.лесенка h3{font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише);margin-bottom:12px}
+.ступень{position:relative;display:grid;grid-template-columns:38px 1fr;gap:12px;width:100%;text-align:left;padding:0 0 14px}
+.ступень:last-child{padding-bottom:0}
+.ступень::before{content:"";position:absolute;left:18px;top:40px;bottom:-2px;width:2px;background:var(--волосок2)}
+.ступень:last-child::before{display:none}
+.узел{position:relative;z-index:1;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:16px;font-weight:800;color:var(--к);background:color-mix(in srgb,var(--к) 15%,var(--фон));border:1.5px solid color-mix(in srgb,var(--к) 55%,transparent);transition:.2s}
+.кирп{padding:11px 14px 12px;border-radius:16px;background:var(--пов);border:1px solid var(--волосок);box-shadow:var(--тень);transition:.2s}
+.кирп .п{display:flex;align-items:center;gap:8px;margin-bottom:5px;font-size:10.5px;font-weight:650;letter-spacing:.07em;text-transform:uppercase;color:var(--тише)}
+.кирп .п em{font-style:normal;color:var(--к)}
+.кирп p{font-size:14px;line-height:1.5}
+.кирп p b{font-weight:750}
+.ступень.выбрана .кирп{border-color:var(--к);background:color-mix(in srgb,var(--к) 10%,var(--пов));box-shadow:0 0 0 1px var(--к) inset}
+.ступень.выбрана .узел{background:var(--к);color:var(--фон);transform:scale(1.06)}
+.ступень.подсвечена .кирп{border-color:var(--к);box-shadow:0 0 0 2px color-mix(in srgb,var(--к) 40%,transparent)}
+.ступень.подсвечена .узел{background:var(--к);color:var(--фон)}
+.ступень:active .кирп{transform:scale(.99)}
+.ступень .отметка{font-size:11px;color:var(--тише);margin-top:7px;display:none}
+.ступень.выбрана .отметка{display:block;color:var(--к);font-weight:650}
+.важно{margin-top:22px}
+.важно summary{list-style:none;cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:650;letter-spacing:.08em;text-transform:uppercase;color:var(--тише)}
+.важно summary::-webkit-details-marker{display:none}
+.важно summary::after{content:"";width:8px;height:8px;margin-left:auto;border-right:2px solid var(--тише);border-bottom:2px solid var(--тише);transform:rotate(45deg);transition:transform .15s}
+.важно[open] summary::after{transform:rotate(225deg)}
+.важно p{margin:0 0 8px;padding:10px 12px;border-radius:12px;background:var(--вст);font-size:13px;line-height:1.55;color:var(--тихий)}
+.спросить .строка{display:flex;gap:8px;margin-top:12px}
+.спросить input{flex:1;min-width:0;min-height:46px;padding:0 14px;border-radius:14px;border:1px solid var(--волосок2);background:var(--вст);color:var(--чернила);font:15px var(--шрифт)}
+.спросить input::placeholder{color:var(--тише)}
+.спросить .идти{min-width:46px;border-radius:14px;background:var(--чернила);color:var(--фон);font-weight:600;padding:0 14px}
+.ответ{margin-top:12px;font-size:14px;line-height:1.55}
+.цитата{margin-top:8px;padding:8px 12px;border-left:2px solid var(--акцент);font-size:12.5px;line-height:1.5;color:var(--тихий)}
+.цитата i{font-style:normal;font-size:11px;color:var(--кА);font-weight:700;margin-left:6px}
+
+/* стеклянные действия внизу статьи */
+.ст-низ{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:70px 14px calc(14px + env(safe-area-inset-bottom));pointer-events:none}
+.ст-низ::before,.ст-низ::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none}
+.ст-низ::before{backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 40%);mask-image:linear-gradient(to bottom,transparent,#000 40%)}
+.ст-низ::after{backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);background:linear-gradient(to bottom,transparent,color-mix(in srgb,var(--фон) 55%,transparent));-webkit-mask-image:linear-gradient(to bottom,transparent 25%,#000 70%);mask-image:linear-gradient(to bottom,transparent 25%,#000 70%)}
+.реш{pointer-events:auto;margin:0 0 10px;padding:12px 14px;border-radius:20px;border:1px solid color-mix(in srgb,var(--к) 45%,transparent);background:color-mix(in srgb,var(--к) 16%,var(--пов));backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:var(--тень);display:flex;gap:12px;align-items:center}
+.реш .бук{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;flex:none;font-size:20px;font-weight:800;color:var(--фон);background:var(--к)}
+.реш b{display:block;font-size:14px;line-height:1.3}
+.реш span{display:block;margin-top:2px;font-size:12px;color:var(--тихий);line-height:1.4}
+.действия{display:flex;gap:10px}
+.д-к{pointer-events:auto;flex:1;min-height:50px;padding:0 14px;border-radius:999px;font-size:14.5px;font-weight:600;white-space:nowrap;background:color-mix(in srgb,var(--пов) 72%,transparent);backdrop-filter:blur(24px) saturate(1.9);-webkit-backdrop-filter:blur(24px) saturate(1.9);box-shadow:inset 0 1px 0 var(--стекло-блеск),inset 0 0 0 1px var(--волосок),0 8px 24px -10px rgba(0,0,0,.5)}
+.д-к.гл{background:color-mix(in srgb,color-mix(in srgb,var(--чернила) 16%,var(--пов)) 78%,transparent)}
+.д-к.он{color:var(--кА);background:color-mix(in srgb,color-mix(in srgb,var(--кА) 22%,var(--пов)) 80%,transparent)}
+.д-к:active{transform:scale(.97)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}

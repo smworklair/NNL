@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Главная справочника · в стиле приложения</title>
+<style>
+:root{--фон:#121211;--пов:#1c1c1b;--вст:#232322;--ч:#f1f1ee;--ти:#a9a9a4;--тш:#8b8b86;--в:rgba(255,255,255,.10);--в2:rgba(255,255,255,.18);--акц:#f5cf2e;--ш:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;--сер:Georgia,"Times New Roman",serif;--тень-к:0 1px 2px rgba(0,0,0,.30),0 10px 26px -12px rgba(0,0,0,.55);--сл:rgba(24,24,23,.86);--ст:rgba(18,18,17,.78);--бл:rgba(255,255,255,.14);--подтв:#86e2a8;--сам:#f0cb3f}
+*{box-sizing:border-box}body{margin:0;background:#0b0b0a;color:var(--ч);font:16px/1.5 var(--ш);-webkit-font-smoothing:antialiased}
+.доска{display:flex;flex-wrap:wrap;gap:30px;justify-content:center;padding:26px 14px 50px}
+.вар{width:375px}
+.вар>h2{margin:0 0 3px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--акц)}
+.вар>p{margin:0 0 12px;font-size:13px;color:var(--ти);line-height:1.45;min-height:92px}
+.рамка{height:812px;overflow:hidden;position:relative;background:var(--фон);border:1px solid var(--в2);border-radius:28px}
+.ш1{padding:16px 0 0;text-align:center;font-size:14px;font-weight:650}
+.т{padding:12px 16px 0;height:calc(100% - 128px);overflow:hidden}
+.низ{position:absolute;left:10px;right:10px;bottom:10px}
+/* стеклянные поле и табы — как в приложении */
+.поле{display:flex;align-items:center;gap:8px;min-height:50px;margin-bottom:10px;padding:5px 5px 5px 16px;border-radius:25px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(180deg,var(--сл),var(--ст));backdrop-filter:blur(22px);box-shadow:inset 0 1px 0 var(--бл),var(--тень-к);color:var(--тш);font-size:15px}
+.поле .о{margin-left:auto;width:38px;height:38px;border-radius:50%;background:var(--ч);color:var(--фон);display:grid;place-items:center;font-weight:700}
+.таблист{display:flex;gap:4px;border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:5px;background:linear-gradient(180deg,var(--сл),var(--ст));backdrop-filter:blur(22px);box-shadow:inset 0 1px 0 var(--бл),var(--тень-к)}
+.таблист span{flex:1 1 auto;text-align:center;line-height:34px;font-size:12px;color:var(--ти);border-radius:999px;white-space:nowrap}
+.таблист .он{background:var(--ч);color:var(--фон);font-weight:600}
+.сек{margin:18px 2px 8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--тш);font-weight:650;display:flex;justify-content:space-between}
+h1{margin:0;font-weight:750;letter-spacing:-.03em;line-height:1.08}
+/* карточки приложения */
+.карт{background:var(--пов);border:1px solid var(--в);border-radius:16px;box-shadow:var(--тень-к);padding:12px 14px}
+/* A: бланк */
+.бланк{background:var(--пов);border:1px solid var(--в2);border-radius:18px;box-shadow:var(--тень-к);padding:14px 16px 12px;margin-top:6px}
+.бл-шапка{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:9px;border-bottom:2px solid var(--ч)}
+.бл-шапка span{font:16px var(--сер);letter-spacing:.02em}.бл-шапка time{font-size:11.5px;color:var(--тш)}
+.бл-ввод{padding:12px 0 10px;border-bottom:1px solid var(--в)}
+.бл-ввод small{display:block;font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--тш);margin-bottom:5px}
+.бл-ввод div{font-size:20px;line-height:1.28;font-weight:600}.бл-ввод i{display:inline-block;width:2px;height:21px;background:var(--акц);vertical-align:-4px;margin-left:1px}
+.бл-стр{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:9px 0;border-bottom:1px solid var(--в)}
+.бл-стр:last-of-type{border-bottom:0}
+.бл-стр dt{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--тш);padding-top:3px}
+.бл-стр dd{margin:0;font-size:14.5px;line-height:1.35}
+.бл-стр dd small{display:block;color:var(--тш);font-size:12px;margin-top:2px}
+.бейдж{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:8px;background:rgba(96,205,138,.15);color:var(--подтв);font-size:11px;font-weight:650;vertical-align:1px}
+.пусто{display:inline-block;border:1.5px dashed var(--ти);border-radius:10px;padding:4px 10px;color:var(--тш);font-size:13px}
+.печать{position:absolute;right:20px;margin-top:-6px}
+.пр-ряд{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.чип{border:1px solid var(--в2);border-radius:999px;padding:7px 13px;font-size:13px;background:var(--пов);box-shadow:var(--тень-к)}
+.кнопка-в{margin-top:10px;display:block;text-align:center;padding:13px;border-radius:14px;background:var(--ч);color:var(--фон);font-weight:650;font-size:14.5px}
+.стр-типовые .р{display:flex;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--в);font-size:14.5px}
+.стр-типовые .р i{font:normal 11.5px ui-monospace,Consolas,monospace;color:var(--тш);width:20px}.стр-типовые .р span{margin-left:auto;color:var(--тш);font-size:12.5px}
+/* B: кабинеты */
+.гер{margin:10px 2px 0}.гер h1{font-size:34px}
+.гер p{margin:6px 0 0;font-size:14px;color:var(--ти)}
+.поле-в{margin:14px 0 4px;min-height:58px;padding:0 6px 0 18px;border-radius:29px}
+.каб{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.каб div{background:var(--пов);border:1px solid var(--в);border-radius:16px;box-shadow:var(--тень-к);padding:12px 14px;min-height:78px;display:flex;flex-direction:column;justify-content:space-between}
+.каб b{font-size:15px;font-weight:700;line-height:1.2}.каб small{font-size:12px;color:var(--тш);line-height:1.35}
+.каб .н{font:600 11px ui-monospace,Consolas,monospace;color:var(--акц);letter-spacing:.04em}
+/* C: кирпичи */
+.полка{display:flex;gap:8px;align-items:flex-end;margin-top:4px}
+.кирпич{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 0 0;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55));color:var(--тл)}
+.кирпич .к-верх{position:relative;width:100%;background:var(--тлф);border:1.5px solid transparent;border-radius:6px 6px 9px 9px;padding:10px 6px;display:flex;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -2px 0 rgba(0,0,0,.30)}
+.кирпич .к-верх::before,.кирпич .к-верх::after{content:"";position:absolute;top:-6px;width:13px;height:7px;border-radius:3px 3px 0 0;background:var(--тлф);border:1.5px solid transparent;border-bottom:0}
+.кирпич .к-верх::before{left:16%}.кирпич .к-верх::after{right:16%}
+.к-зн{font-size:12px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.к-низ{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.с-врач{--тл:#86e2a8;--тлф:rgba(96,205,138,.15)}.с-сам{--тл:#f0cb3f;--тлф:rgba(240,203,63,.14)}.с-нейтр{--тл:#f1f1ee;--тлф:#232322}
+.с-пусто{--тл:#8b8b86;--тлф:transparent}.с-пусто .к-верх{border-style:dashed;border-color:#a9a9a4}.с-пусто .к-верх::before,.с-пусто .к-верх::after{border-style:dashed;border-color:#a9a9a4}
+.подп{margin:12px 2px 0;font-size:12.5px;color:var(--тш);line-height:1.45}
+.вопр{margin:14px 2px 0}.вопр h1{font-size:30px}
+.сп-фраза{display:flex;flex-direction:column;gap:8px}
+.сп-фраза div{background:var(--пов);border:1px solid var(--в);border-radius:14px;padding:12px 14px;font-size:14.5px;display:flex;justify-content:space-between;gap:10px;box-shadow:var(--тень-к)}
+.сп-фраза small{color:var(--акц);font:11px ui-monospace,Consolas,monospace;white-space:nowrap;padding-top:3px}
+</style>
+</head>
+<body>
+<div class="доска">
+
+<section class="вар">
+  <h2>A · Бланк справки</h2>
+  <p>Главная — это бланк, который ядро NNL заполняет, пока вы пишете. Поле «Жалобы» первое и крупное, ниже графы «Статья», «Пункт», «Основание» заполняются на глазах, пустые — пунктиром. По теме («справка по годности») и в духе вашего блока «Справка» из Разбора.</p>
+  <div class="рамка">
+    <div class="ш1">Справка по годности</div>
+    <div class="т">
+      <div class="бланк">
+        <div class="бл-шапка"><span>Справка по запросу</span><time>18.10.2026</time></div>
+        <div class="бл-ввод"><small>Жалобы — своими словами</small><div>У меня давление дома 150 на 95<i></i></div></div>
+        <dl style="margin:0">
+          <div class="бл-стр"><dt>Статья</dt><dd>43 · Гипертоническая болезнь<span class="бейдж">очень близко</span></dd></div>
+          <div class="бл-стр"><dt>Пункт</dt><dd><span class="пусто">не определён</span><small>нужны данные врача или обследование</small></dd></div>
+                    <div class="бл-стр"><dt>Числа</dt><dd>150/95 — давление<small>есть в тексте статьи</small></dd></div>
+        </dl>
+        <span class="кнопка-в">Открыть статью 43</span>
+      </div>
+      <div class="сек"><span>Проверить значение</span></div>
+      <div class="пр-ряд" style="margin-top:0"><span class="чип">Зрение</span><span class="чип">Слух</span><span class="чип">Рост и масса</span><span class="чип">ИМТ</span></div>
+    </div>
+    <div class="низ"><div class="таблист"><span class="он">Справочник</span><span>Бумаги</span><span>Дело</span><span>Помощник α</span></div></div>
+  </div>
+</section>
+
+<section class="вар">
+  <h2>B · Кабинеты комиссии</h2>
+  <p>Навигация по врачам, как на настоящей медкомиссии: терапевт, хирург, невролог, окулист, ЛОР… Человек знает, к кому ему идти, а не названия глав. Сверху большой вопрос и стеклянное поле, как в Разборе.</p>
+  <div class="рамка">
+    <div class="ш1">Справка по годности</div>
+    <div class="т">
+      <div class="гер"><h1>На что<br>жалуетесь?</h1><p>Опишите словами — ядро NNL найдёт статью. Или выберите врача.</p></div>
+      <div class="поле поле-в"><span>Что беспокоит? Например: колет сердце</span><span class="о">↑</span></div>
+      <div class="сек"><span>Кабинеты</span><span>8</span></div>
+      <div class="каб">
+        <div><span class="н">01</span><b>Терапевт</b><small>сердце, лёгкие, желудок, кровь · 29 статей</small></div>
+        <div><span class="н">02</span><b>Хирург</b><small>спина, суставы, травмы, опухоли · 23</small></div>
+        <div><span class="н">03</span><b>Невролог</b><small>нервы и мозг · 8</small></div>
+        <div><span class="н">04</span><b>Психиатр</b><small>психика · 5</small></div>
+        <div><span class="н">05</span><b>Окулист</b><small>глаза, зрение · 8</small></div>
+        <div><span class="н">06</span><b>ЛОР</b><small>ухо, нос, горло · 5</small></div>
+        <div><span class="н">07</span><b>Дерматолог</b><small>кожа · 4</small></div>
+        <div><span class="н">08</span><b>Стоматолог</b><small>зубы · 3</small></div>
+      </div>
+    </div>
+    <div class="низ"><div class="таблист"><span class="он">Справочник</span><span>Бумаги</span><span>Дело</span><span>Помощник α</span></div></div>
+  </div>
+</section>
+
+<section class="вар">
+  <h2>C · Сборка решения</h2>
+  <p>Фирменные кирпичи вашего приложения из Разбора на главной. Четыре гнезда — «Слова, Подтвердил, Статья, Пункт» — заполняет ядро по мере ввода. Справочник становится живой демонстрацией того, как работает NNL.</p>
+  <div class="рамка">
+    <div class="ш1">Справка по годности</div>
+    <div class="т">
+      <div class="вопр"><h1>Что беспокоит?</h1></div>
+      <div class="поле поле-в" style="margin-top:12px"><span style="color:var(--ч)">У меня давление дома 150 на 95</span><span class="о">↑</span></div>
+      <div class="полка">
+        <div class="кирпич с-сам"><div class="к-верх"><span class="к-зн">давление…</span></div><span class="к-низ">Слова</span></div>
+        <div class="кирпич с-пусто"><div class="к-верх"><span class="к-зн">—</span></div><span class="к-низ">Подтвердил</span></div>
+        <div class="кирпич с-нейтр"><div class="к-верх"><span class="к-зн">ст. 43</span></div><span class="к-низ">Статья</span></div>
+        <div class="кирпич с-пусто"><div class="к-верх"><span class="к-зн">—</span></div><span class="к-низ">Пункт</span></div>
+      </div>
+      <p class="подп">Ядро NNL собирает ответ по вашим словам: статья найдена, пункт и подтверждение врача — когда напишете диагноз или значения.</p>
+      <div class="сек"><span>Спросите так</span></div>
+      <div class="сп-фраза">
+        <div>Окулист после капель: −7<small>→ ст. 34</small></div>
+        <div>Правое ухо не слышит, левое — шёпот на 3 м<small>→ ст. 40</small></div>
+      </div>
+      <div class="сек"><span>Или откройте</span></div>
+      <div class="пр-ряд" style="margin-top:0"><span class="чип">Оглавление: 16 областей</span><span class="чип">Проверить значение</span></div>
+    </div>
+    <div class="низ"><div class="таблист"><span class="он">Справочник</span><span>Бумаги</span><span>Дело</span><span>Помощник α</span></div></div>
+  </div>
+</section>
+
+</div>
+</body>
+</html>

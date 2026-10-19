@@ -1,0 +1,45 @@
+/* Карточка «Проверьте себя» на странице статьи */
+#карточка-статьи.кс{margin:18px 0 6px;padding:18px 16px 16px;border-radius:20px;border:1px solid var(--волосок2);background:var(--поверхность)}
+.кс-шапка{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.кс-шапка h3{margin:0;font-size:18px;font-weight:700}
+.кс-метка{padding:4px 10px;border-radius:999px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--сам);background:var(--сам-фон);color:var(--сам)}
+.кс-метка.пр{border-color:var(--подтв);background:var(--подтв-фон);color:var(--подтв)}
+.кс-под{margin:8px 0 0;font-size:13px;line-height:1.5;color:var(--тихий)}
+.кс-блок{margin-top:20px;padding-top:16px;border-top:1px solid var(--волосок)}
+.кс-блок h4{margin:0;font-size:15px;font-weight:700}
+.кс-спис{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.кс-стр{padding:2px 0}
+.кс-чек{display:flex;align-items:flex-start;gap:12px;width:100%;padding:12px;border-radius:14px;border:1px solid var(--волосок2);background:none;color:var(--чернила);font:inherit;text-align:left;cursor:pointer;transition:background .2s ease,border-color .2s ease}
+.кс-чек i{flex:none;width:24px;height:24px;margin-top:1px;border-radius:8px;border:2px solid var(--волосок2);display:flex;align-items:center;justify-content:center;transition:background .2s ease,border-color .2s ease}
+.кс-чек i svg{width:15px;height:15px;fill:none;stroke:var(--фон);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .15s ease}
+.кс-чек span{font-size:14.5px;line-height:1.4}
+.кс-чек em{font-style:normal;font-size:12px;color:var(--тихий);white-space:nowrap}
+.кс-стр.он .кс-чек{border-color:var(--подтв);background:var(--подтв-фон)}
+.кс-стр.он .кс-чек i{border-color:var(--подтв);background:var(--подтв)}
+.кс-стр.он .кс-чек i svg{opacity:1}
+.кс-обс{margin:6px 4px 0 40px;font-size:12.5px;line-height:1.4;color:var(--тихий)}
+.кс-цитата{margin:4px 4px 0 40px;font-size:12.5px}
+.кс-цитата summary{cursor:pointer;color:var(--тихий);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px;list-style:none}
+.кс-цитата summary::-webkit-details-marker{display:none}
+.кс-цитата blockquote{margin:6px 0 0;padding:8px 12px;border-left:2px solid var(--волосок2);color:var(--тихий);line-height:1.5}
+.кс-счёт{display:flex;align-items:center;gap:12px;margin-top:14px;font-size:12.5px;color:var(--тихий)}
+.кс-шкала{flex:1;height:5px;border-radius:5px;background:rgba(127,127,127,.22);overflow:hidden}
+.кс-шкала u{display:block;height:100%;border-radius:5px;background:var(--подтв);text-decoration:none;transition:width .35s ease}
+.кс-поле{margin-top:14px}
+.кс-зн{display:flex;align-items:baseline;gap:10px}
+.кс-зн b{font-size:32px;line-height:1;font-weight:700;letter-spacing:-.02em}
+.кс-зн span{font-size:12.5px;color:var(--тихий)}
+.кс-поле input[type=range]{width:100%;margin-top:10px}
+.кс-итог{margin-top:14px;padding:13px 14px;border-radius:14px;border:1px solid var(--волосок2);background:var(--вставка)}
+.кс-итог.есть{border-color:var(--сам);background:var(--сам-фон)}
+.кс-итог b{display:block;font-size:14.5px;line-height:1.35}
+.кс-итог span{display:block;margin-top:4px;font-size:13px;line-height:1.45;color:var(--тихий)}
+.кс-ссылка{display:inline-block;margin-top:10px;border:0;background:none;color:var(--чернила);font:inherit;font-size:13px;font-weight:600;text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:0}
+.кс-кн{display:flex;gap:8px;margin-top:12px}
+.кс-кн button{flex:1;min-height:44px;border-radius:12px;border:1px solid var(--волосок2);background:var(--вставка);color:var(--чернила);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.кс-кн button.он{border-color:var(--тихий);background:var(--поверхность);box-shadow:0 0 0 1px var(--тихий) inset}
+.кс-свод{margin-top:20px;padding:14px;border-radius:14px;border:1px solid var(--волосок2);background:var(--вставка)}
+.кс-свод b{font-size:14.5px}
+.кс-свод ul{margin:8px 0 0;padding:0 0 0 18px;display:flex;flex-direction:column;gap:6px;font-size:13.5px;line-height:1.45}
+.кс-свод li.ок{color:var(--подтв)}
+.кс-сноска{margin:14px 2px 0;font-size:11.5px;line-height:1.45;color:var(--тише)}
