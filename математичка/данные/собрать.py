@@ -9,7 +9,7 @@ import os
 
 ЭТА = os.path.dirname(os.path.abspath(__file__))
 КОРЕНЬ = os.path.dirname(os.path.dirname(ЭТА))
-КОНТРОЛЬ = os.path.join(КОРЕНЬ, "v8", "блоки", "основная_внешние.з1")
+КОНТРОЛЬ = os.path.join(КОРЕНЬ, "система", "блоки", "основная_внешние.з1")
 
 
 def jl(путь):
@@ -65,7 +65,7 @@ def тема_акты():
 
 
 def вклад_соседа():
-    d = json.load(open(os.path.join(КОРЕНЬ, "v9", "результаты", "лаба_совместность.json"), encoding="utf-8"))
+    d = json.load(open(os.path.join(КОРЕНЬ, "лаборатория", "результаты", "лаба_совместность.json"), encoding="utf-8"))
     строки = []
     for i, q in enumerate(d["вопросы"], 1):
         через = round(sum(q["через_шину"].values()), 4)
@@ -79,7 +79,7 @@ def вклад_соседа():
 
 
 def устройства_v92():
-    d = json.load(open(os.path.join(КОРЕНЬ, "v9.2", "результаты", "опыт_общий_ствол.json"), encoding="utf-8"))
+    d = json.load(open(os.path.join(КОРЕНЬ, "лаборатория", "общий_ствол", "результаты", "опыт_общий_ствол.json"), encoding="utf-8"))
     метрики = ["здоровье_перефраз", "право_перефраз", "здоровье_живые", "право_живые",
                "смесь_здоровье_топ1_в_своей_области", "смесь_право_топ1_в_своей_области",
                "смесь_оба_в_общей_двойке", "смесь_двойка_из_одной_области"]
@@ -93,7 +93,7 @@ def устройства_v92():
 
 
 def ошибки_систем():
-    bench = jl(os.path.join(КОРЕНЬ, "bench", "bench.jsonl"))
+    bench = jl(os.path.join(КОРЕНЬ, "бенчмарки", "bench", "bench.jsonl"))
     pred = {}
     for f in ("v4.json", "v6.json"):
         with open(os.path.join(КОРЕНЬ, "диагностика", f), encoding="utf-8") as fh:

@@ -7,7 +7,7 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "v8"))
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "система"))
 sys.dont_write_bytecode = True
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
@@ -57,7 +57,7 @@ with open(вход, "w", encoding="utf-8") as ф:
 в = по_тексту["хочу пиццу и отдохнуть"]
 проверить("«вне»: обе области 0, ответов нет", в["понятия"]["область:здоровье"] == 0 and в["понятия"]["область:право"] == 0 and в["ответы"] == [])
 import subprocess  # noqa: E402
-р = subprocess.run([sys.executable, "-X", "utf8", os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "v8", "обучение", "дообучить.py"), "очередь", "основная_внешние", "1", "здоровье", os.path.join(папка, "нет.jsonl")], capture_output=True, text=True, encoding="utf-8")
+р = subprocess.run([sys.executable, "-X", "utf8", os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "система", "обучение", "дообучить.py"), "очередь", "основная_внешние", "1", "здоровье", os.path.join(папка, "нет.jsonl")], capture_output=True, text=True, encoding="utf-8")
 проверить("режим «очередь» без файла строк отказывается и ничего не обучает", р.returncode != 0 and "ОТКАЗ" in (р.stderr + р.stdout), р.stderr[-200:])
 print("\nОШИБОК: %d" % len(ошибки))
 sys.exit(1 if ошибки else 0)

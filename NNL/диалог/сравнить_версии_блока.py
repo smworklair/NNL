@@ -17,7 +17,7 @@ sys.dont_write_bytecode = True
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 КОРЕНЬ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-for п in (КОРЕНЬ, os.path.join(КОРЕНЬ, "v8", "замер")):
+for п in (КОРЕНЬ, os.path.join(КОРЕНЬ, "система", "замер")):
     if п not in sys.path:
         sys.path.insert(0, п)
 import общее as О  # noqa: E402
@@ -71,7 +71,7 @@ if __name__ == "__main__":
     if len(а) < 3:
         print(__doc__)
         sys.exit(2)
-    строки = [json.loads(l) for l in open(os.path.join(КОРЕНЬ, "bench", "bench.jsonl"), encoding="utf-8") if l.strip()]
+    строки = [json.loads(l) for l in open(os.path.join(КОРЕНЬ, "бенчмарки", "bench", "bench.jsonl"), encoding="utf-8") if l.strip()]
     вопросы = [r["вопрос"] for r in строки]
     эталоны = [(("ответ:здоровье:%s" % r["ответ"]) if r.get("область") == "здоровье" else None) for r in строки]
     о = сравнить(а[0], а[1], а[2:], вопросы, эталоны, эпс)

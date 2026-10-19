@@ -21,7 +21,7 @@ def _без_вводных(текст):
     слова = [w for w in re.findall(r"[\w\-\.]+", текст.lower()) if w not in _ВВОДНЫЕ]
     return " ".join(слова) or текст
 КОРЕНЬ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-for п in (КОРЕНЬ, os.path.join(КОРЕНЬ, "v8", "замер")):
+for п in (КОРЕНЬ, os.path.join(КОРЕНЬ, "система", "замер")):
     if п not in sys.path:
         sys.path.insert(0, п)
 import общее as О  # noqa: E402  (v8/замер/общее.py: загрузка языка NNL-1 и пути к архитектурам)

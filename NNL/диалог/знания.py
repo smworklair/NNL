@@ -8,7 +8,7 @@ import re
 КОРЕНЬ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 СТАТЬИ = os.path.join(КОРЕНЬ, "внешние", "документы", "pp565", "статьи_2026.json")
 СПРАВОЧНИК = os.path.join(КОРЕНЬ, "внешние", "справочник.json")
-ТЕМЫ = r"C:\ВОЕНКОМАТ ПРОЕКТ НАВЗВАНИЕ НЕ ПРИДУМАЛ\rack\data\lex_topics.json"
+ТЕМЫ = os.path.join(КОРЕНЬ, "внешние", "lex_topics.json")
 
 _ПУНКТ = re.compile(r"^([а-е])\)\s*(.*)$")
 _КАТЕГОРИЯ = re.compile(r"^((А|Б|В|Г|Д|НГ)(-\d)?|-)(\s*\(.*\))?$")

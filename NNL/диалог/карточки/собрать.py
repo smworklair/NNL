@@ -11,7 +11,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 ЗДЕСЬ = os.path.dirname(os.path.abspath(__file__))
 ДАННЫЕ = os.path.join(ЗДЕСЬ, "данные")
-ВЫХОД = os.path.join(os.path.dirname(ЗДЕСЬ), "макеты_военкомат", "карточки_статей.js")
+ВЫХОД = os.path.join(os.path.dirname(ЗДЕСЬ), "макеты", "карточки_статей.js")
 
 if __name__ == "__main__":
     код = subprocess.call([sys.executable, "-X", "utf8", os.path.join(ЗДЕСЬ, "проверить.py")])

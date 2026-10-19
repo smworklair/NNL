@@ -30,7 +30,7 @@ import диалог as Д  # noqa: E402
 import клиент as К  # noqa: E402
 import расследование as Р  # noqa: E402
 
-БЕНЧ = os.path.join(ПРОЕКТ, "bench", "bench.jsonl")
+БЕНЧ = os.path.join(ПРОЕКТ, "бенчмарки", "bench", "bench.jsonl")
 СНИМОК_БАНКА = os.path.join(КАТАЛОГ, "данные", "банк_снимок.json")      # копия банка вопросов: другая задача его перестраивает, замеры должны повторяться
 
 

@@ -24,7 +24,7 @@ import numpy as np
 КАТАЛОГ = os.path.dirname(os.path.abspath(__file__))
 КОРЕНЬ_NNL = os.path.dirname(КАТАЛОГ)
 ПРОЕКТ = os.path.dirname(КОРЕНЬ_NNL)
-for _п in (ПРОЕКТ, КАТАЛОГ, os.path.join(ПРОЕКТ, "v8", "замер"), os.path.join(ПРОЕКТ, "v9", "пробы")):
+for _п in (ПРОЕКТ, КАТАЛОГ, os.path.join(ПРОЕКТ, "система", "замер"), os.path.join(ПРОЕКТ, "лаборатория", "пробы")):
     if _п not in sys.path:
         sys.path.insert(0, _п)
 sys.dont_write_bytecode = True

@@ -5,7 +5,7 @@
 import json, os, sys
 sys.stdout.reconfigure(encoding="utf-8")
 D = os.path.dirname(os.path.abspath(__file__))
-bench = [json.loads(l) for l in open(r"C:\ЯДРО-ОПЫТ\bench\bench.jsonl", encoding="utf-8") if l.strip()]
+bench = [json.loads(l) for l in open(r"C:\ЯДРО-ОПЫТ\бенчмарки\bench\bench.jsonl", encoding="utf-8") if l.strip()]
 pred = {}
 for f in ("v4.json", "v6.json"):
     pred.update(json.load(open(os.path.join(D, f), encoding="utf-8")))

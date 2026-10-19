@@ -6,12 +6,12 @@ import sys
 
 sys.dont_write_bytecode = True
 sys.stdout.reconfigure(encoding="utf-8")
-V4 = r"C:\ЯДРО-ОПЫТ\v4"
+V4 = r"C:\ЯДРО-ОПЫТ\архив\ядро_v4"
 sys.path.insert(0, V4)
 from ядро import NOT_KNOWN, Kernel  # noqa: E402
 
 OUT = sys.argv[1]
-bench = [json.loads(l) for l in open(r"C:\ЯДРО-ОПЫТ\bench\bench.jsonl", encoding="utf-8") if l.strip()]
+bench = [json.loads(l) for l in open(r"C:\ЯДРО-ОПЫТ\бенчмарки\bench\bench.jsonl", encoding="utf-8") if l.strip()]
 
 k4 = Kernel(os.path.join(V4, "типы"), os.path.join(V4, "архитектуры"))
 for b in ("здоровье", "право"):
