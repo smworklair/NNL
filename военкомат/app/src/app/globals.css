@@ -205,3 +205,13 @@ input{font:inherit}
   .doc mark.filled{background:none!important}
   .paper-app .scroll{display:block!important}
 }
+
+/* законы */
+.area.law{text-decoration:none;color:inherit}
+.area.law b small{display:block;margin-top:3px;font-size:12px;font-weight:400;color:var(--quieter)}
+.law-lead{font-family:Georgia,"Times New Roman",serif;font-size:17px;line-height:1.45;margin:10px 0 4px}
+.law-h{margin:20px 0 6px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--quieter)}
+.law-p{font-size:15px;line-height:1.55;margin:8px 0}
+.law-ul{margin:6px 0;padding-left:20px;font-size:15px;line-height:1.55}
+.law-doc{display:block;margin-top:20px;border:1px solid var(--ok);border-radius:14px;background:rgba(96,205,138,.08);padding:12px 14px;text-decoration:none;color:inherit}
+.law-doc b{display:block;color:var(--ok);font-size:13px}.law-doc span{display:block;margin-top:3px;font-size:14.5px}

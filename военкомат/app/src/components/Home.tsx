@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import Sieve from "./Sieve";
+import Link from "next/link";
 import { СВОДКА, ПРОВЕРКИ, ГЛАВЫ } from "@/data/главная";
+import законы from "@/data/законы.json";
 
 const ПРИМЕРЫ: Record<string, string> = {
   "34": "зрение минус 5", "68": "плоскостопие", "43": "давление 160 на 100", "66": "болит спина",
@@ -39,6 +41,15 @@ export default function Home() {
             <button key={г.имя} className="area" onClick={() => setПоиск(г.имя)}>
               <i>{String(i + 1).padStart(2, "0")}</i><b>{г.имя}</b><span>{г.б - г.а + 1}</span>
             </button>
+          ))}
+        </section>
+        <section className="areas">
+          <div className="head label" style={{ margin: "18px 0 6px" }}><span>Права и порядок</span><span>{законы.length}</span></div>
+          {законы.map((з) => (
+            <Link key={з.н} href={`/l/${з.н}`} className="area law">
+              <i>{String(з.н + 1).padStart(2, "0")}</i>
+              <b>{з.название}<small>{з.группа} · {з.тикет}</small></b>
+            </Link>
           ))}
         </section>
       </div>
