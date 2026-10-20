@@ -1,17 +1,11 @@
 import Link from "next/link";
 
-type Режим = "home" | "invest" | "helper";
-
-/* Переключатель режима внизу экрана: «Справочник» (главная), «Расследование» (проверка комплекта документов), «Помощник α» (чат). */
-export default function Modes({ активный }: { активный: Режим }) {
-  const п = (р: Режим, href: string, текст: React.ReactNode) => (
-    <Link href={href} className={`mode ${активный === р ? "on" : ""}`} aria-current={активный === р ? "page" : undefined}>{текст}</Link>
-  );
+/* Переключатель режима внизу экрана, как в старом сайте: «Расследование» (справочник на главной) и «Помощник α» (чат). */
+export default function Modes({ активный }: { активный: "home" | "helper" }) {
   return (
     <div className="modes" role="group" aria-label="Режим">
-      {п("home", "/", "Справочник")}
-      {п("invest", "/investigate", "Расследование")}
-      {п("helper", "/helper", <>Помощник<em>α</em></>)}
+      <Link href="/" className={`mode ${активный === "home" ? "on" : ""}`} aria-current={активный === "home" ? "page" : undefined}>Расследование</Link>
+      <Link href="/helper" className={`mode ${активный === "helper" ? "on" : ""}`} aria-current={активный === "helper" ? "page" : undefined}>Помощник<em>α</em></Link>
     </div>
   );
 }
