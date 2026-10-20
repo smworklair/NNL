@@ -4,7 +4,7 @@ import { ViewTransition } from "react";
 import Link from "next/link";
 import { умныйПоиск, type Ответ } from "@/lib/api";
 import { всеСтатьи, нижний, type СтатьяСписка } from "@/lib/статьи";
-import { читатьДело, type Отметка } from "@/lib/дело";
+import { читатьДело, синхронизироватьДело, type Отметка } from "@/lib/дело";
 import { ДОКУМЕНТЫ } from "@/data/документы";
 
 type Вкладка = "статьи" | "документы" | "дело";
@@ -26,6 +26,7 @@ export default function Sieve({ начальный, закрыть }: { нача
   useEffect(() => {
     ввод.current?.focus({ preventScroll: true });
     setДело(читатьДело());
+    синхронизироватьДело().then(setДело);
   }, []);
   useEffect(() => {
     всеСтатьи().then(setСтатьи).catch(() => setСтатьи([]));
