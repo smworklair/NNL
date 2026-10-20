@@ -138,11 +138,13 @@ export default function Sieve({ начальный, закрыть }: { нача
             </>
           ))}
       </div>
-      <form className="sieve-bar" onSubmit={(е) => { е.preventDefault(); (document.activeElement as HTMLElement | null)?.blur(); }}>
-        <input ref={ввод} value={q} onChange={(е) => setQ(е.target.value)} enterKeyHint="search"
-          placeholder="Найти статью: опишите, что беспокоит" autoComplete="off" spellCheck={false} aria-label="Поиск" />
-      </form>
-      <div className="dock-modes"><Modes активный="home" /></div>
+      <div className="glass-bottom">
+        <form className="sieve-bar" onSubmit={(е) => { е.preventDefault(); (document.activeElement as HTMLElement | null)?.blur(); }}>
+          <input ref={ввод} value={q} onChange={(е) => setQ(е.target.value)} enterKeyHint="search"
+            placeholder="Найти статью: опишите, что беспокоит" autoComplete="off" spellCheck={false} aria-label="Поиск" />
+        </form>
+        <div className="dock-modes"><Modes активный="home" /></div>
+      </div>
     </div>
   );
 }

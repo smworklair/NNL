@@ -477,3 +477,27 @@ a.q{display:inline-block}
 /* сито: нижний отступ только один (у панели режимов), иначе между поиском и панелью дыра */
 .sieve-bar{padding-bottom:6px}
 .sieve-bar + .dock-modes{padding-top:0}
+
+/* ===== нижние панели — стекло поверх прокрутки: контент виден сквозь них ===== */
+:root{--veil:linear-gradient(to bottom,transparent 0,color-mix(in srgb,var(--bg) 80%,transparent) 34px)}
+.dock{background:var(--veil)}
+.glass-bottom,.app > .dock-modes{position:absolute;left:0;right:0;bottom:0;z-index:6;padding-top:22px;background:var(--veil);pointer-events:none}
+.glass-bottom > *,.app > .dock-modes > *{pointer-events:auto}
+.glass-bottom .dock-modes{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+.app > .dock-modes{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+.glass-bottom .chat-bar,.glass-bottom .sieve-bar{padding:0 12px 8px}
+.app > .scroll.art:has(~ .dock-modes){padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+.app > .scroll.art.chat,.app > .scroll.art:has(~ .glass-bottom){padding-bottom:calc(150px + env(safe-area-inset-bottom))}
+.sieve{display:block}
+.sieve-body{position:absolute;inset:0;padding:calc(58px + env(safe-area-inset-top)) 16px calc(150px + env(safe-area-inset-bottom))}
+.sieve .tabs{position:absolute;top:0;left:0;right:0;z-index:6;background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 85%,transparent) 60%,transparent)}
+/* плашки: без рамки, со световой кромкой */
+.search,.modes,.add,.chat-bar input,.sieve-bar input,.inv-form input{
+  border-color:transparent;background:color-mix(in srgb,var(--bg) 38%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 6px 22px rgba(0,0,0,.22)}
+.tool,.q,.chip,.newchat{box-shadow:inset 0 1px 0 rgba(255,255,255,.10)}
+@media (prefers-color-scheme:light){
+  .search,.modes,.add,.chat-bar input,.sieve-bar input,.inv-form input{background:rgba(255,255,255,.55);box-shadow:inset 0 1px 0 rgba(255,255,255,.9),0 6px 22px rgba(20,20,25,.10)}
+}
+.kb .sieve-body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+.kb .app > .scroll.art.chat{padding-bottom:calc(78px + env(safe-area-inset-bottom))}

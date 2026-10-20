@@ -248,13 +248,17 @@ export default function Helper() {
             {ждём ? <div className="msg bot"><div className="bub dots-load">Разбираю…</div></div> : null}
             <div ref={конец} />
           </div>
+        </>
+      )}
+      <div className="glass-bottom">
+        {экран === "чат" ? (
           <form className="chat-bar" onSubmit={(е) => { е.preventDefault(); отправить(); (document.activeElement as HTMLElement | null)?.blur(); }}>
             <input value={текст} onChange={(е) => setТекст(е.target.value)} placeholder="Опишите, что беспокоит" autoComplete="off" enterKeyHint="send" aria-label="Сообщение" />
             <button type="submit" disabled={ждём || !текст.trim()} aria-label="Отправить">↑</button>
           </form>
-        </>
-      )}
-      <div className="dock-modes"><Modes активный="helper" /></div>
+        ) : null}
+        <div className="dock-modes"><Modes активный="helper" /></div>
+      </div>
     </div>
   );
 }
