@@ -5,6 +5,7 @@ import type { Карточка, Статья } from "@/lib/карточка";
 import { категорияПризыва } from "@/lib/карточка";
 import { добавитьВДело, естьВДеле } from "@/lib/дело";
 import CardView from "./Card";
+import { Calculator, Myopia, type Подсветка } from "./Calculator";
 
 type ТГ = { BackButton?: { show: () => void; hide: () => void; onClick: (f: () => void) => void; offClick: (f: () => void) => void } };
 
@@ -13,6 +14,7 @@ export default function Article({ статья, карточка }: { стать
   const роутер = useRouter();
   const [открытыПримечания, setОткрыто] = useState(false);
   const [вДеле, setВДеле] = useState(false);
+  const [свет, setСвет] = useState<Подсветка>({ буквы: [], категория: null });
 
   const назад = () => (window.history.length > 1 ? роутер.back() : роутер.push("/"));
 
@@ -37,7 +39,7 @@ export default function Article({ статья, карточка }: { стать
         <p className="label" style={{ margin: "14px 0 8px" }}>Ступени · категория для призывника</p>
         <div className="steps">
           {статья.пункты.map((п) => (
-            <div key={п.буква} id={`step-${п.буква}`} className="step">
+            <div key={п.буква} id={`step-${п.буква}`} className={`step ${свет.буквы.includes(п.буква) ? "lit" : ""}`}>
               <span className="letter">{п.буква}</span>
               <span className="desc">{п.описание}</span>
               <span className="cat">{категорияПризыва(п)}</span>
@@ -45,6 +47,9 @@ export default function Article({ статья, карточка }: { стать
           ))}
           {!статья.пункты.length ? <p className="note">Статья без деления на пункты.</p> : null}
         </div>
+
+        {статья.ид === "34" ? <Myopia при={setСвет} /> : null}
+        {["13", "40", "86"].includes(статья.ид) ? <Calculator ид={статья.ид} при={setСвет} /> : null}
 
         {карточка && карточка.блоки.length ? <CardView статья={статья} карточка={карточка} /> : null}
 

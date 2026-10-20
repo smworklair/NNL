@@ -163,3 +163,18 @@ input{font:inherit}
 ::view-transition-group(.morph){animation-duration:380ms;animation-timing-function:cubic-bezier(.22,1,.36,1)}
 .hit,.row{text-decoration:none;color:inherit}
 @media (prefers-reduced-motion:reduce){::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+
+/* калькуляторы порогов */
+.calc{margin-top:18px;border:1px solid var(--line2);border-radius:18px;background:var(--surface);padding:14px}
+.calc h3{margin:0 0 4px;font-size:17px}
+.switch{display:flex;gap:10px;align-items:center;margin-top:12px;font-size:14px;line-height:1.35}
+.switch input{width:22px;height:22px;accent-color:var(--ok);flex:none}
+.calc-res{display:flex;gap:12px;align-items:flex-start;margin-top:14px;border:1px solid var(--line);border-radius:14px;padding:12px}
+.calc-res i{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:18px;background:var(--inset)}
+.calc-res b{display:block;font-size:14.5px;line-height:1.3}
+.calc-res span{display:block;margin-top:3px;font-size:13px;line-height:1.4;color:var(--quiet)}
+.calc-res.empty{border-style:dashed}
+.calc-res.k-А i{background:#2a6a4a;color:#fff}.calc-res.k-Б i{background:#4a6a2a;color:#fff}
+.calc-res.k-В i{background:#8a6a14;color:#fff}.calc-res.k-Г i{background:#2f6a8a;color:#fff}
+.calc-res.k-Д i{background:#8a3a34;color:#fff}
+.step.lit{border-color:var(--accent);background:rgba(245,207,46,.09);box-shadow:0 0 0 1px var(--accent) inset}
