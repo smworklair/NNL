@@ -430,3 +430,46 @@ a.q{display:inline-block}
 .in-tg .artbar > .back:first-child{visibility:hidden}
 .newchat{border:1px solid var(--line2);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:700}
 .kb .dock-modes{display:none}
+
+/* ===== стекло: полупрозрачные поверхности без рамок. Размытие только на маленьких плавающих плашках (дёшево для iPhone) ===== */
+:root{
+  --surface:rgba(255,255,255,.055);--inset:rgba(255,255,255,.10);
+  --line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.12);
+  --glass:rgba(40,40,38,.50);--shadow:0 8px 28px rgba(0,0,0,.28);
+}
+@media (prefers-color-scheme:light){
+  :root{--surface:rgba(20,20,25,.045);--inset:rgba(20,20,25,.08);--line:rgba(20,20,25,.07);--line2:rgba(20,20,25,.12);--glass:rgba(255,255,255,.55);--shadow:0 8px 24px rgba(20,20,25,.08)}
+}
+.app{background:
+  radial-gradient(120% 55% at 15% -5%,rgba(255,255,255,.075),transparent 62%),
+  radial-gradient(90% 45% at 105% 28%,rgba(245,207,46,.045),transparent 60%),
+  radial-gradient(100% 50% at 0% 100%,rgba(120,150,255,.05),transparent 60%),
+  var(--bg)}
+@media (prefers-color-scheme:light){.app{background:radial-gradient(120% 55% at 15% -5%,rgba(255,255,255,.9),transparent 62%),var(--bg)}}
+
+/* крупные блоки: заливка, без рамок */
+.card3,.calc,.variant,.verdict,.delo-head,.legend,.pcard,.hit,.step,.cblock,.card{border-color:transparent;box-shadow:none}
+.card{border:1px solid var(--line)}
+.step{border:0}
+.step.lit{box-shadow:0 0 0 1px var(--accent) inset}
+.step.sel{box-shadow:0 0 0 1px var(--ink) inset}
+.hit,.step,.legend,.pcard,.variant,.verdict,.calc,.card3,.delo-head{border:0;border-radius:20px}
+.cblock{border:0;background:transparent}
+.crow{background:var(--surface);border-color:transparent}
+
+/* мелкие плашки: заливка без обводки */
+.chip,.tool,.q,.ref,.newchat,.seg2 button,.tab,.chipx{border-color:transparent;background:var(--inset)}
+.tool.on,.q.main,.seg2 button.on,.tab.on{background:var(--ink);color:var(--bg)}
+.tab.on{border-color:transparent}
+.bub{background:var(--surface);border-color:transparent}
+.msg.me .bub{background:var(--ink);border-color:transparent}
+
+/* плавающие элементы: стекло с размытием */
+.search,.modes,.add,.chat-bar input,.sieve-bar input,.inv-form input{
+  background:var(--glass);border-color:var(--line2);
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5)}
+.modes{background:var(--glass)}
+.mode.on{background:var(--ink);color:var(--bg)}
+.add{box-shadow:none}
+.add.done{border-color:var(--line2)}
+.artbar{background:linear-gradient(var(--bg),transparent)}
