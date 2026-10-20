@@ -99,9 +99,9 @@ export default function Sieve({ начальный, закрыть }: { нача
           <>
             {!документы.length ? <p className="note">Такого бланка нет. Все бланки: очистите поле поиска.</p> : <h2>Бланки · {документы.length}</h2>}
             {документы.map((д) => (
-              <button key={д.н} type="button" className="row">
+              <Link key={д.н} href={`/b/${д.н}`} className="row">
                 <b>{д.вид}</b><span>{д.имя}</span><em>{д.куда}. {д.лид}</em>
-              </button>
+              </Link>
             ))}
           </>
         )}

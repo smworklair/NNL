@@ -178,3 +178,30 @@ input{font:inherit}
 .calc-res.k-В i{background:#8a6a14;color:#fff}.calc-res.k-Г i{background:#2f6a8a;color:#fff}
 .calc-res.k-Д i{background:#8a3a34;color:#fff}
 .step.lit{border-color:var(--accent);background:rgba(245,207,46,.09);box-shadow:0 0 0 1px var(--accent) inset}
+
+/* бланки */
+.pfield{display:block;margin-top:10px}
+.pfield span{display:block;font-size:12px;color:var(--quiet);margin-bottom:4px}
+.pfield input,.pfield textarea{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--glass);color:var(--ink);padding:11px 12px;font-size:16px;outline:none;font-family:inherit;resize:vertical}
+.doc{background:#fff;color:#111;border-radius:6px;padding:22px 18px;box-shadow:var(--shadow);font:15px/1.5 "Times New Roman",Times,serif}
+.doc-right{white-space:pre-line;text-align:right;margin:0 0 14px}
+.doc-title{margin:14px 0 0;text-align:center;font-weight:700;letter-spacing:.15em}
+.doc-sub{margin:4px 0 0;text-align:center}
+.doc-p{margin:10px 0 0;text-align:left}
+.doc mark.filled{background:#fbe7a1;color:#111;padding:0 2px;border-radius:3px}
+.doc-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin-top:28px}
+.doc-sign{text-align:center}.doc-sign small{font-size:11px}
+.pbtns{display:flex;gap:8px}.pbtns .add{flex:1;font-size:15px}
+.add.ghost{background:var(--glass);font-weight:600}
+
+/* печать: только сам документ */
+@media print{
+  html,body{background:#fff!important;height:auto!important;overflow:visible!important}
+  .app{height:auto!important;overflow:visible!important}
+  .no-print,.artbar,.dock{display:none!important}
+  .scroll{overflow:visible!important;padding:0!important}
+  .art-title,.art>.cnote,.art>.label{display:none!important}
+  .doc{box-shadow:none!important;border-radius:0!important;padding:18mm 15mm 15mm 20mm!important;font-size:14pt!important}
+  .doc mark.filled{background:none!important}
+  .paper-app .scroll{display:block!important}
+}
