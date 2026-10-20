@@ -42,9 +42,9 @@ export default function Home() {
         <section className="areas">
           <div className="head label" style={{ margin: "14px 0 6px" }}><span>Области</span><span>{ГЛАВЫ.length}</span></div>
           {ГЛАВЫ.map((г, i) => (
-            <button key={г.имя} className="area" onClick={() => setПоиск(г.имя)}>
+            <Link key={г.имя} href={`/g/${i}`} className="area">
               <i>{String(i + 1).padStart(2, "0")}</i><b>{г.имя}</b><span>{г.б - г.а + 1}</span>
-            </button>
+            </Link>
           ))}
         </section>
         <section className="areas">

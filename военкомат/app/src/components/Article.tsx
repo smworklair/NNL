@@ -3,6 +3,7 @@ import { useEffect, useState, ViewTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { Карточка, Статья } from "@/lib/карточка";
 import { категорияПризыва } from "@/lib/карточка";
+import { БУКВЫ, КАТ_ИМЯ, КАТ_СМЫСЛ, буква } from "@/lib/категории";
 import { добавитьВДело, естьВДеле } from "@/lib/дело";
 import CardView from "./Card";
 import { Calculator, Myopia, type Подсветка } from "./Calculator";
@@ -37,12 +38,17 @@ export default function Article({ статья, карточка }: { стать
       <div className="scroll art">
         <ViewTransition name={`art-${статья.ид}`} share="morph" default="none"><h1 className="art-title">{статья.название}</h1></ViewTransition>
         <p className="label" style={{ margin: "14px 0 8px" }}>Ступени · категория для призывника</p>
+        <details className="legend">
+          <summary>Что значат буквы А–Д</summary>
+          <ul>{БУКВЫ.map((б) => <li key={б}><b className={`k k-${б}`}>{б}</b><span>{КАТ_ИМЯ[б]}. {КАТ_СМЫСЛ[б]}</span></li>)}</ul>
+          <p>Категория для призывника, если врач подтвердит диагноз. Решает только комиссия.</p>
+        </details>
         <div className="steps">
           {статья.пункты.map((п) => (
             <div key={п.буква} id={`step-${п.буква}`} className={`step ${свет.буквы.includes(п.буква) ? "lit" : ""}`}>
               <span className="letter">{п.буква}</span>
               <span className="desc">{п.описание}</span>
-              <span className="cat">{категорияПризыва(п)}</span>
+              <span className={`cat k-${буква(категорияПризыва(п))}`}>{категорияПризыва(п)}</span>
             </div>
           ))}
           {!статья.пункты.length ? <p className="note">Статья без деления на пункты.</p> : null}
