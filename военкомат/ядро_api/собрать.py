@@ -13,7 +13,8 @@ import shutil
 import sys
 
 ЗДЕСЬ = os.path.dirname(os.path.abspath(__file__))
-КОРЕНЬ = os.path.dirname(os.path.dirname(ЗДЕСЬ))
+# Откуда брать ядро: в монорепозитории это корень над папкой военкомат, в отдельном репозитории voenkomat укажите путь к клону NNL: NNL_ROOT=...
+КОРЕНЬ = os.environ.get("NNL_ROOT") or os.path.dirname(os.path.dirname(ЗДЕСЬ))
 DIST = os.path.join(ЗДЕСЬ, "dist")
 CORE = os.path.join(DIST, "core")
 
