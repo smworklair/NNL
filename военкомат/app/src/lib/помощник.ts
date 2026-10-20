@@ -3,7 +3,7 @@
 export type Провайдер = { имя: string; модели: string[]; ключ_на_сервере: boolean; документация?: string };
 export type Рейтинг = { статья: string; название: string; p: number };
 export type Ссылка = { текст: string; статья: string; пункт: string | null; ок: boolean; название?: string };
-export type ОтветХода = { ответ: string; рейтинг?: Рейтинг[]; ссылки?: Ссылка[]; закончено?: boolean; действие?: string; ошибка?: string };
+export type ОтветХода = { ответ: string; рейтинг?: Рейтинг[]; ссылки?: Ссылка[]; закончено?: boolean; действие?: string; вопрос?: { текст: string; вид?: string; статья?: string | number }; ошибка?: string };
 
 export type Настройка = { режим: "nnl" | "свой"; провайдер: string; модель: string; ключ: string };
 const КЛЮЧ = "справка_помощник";

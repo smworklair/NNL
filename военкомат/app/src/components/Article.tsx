@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, ViewTransition } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Карточка, Статья } from "@/lib/карточка";
 import { категорияПризыва } from "@/lib/карточка";
@@ -8,6 +9,14 @@ import { добавитьВДело, естьВДеле, убратьИзДел�
 import CardView from "./Card";
 import { Calculator, Myopia, type Подсветка } from "./Calculator";
 
+const ДАЛЬШЕ: Record<string, string> = {
+  А: "Годность подтверждается на медосвидетельствовании. Если есть жалобы, принесите документы, которые их подтверждают.",
+  Б: "Служба возможна с ограничениями. Покажите комиссии все документы по этому заболеванию.",
+  В: "Комиссия решает по документам: принесите выписки и результаты обследований, подтверждающие диагноз.",
+  Г: "Решается отсрочка на время лечения. Нужны документы о лечении; потом пройдёте освидетельствование повторно.",
+  Д: "Комиссия решает по документам: без выписок и результатов обследований категорию не поставят.",
+};
+
 type ТГ = { BackButton?: { show: () => void; hide: () => void; onClick: (f: () => void) => void; offClick: (f: () => void) => void } };
 
 /* Страница статьи: ступени по буквам, примечания и карточка «Проверьте себя». */
@@ -15,6 +24,7 @@ export default function Article({ статья, карточка }: { стать
   const роутер = useRouter();
   const [открытыПримечания, setОткрыто] = useState(false);
   const [вДеле, setВДеле] = useState(false);
+  const [выбрана, setВыбрана] = useState<string | null>(null);
   const [свет, setСвет] = useState<Подсветка>({ буквы: [], категория: null });
 
   const назад = () => (window.history.length > 1 ? роутер.back() : роутер.push("/"));
@@ -27,6 +37,13 @@ export default function Article({ статья, карточка }: { стать
     return () => { кн.offClick(назад); кн.hide(); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [статья.ид]);
+
+  useEffect(() => {
+    if (выбрана) setTimeout(() => document.querySelector(".variant")?.scrollIntoView({ behavior: "smooth", block: "center" }), 80);
+  }, [выбрана]);
+
+  const выбранный = статья.пункты.find((п) => п.буква === выбрана);
+  const вариант = выбранный ? буква(категорияПризыва(выбранный)) : "";
 
   return (
     <div className="app">
@@ -45,14 +62,30 @@ export default function Article({ статья, карточка }: { стать
         </details>
         <div className="steps">
           {статья.пункты.map((п) => (
-            <div key={п.буква} id={`step-${п.буква}`} className={`step ${свет.буквы.includes(п.буква) ? "lit" : ""}`}>
+            <button type="button" key={п.буква} id={`step-${п.буква}`} aria-pressed={выбрана === п.буква}
+              className={`step ${свет.буквы.includes(п.буква) ? "lit" : ""} ${выбрана === п.буква ? "sel" : ""}`}
+              onClick={() => setВыбрана(выбрана === п.буква ? null : п.буква)}>
               <span className="letter">{п.буква}</span>
               <span className="desc">{п.описание}</span>
               <span className={`cat k-${буква(категорияПризыва(п))}`}>{категорияПризыва(п)}</span>
-            </div>
+            </button>
           ))}
           {!статья.пункты.length ? <p className="note">Статья без деления на пункты.</p> : null}
         </div>
+        {вариант ? (
+          <section className="variant" aria-live="polite">
+            <div className="variant-head"><span className={`k k-${вариант}`}>{вариант}</span>
+              <div><small>Если врач подтвердит</small><b>Категория {вариант}: {КАТ_ИМЯ[вариант].toLowerCase()}</b></div></div>
+            <p>{КАТ_СМЫСЛ[вариант]}</p>
+            <h4>Что делать дальше</h4>
+            <ol>
+              <li>{ДАЛЬШЕ[вариант]}</li>
+              <li>Если решение комиссии не устраивает, его можно оспорить: <Link href="/b/5">бланк жалобы</Link>.</li>
+              <li>Сохраните статью в «моё дело», чтобы не потерять.</li>
+            </ol>
+            <p className="note">Категорию назначает призывная комиссия по документам врачей. Это справка по тексту Расписания болезней.</p>
+          </section>
+        ) : null}
 
         {статья.ид === "34" ? <Myopia при={setСвет} /> : null}
         {["13", "40", "86"].includes(статья.ид) ? <Calculator ид={статья.ид} при={setСвет} /> : null}

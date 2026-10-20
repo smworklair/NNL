@@ -368,3 +368,38 @@ select{width:100%;border:1px solid var(--line2);border-radius:12px;background:va
 .chat.scroll{padding-bottom:12px}
 /* внутри Telegram есть своя кнопка «Назад»: нашу прячем, место оставляем */
 .in-tg .artbar .back{visibility:hidden}
+
+/* ступень — кнопка; выбранная раскрывает карточку «Ваш вариант» */
+button.step{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer}
+.step.sel{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink) inset}
+.step:active{background:var(--inset)}
+.variant{margin-top:12px;border:1px solid var(--line2);border-radius:16px;background:var(--surface);padding:14px;animation:hero-вход .35s cubic-bezier(.22,1,.36,1) both}
+.variant-head{display:flex;gap:12px;align-items:center}
+.variant-head small{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--quieter)}
+.variant-head b{font-size:15.5px}
+.variant .k{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none;background:var(--inset)}
+.variant p{font-size:14px;line-height:1.5;margin:10px 0 4px}
+.variant h4{margin:12px 0 4px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--quiet)}
+.variant ol{margin:0;padding-left:20px;font-size:14px;line-height:1.5}
+.variant li{margin:4px 0}
+.variant li a{text-decoration:underline}
+.variant .note{font-size:12px;color:var(--quiet)}
+
+/* помощник: панель действий, карточка подключения, кнопки ответов */
+.tools{flex:none;display:flex;gap:8px;padding:4px 12px 8px}
+.tool{flex:1;border:1px solid var(--line2);background:var(--surface);color:var(--quiet);border-radius:999px;padding:8px 6px;font-size:13px;font-weight:600;white-space:nowrap}
+.tool.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pcard{display:flex;flex-direction:column;gap:2px;align-self:stretch;text-align:left;border:1px solid var(--line2);background:var(--surface);color:var(--ink);border-radius:14px;padding:10px 14px;font:inherit;position:relative}
+.pcard b{font-size:13.5px}.pcard span{font-size:12px;color:var(--quiet)}
+.pcard.link i{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-style:normal;font-size:12.5px;font-weight:700;border:1px solid var(--line2);border-radius:999px;padding:6px 12px}
+.chips-wrap{display:flex;flex-direction:column;gap:8px;align-items:center}
+.bub .main{margin:0;font-weight:700}
+.bub .more{margin:6px 0 0}
+.bub .more.clamp{display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.linkbtn{border:0;background:none;color:var(--quiet);text-decoration:underline;font-size:13px;padding:6px 0 0}
+.qbtns{display:flex;flex-wrap:wrap;gap:8px}
+.q{border:1px solid var(--line2);background:var(--surface);color:var(--ink);border-radius:999px;padding:10px 16px;font-size:14px;font-weight:600}
+.q.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.q.quiet{border-style:dashed;color:var(--quiet)}
+.row.hist{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.chat.scroll{display:flex;flex-direction:column;gap:12px}
