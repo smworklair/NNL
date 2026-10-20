@@ -250,7 +250,6 @@ export default function Helper() {
           </div>
           <form className="chat-bar" onSubmit={(е) => { е.preventDefault(); отправить(); (document.activeElement as HTMLElement | null)?.blur(); }}>
             <input value={текст} onChange={(е) => setТекст(е.target.value)} placeholder="Опишите, что беспокоит" autoComplete="off" enterKeyHint="send" aria-label="Сообщение" />
-            <button type="button" className="hide-kb" onClick={() => (document.activeElement as HTMLElement | null)?.blur()} aria-label="Скрыть клавиатуру">⌄</button>
             <button type="submit" disabled={ждём || !текст.trim()} aria-label="Отправить">↑</button>
           </form>
         </>

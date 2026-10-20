@@ -29,6 +29,15 @@ export default function Sieve({ начальный, закрыть }: { нача
     setДело(читатьДело());
     синхронизироватьДело().then(setДело);
   }, []);
+  /* Закрыть сито: нативная «Назад» Telegram или Esc */
+  useEffect(() => {
+    const кн = (window as unknown as { Telegram?: { WebApp?: { BackButton?: { show: () => void; hide: () => void; onClick: (f: () => void) => void; offClick: (f: () => void) => void } } } }).Telegram?.WebApp?.BackButton;
+    const клавиша = (е: KeyboardEvent) => { if (е.key === "Escape") закрыть(); };
+    window.addEventListener("keydown", клавиша);
+    if (кн) { кн.show(); кн.onClick(закрыть); }
+    return () => { window.removeEventListener("keydown", клавиша); if (кн) { кн.offClick(закрыть); кн.hide(); } };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     всеСтатьи().then(setСтатьи).catch(() => setСтатьи([]));
   }, []);
@@ -132,8 +141,6 @@ export default function Sieve({ начальный, закрыть }: { нача
       <form className="sieve-bar" onSubmit={(е) => { е.preventDefault(); (document.activeElement as HTMLElement | null)?.blur(); }}>
         <input ref={ввод} value={q} onChange={(е) => setQ(е.target.value)} enterKeyHint="search"
           placeholder="Найти статью: опишите, что беспокоит" autoComplete="off" spellCheck={false} aria-label="Поиск" />
-        <button type="button" className="hide-kb" onClick={() => (document.activeElement as HTMLElement | null)?.blur()} aria-label="Скрыть клавиатуру">⌄</button>
-        <button type="button" onClick={закрыть}>Отмена</button>
       </form>
       <div className="dock-modes"><Modes активный="home" /></div>
     </div>
