@@ -519,3 +519,7 @@ a.q{display:inline-block}
   radial-gradient(100% 45% at 100% 100%,rgba(255,255,255,.03),transparent 60%),
   var(--bg)}
 @media (prefers-color-scheme:light){.app{background:radial-gradient(120% 55% at 15% -5%,rgba(255,255,255,.9),transparent 62%),var(--bg)}}
+
+/* фон ровный, как на эталонном скриншоте (#121211): никаких градиентов и оттенков */
+.app{background:var(--bg)}
+@media (prefers-color-scheme:light){.app{background:var(--bg)}}
