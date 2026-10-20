@@ -27,13 +27,15 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   const к = await кто(req);
   if (к.ошибка) return к.ошибка;
-  const тело = (await req.json().catch(() => null)) as { ид?: string; статус?: string } | null;
+  const тело = (await req.json().catch(() => null)) as { ид?: string; статус?: string; шагЗакрыт?: boolean } | null;
   const ид = String(тело?.ид ?? "");
   const статус = тело?.статус === "врач" ? "врач" : "слово";
+  const шаг = typeof тело?.шагЗакрыт === "boolean" ? тело.шагЗакрыт : null;
   if (!/^\d{1,2}$/.test(ид) || Number(ид) < 1 || Number(ид) > 88) return ответ({ ошибка: "нет такой статьи" }, 400);
   await к.sql`insert into users (tg_id) values (${к.id}) on conflict do nothing`;
-  await к.sql`insert into delo (tg_id, article_id, status) values (${к.id}, ${ид}, ${статус})
-    on conflict (tg_id, article_id) do update set status = excluded.status, added_at = now()`;
+  await к.sql`insert into delo (tg_id, article_id, status, step_closed) values (${к.id}, ${ид}, ${статус}, ${шаг ?? false})
+    on conflict (tg_id, article_id) do update set status = excluded.status,
+      step_closed = coalesce(${шаг}::boolean, delo.step_closed)`;
   return ответ({ ок: true });
 }
 

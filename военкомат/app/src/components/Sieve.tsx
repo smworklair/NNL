@@ -114,6 +114,7 @@ export default function Sieve({ начальный, закрыть }: { нача
             </div>
           ) : (
             <>
+              <Link href="/delo" className="cta" style={{ display: "block", textAlign: "center", textDecoration: "none", marginBottom: 6 }}>Открыть моё дело</Link>
               <h2>В деле · {дело.length}</h2>
               {дело.filter((з) => !ф || нижний(названиеСтатьи(з.ид)).includes(ф) || з.ид === ф).map((з) => (
                 <Link key={з.ид} href={`/a/${з.ид}`} className="row">
