@@ -4,7 +4,7 @@ import { ViewTransition } from "react";
 import Link from "next/link";
 import { умныйПоиск, type Ответ } from "@/lib/api";
 import { всеСтатьи, нижний, type СтатьяСписка } from "@/lib/статьи";
-import { читатьДело, синхронизироватьДело, type Отметка } from "@/lib/дело";
+import { читатьДело, синхронизироватьДело, убратьИзДела, type Отметка } from "@/lib/дело";
 import { ДОКУМЕНТЫ } from "@/data/документы";
 
 type Вкладка = "статьи" | "документы" | "дело";
@@ -117,10 +117,13 @@ export default function Sieve({ начальный, закрыть }: { нача
               <Link href="/delo" className="cta" style={{ display: "block", textAlign: "center", textDecoration: "none", marginBottom: 6 }}>Открыть моё дело</Link>
               <h2>В деле · {дело.length}</h2>
               {дело.filter((з) => !ф || нижний(названиеСтатьи(з.ид)).includes(ф) || з.ид === ф).map((з) => (
-                <Link key={з.ид} href={`/a/${з.ид}`} className="row">
-                  <b>ст. {з.ид}</b><span>{коротко(названиеСтатьи(з.ид), 90)}</span>
-                  <em>{з.статус === "врач" ? "от врача" : "со слов"}</em>
-                </Link>
+                <div key={з.ид} className="row-wrap">
+                  <Link href={`/a/${з.ид}`} className="row">
+                    <b>ст. {з.ид}</b><span>{коротко(названиеСтатьи(з.ид), 90)}</span>
+                    <em>{з.статус === "врач" ? "от врача" : "со слов"}</em>
+                  </Link>
+                  <button type="button" className="rm" aria-label="Убрать из дела" onClick={() => setДело(убратьИзДела(з.ид))}>✕</button>
+                </div>
               ))}
             </>
           ))}

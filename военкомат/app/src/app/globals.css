@@ -349,3 +349,8 @@ select{width:100%;border:1px solid var(--line2);border-radius:12px;background:va
 .chat-bar input{flex:1;min-width:0;height:48px;border:1px solid var(--line2);border-radius:999px;background:var(--glass);color:var(--ink);padding:0 18px;font-size:16px;outline:none}
 .chat-bar button{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);font-size:20px;font-weight:700}
 .chat-bar button:disabled{opacity:.35}
+
+/* убрать из дела: нормальная зона нажатия и в списке вкладки */
+.rm{min-width:44px;min-height:40px;display:grid;place-items:center;font-size:18px}
+.row-wrap{display:flex;align-items:center;border-bottom:1px solid var(--line)}
+.row-wrap .row{flex:1;border-bottom:0}

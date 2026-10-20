@@ -2,6 +2,11 @@
 export type Отметка = { ид: string; статус: "врач" | "слово"; в: number; шагЗакрыт: boolean };
 
 const КЛЮЧ = "справка_годность_дело";
+const КЛЮЧ_УДАЛЁННЫЕ = "справка_годность_дело_удалённые";
+
+/* Убранные отметки помним, пока сервер не подтвердит удаление: поздняя синхронизация не должна возвращать их обратно. */
+const удалённые = (): string[] => { try { const с = JSON.parse(localStorage.getItem(КЛЮЧ_УДАЛЁННЫЕ) || "[]"); return Array.isArray(с) ? с.map(String) : []; } catch { return []; } };
+const записатьУдалённые = (с: string[]) => { try { localStorage.setItem(КЛЮЧ_УДАЛЁННЫЕ, JSON.stringify([...new Set(с)])); } catch { /* не сохранится */ } };
 
 export function читатьДело(): Отметка[] {
   try {
@@ -30,18 +35,26 @@ export function добавитьВДело(ид: string, статус: "врач
   if (initData()) fetch("/api/delo", { method: "POST", headers: заголовки(), body: JSON.stringify({ ид, статус }) }).catch(() => {});
 }
 
-/* Подтягивает дело с сервера и объединяет с локальным: что есть только на устройстве, уходит на сервер. */
+/* Подтягивает дело с сервера и объединяет с локальным: что есть только на устройстве, уходит на сервер, что убрано, удаляется и там. */
 export async function синхронизироватьДело(): Promise<Отметка[]> {
-  const локально = читатьДело();
+  const убранные = new Set(удалённые());
+  const локально = читатьДело().filter((з) => !убранные.has(з.ид));
   if (!initData()) return локально;
   try {
     const р = await fetch("/api/delo", { headers: заголовки(), cache: "no-store" });
     if (!р.ok) return локально;
     const сервер = (await р.json()) as Отметка[];
+    const неУдалилось: string[] = [];
+    for (const ид of убранные) {
+      if (!сервер.some((з) => з.ид === ид)) continue;     // на сервере уже нет: надгробие больше не нужно
+      const ок = await fetch(`/api/delo?${new URLSearchParams({ ид })}`, { method: "DELETE", headers: заголовки() }).then((р) => р.ok).catch(() => false);
+      if (!ок) неУдалилось.push(ид);                       // не вышло: помним и попробуем в следующий раз
+    }
+    записатьУдалённые(неУдалилось);
     const есть = new Set(сервер.map((з) => з.ид));
     const толькоЗдесь = локально.filter((з) => !есть.has(з.ид));
     await Promise.all(толькоЗдесь.map((з) => fetch("/api/delo", { method: "POST", headers: заголовки(), body: JSON.stringify({ ид: з.ид, статус: з.статус }) }).catch(() => {})));
-    const итог = [...сервер, ...толькоЗдесь].sort((а, б) => б.в - а.в);
+    const итог = [...сервер.filter((з) => !убранные.has(з.ид)), ...толькоЗдесь].sort((а, б) => б.в - а.в);
     записатьЛокально(итог);
     return итог;
   } catch {
@@ -59,8 +72,15 @@ export function изменитьОтметку(ид: string, правка: { с�
 }
 
 export function убратьИзДела(ид: string): Отметка[] {
+  записатьУдалённые([...удалённые(), ид]);
   const список = читатьДело().filter((з) => з.ид !== ид);
   записатьЛокально(список);
-  if (initData()) fetch(`/api/delo?${new URLSearchParams({ ид })}`, { method: "DELETE", headers: заголовки() }).catch(() => {});
+  if (initData()) {
+    fetch(`/api/delo?${new URLSearchParams({ ид })}`, { method: "DELETE", headers: заголовки() })
+      .then((р) => { if (р.ok) записатьУдалённые(удалённые().filter((х) => х !== ид)); })
+      .catch(() => {});
+  } else {
+    записатьУдалённые(удалённые().filter((х) => х !== ид));
+  }
   return список;
 }
