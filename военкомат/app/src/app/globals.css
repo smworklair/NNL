@@ -1,6 +1,6 @@
 :root{
   --bg:#121211;--surface:#1c1c1b;--inset:#232322;--ink:#f1f1ee;--quiet:#a9a9a4;--quieter:#8b8b86;
-  --line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);--ok:#86e2a8;--accent:#f5cf2e;
+  --line:rgba(255,255,255,.10);--line2:rgba(255,255,255,.18);--ok:#f1f1ee;--accent:#f5cf2e;
   --glass:rgba(24,24,23,.96);--shadow:0 10px 30px rgba(0,0,0,.40);
   --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   color-scheme:dark;
@@ -8,7 +8,7 @@
 @media (prefers-color-scheme:light){
   :root{
     --bg:#f6f6f2;--surface:#fff;--inset:#eaeae4;--ink:#17171a;--quiet:#54545c;--quieter:#63636b;
-    --line:rgba(20,20,25,.10);--line2:rgba(20,20,25,.18);--ok:#0f6b3d;--accent:#e0b400;
+    --line:rgba(20,20,25,.10);--line2:rgba(20,20,25,.18);--ok:#17171a;--accent:#e0b400;
     --glass:rgba(255,255,255,.96);--shadow:0 8px 24px rgba(20,20,25,.10);color-scheme:light;
   }
 }
@@ -90,7 +90,7 @@ input{font:inherit}
 .empty{text-align:center;padding:40px 10px}
 .empty h3{margin:0 0 8px;font-size:18px}
 .empty p{margin:0 auto 18px;max-width:300px;color:var(--quiet);font-size:14px;line-height:1.5}
-.cta{border:1px solid var(--ok);background:rgba(96,205,138,.12);color:var(--ok);border-radius:14px;padding:12px 22px;font-weight:600}
+.cta{border:1px solid var(--ok);background:color-mix(in srgb,var(--ink) 11%,transparent);color:var(--ok);border-radius:14px;padding:12px 22px;font-weight:600}
 
 /* клавиатура поднята: плотный список, тонкие вкладки, поле сразу над клавиатурой */
 @media (max-height:560px){
@@ -125,12 +125,12 @@ input{font:inherit}
 .chead{display:flex;justify-content:space-between;align-items:center}
 .chead h3{margin:0;font-size:18px}
 .cbadge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:8px;background:rgba(245,207,46,.18);color:var(--accent)}
-.cbadge.ok{background:rgba(96,205,138,.18);color:var(--ok)}
+.cbadge.ok{background:color-mix(in srgb,var(--ink) 16%,transparent);color:var(--ok)}
 .cnote{font-size:13px;line-height:1.45;color:var(--quiet);margin:6px 0}
 .cblock{margin-top:16px;padding-top:12px;border-top:1px solid var(--line)}
 .cblock h4{margin:0 0 4px;font-size:15px}
 .crow{margin-top:8px;border:1px solid var(--line);border-radius:12px;padding:8px 10px}
-.crow.on{border-color:var(--ok);background:rgba(96,205,138,.08)}
+.crow.on{border-color:var(--ok);background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .ccheck{display:flex;gap:10px;align-items:flex-start;width:100%;border:0;background:none;padding:2px 0;text-align:left}
 .ccheck i{flex:none;width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line2);display:grid;place-items:center;font-style:normal;font-size:14px;color:var(--bg)}
 .crow.on .ccheck i{background:var(--ok);border-color:var(--ok)}
@@ -213,7 +213,7 @@ input{font:inherit}
 .law-h{margin:20px 0 6px;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--quieter)}
 .law-p{font-size:15px;line-height:1.55;margin:8px 0}
 .law-ul{margin:6px 0;padding-left:20px;font-size:15px;line-height:1.55}
-.law-doc{display:block;margin-top:20px;border:1px solid var(--ok);border-radius:14px;background:rgba(96,205,138,.08);padding:12px 14px;text-decoration:none;color:inherit}
+.law-doc{display:block;margin-top:20px;border:1px solid var(--ok);border-radius:14px;background:color-mix(in srgb,var(--ink) 7%,transparent);padding:12px 14px;text-decoration:none;color:inherit}
 .law-doc b{display:block;color:var(--ok);font-size:13px}.law-doc span{display:block;margin-top:3px;font-size:14.5px}
 
 /* моё дело */
@@ -221,9 +221,9 @@ input{font:inherit}
 .delo-head b{font-size:34px;line-height:1;margin-right:8px}.delo-head span{color:var(--quiet);font-size:13px}
 .delo-chips{display:flex;flex-direction:column;gap:6px;align-items:flex-end}
 .chipx{font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;background:var(--inset);color:var(--quiet)}
-.chipx.ok{background:rgba(96,205,138,.16);color:var(--ok)}
+.chipx.ok{background:color-mix(in srgb,var(--ink) 14%,transparent);color:var(--ok)}
 .step-card{margin-top:12px;border:1px solid var(--accent);border-radius:16px;background:rgba(245,207,46,.07);padding:12px 14px}
-.step-card.done{border-color:var(--ok);background:rgba(96,205,138,.08)}
+.step-card.done{border-color:var(--ok);background:color-mix(in srgb,var(--ink) 7%,transparent)}
 .step-card p{margin:6px 0 4px;font-size:14px;line-height:1.5}
 .step-btns{display:flex;gap:16px;margin-top:6px}
 .mark{border-bottom:1px solid var(--line);padding:10px 2px}
@@ -301,3 +301,51 @@ input{font:inherit}
 .area-row{grid-template-columns:auto 1fr auto}
 .area-row .dots{grid-column:auto;display:flex;gap:4px;align-items:center;font-style:normal}
 .area-row .dots .k{min-width:18px;height:18px;font-size:10px}
+
+/* птица по центру плаката (общий display:block перебивал grid) */
+.свод-арт.арт-птица{display:grid;place-items:center}
+.свод-арт.арт-птица img{height:118px;width:auto;max-width:none;display:block}
+.свод-арт.арт-монолит img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+
+/* лёгкие анимации плакатов: только transform, opacity и смещение штриха, без размытия и перерисовки слоёв */
+@keyframes свод-бег{to{transform:translateX(-300px)}}
+@keyframes свод-порт{to{stroke-dashoffset:-14}}
+@keyframes свод-курсор{50%{opacity:0}}
+@keyframes свод-парит{0%,100%{transform:translateY(3px)}50%{transform:translateY(-4px)}}
+@keyframes свод-вход{from{opacity:0;transform:translateY(14px)}}
+@keyframes hero-вход{from{opacity:0;transform:translateY(10px)}}
+.арт-кардио .линия{will-change:transform;animation:свод-бег 4.4s linear infinite}
+.арт-кардио .эхо{animation-delay:-.1s}
+.арт-чип .пины .п0,.арт-чип .пины .п2,.арт-чип .пины .п3,.арт-чип .пины .п5{stroke-dasharray:4 3;animation:свод-порт 1.6s linear infinite}
+.арт-терминал .курсор{animation:свод-курсор 1.1s steps(1) infinite}
+.свод-арт.арт-птица img{animation:свод-парит 7s ease-in-out infinite}
+.card.poster{animation:свод-вход .6s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(var(--i,0) * 70ms + 120ms)}
+.hero h1{animation:hero-вход .7s cubic-bezier(.22,1,.36,1) both}
+.chips{animation:hero-вход .7s cubic-bezier(.22,1,.36,1) .1s both}
+@media (prefers-reduced-motion:reduce){
+  .арт-кардио .линия,.арт-чип .пины line,.арт-чип .пины polyline,.арт-терминал .курсор,.свод-арт.арт-птица img,.card.poster,.hero h1,.chips{animation:none}
+}
+
+/* ссылки как часть интерфейса, а не подчёркнутый синий текст */
+a{color:inherit;text-decoration:none}
+.area b{color:var(--ink)}
+
+/* рисунки без зелёного оттенка: как в задуманном монохромном оформлении */
+.свод-арт.арт-птица img,.свод-арт.арт-монолит img{filter:grayscale(1) brightness(1.15)}
+.mode{display:grid;place-items:center;text-decoration:none}
+.alpha{font-style:normal;font-size:10px;padding:1px 5px;border-radius:5px;background:rgba(245,207,46,.25);color:var(--accent)}
+
+/* помощник: чат */
+select{width:100%;border:1px solid var(--line2);border-radius:12px;background:var(--glass);color:var(--ink);padding:11px 12px;font-size:16px;outline:none;font-family:inherit}
+.chat{display:flex;flex-direction:column;gap:10px;padding-bottom:12px}
+.msg{display:flex;flex-direction:column;gap:6px;max-width:88%}
+.msg.me{align-self:flex-end;align-items:flex-end}.msg.bot{align-self:flex-start}
+.bub{white-space:pre-wrap;font-size:14.5px;line-height:1.5;padding:10px 14px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.msg.me .bub{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dots-load{color:var(--quiet)}
+.refs{display:flex;flex-wrap:wrap;gap:6px}
+.ref{font-size:12.5px;font-weight:600;border:1px solid var(--line2);border-radius:999px;padding:6px 12px;background:var(--inset)}
+.chat-bar{flex:none;display:flex;gap:8px;padding:8px 12px calc(10px + env(safe-area-inset-bottom))}
+.chat-bar input{flex:1;min-width:0;height:48px;border:1px solid var(--line2);border-radius:999px;background:var(--glass);color:var(--ink);padding:0 18px;font-size:16px;outline:none}
+.chat-bar button{flex:none;width:48px;height:48px;border-radius:50%;border:0;background:var(--ink);color:var(--bg);font-size:20px;font-weight:700}
+.chat-bar button:disabled{opacity:.35}

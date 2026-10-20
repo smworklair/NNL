@@ -28,7 +28,7 @@ export default function Home() {
         </div>
         <div className="carousel" aria-label="Сводка">
           {СВОДКА.map((к, i) => (
-            <article key={к.заг} className={`card poster ${к.вид === "помощь" ? "help" : ""} ${к.вид === "донат" ? "donate" : ""} ${к.вид === "важно" ? "important" : ""}`}>
+            <article key={к.заг} style={{ ["--i" as string]: i }} className={`card poster ${к.вид === "помощь" ? "help" : ""} ${к.вид === "донат" ? "donate" : ""} ${к.вид === "важно" ? "important" : ""}`}>
               {к.арт ? <span className={`свод-арт арт-${к.арт}`} aria-hidden="true" dangerouslySetInnerHTML={{ __html: (арт as Record<string, string>)[к.арт] }} /> : null}
               <div className="pbody">
                 <div className="ptop"><span className="kind">{к.метка}</span><span className="num">{i + 1}/{СВОДКА.length}</span></div>
@@ -61,7 +61,7 @@ export default function Home() {
         <button className="search" onClick={() => setПоиск("")}>Жалобы своими словами: колет сердце, минус 7…</button>
         <div className="modes" role="group" aria-label="Режим">
           <button className="mode on">Расследование</button>
-          <button className="mode" disabled>Помощник<em>α</em></button>
+          <Link href="/helper" className="mode">Помощник<em>α</em></Link>
         </div>
       </div>
       {поиск !== null ? <Sieve начальный={поиск} закрыть={() => setПоиск(null)} /> : null}
