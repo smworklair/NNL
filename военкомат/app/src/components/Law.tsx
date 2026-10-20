@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import Modes from "./Modes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Закон } from "@/app/l/[n]/page";
@@ -42,6 +43,7 @@ export default function Law({ закон, бумага }: { закон: Зако
           </Link>
         ) : null}
       </div>
+      <div className="dock-modes"><Modes активный="home" /></div>
     </div>
   );
 }

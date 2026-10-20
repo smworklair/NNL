@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Modes from "./Modes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { читатьДело, синхронизироватьДело, изменитьОтметку, убратьИзДела, type Отметка } from "@/lib/дело";
@@ -99,6 +100,7 @@ export default function Delo({ названия }: { названия: Record<st
           </>
         )}
       </div>
+      <div className="dock-modes"><Modes активный="home" /></div>
     </div>
   );
 }

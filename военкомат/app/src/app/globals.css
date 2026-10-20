@@ -403,3 +403,24 @@ button.step{width:100%;text-align:left;color:inherit;font:inherit;cursor:pointer
 .q.quiet{border-style:dashed;color:var(--quiet)}
 .row.hist{display:flex;flex-direction:column;gap:2px;align-items:flex-start}
 .chat.scroll{display:flex;flex-direction:column;gap:12px}
+
+/* расследование */
+.inv-form{display:flex;gap:8px;margin-top:12px}
+.inv-form input{flex:1;min-width:0;height:48px;border:1px solid var(--line2);border-radius:999px;background:var(--glass);color:var(--ink);padding:0 18px;font-size:16px;outline:none}
+.inv-form button{flex:none;height:48px;padding:0 20px;border:0;border-radius:999px;background:var(--ink);color:var(--bg);font-weight:700;font-size:15px}
+.inv-form button:disabled{opacity:.35}
+.seg2{display:flex;gap:8px}
+.seg2 button{flex:1;border:1px solid var(--line2);background:var(--surface);color:var(--quiet);border-radius:14px;padding:12px 8px;font-size:14px;font-weight:600}
+.seg2 button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.verdict{border:1px solid var(--line2);border-radius:16px;background:var(--surface);padding:14px}
+.verdict.ok{border-color:var(--ok)}
+.verdict b{font-size:15.5px}
+.verdict p{margin:8px 0 0;font-size:14px;line-height:1.5}
+.verdict ul{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.45;color:var(--quiet)}
+a.q{display:inline-block}
+
+/* везде внизу одна и та же панель режимов */
+.app > .scroll.art:has(~ .dock-modes){padding-bottom:16px}
+.app > .dock .add{height:46px;font-size:15px}
+.app > .dock .modes{margin-top:8px}
+.app > .scroll.art:has(~ .dock){padding-bottom:calc(140px + env(safe-area-inset-bottom))}

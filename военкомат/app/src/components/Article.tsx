@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, ViewTransition } from "react";
+import Modes from "./Modes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Карточка, Статья } from "@/lib/карточка";
@@ -105,6 +106,7 @@ export default function Article({ статья, карточка }: { стать
         <button className={`add ${вДеле ? "done" : ""}`} onClick={() => { if (вДеле) { убратьИзДела(статья.ид); setВДеле(false); } else { добавитьВДело(статья.ид); setВДеле(true); } }}>
           {вДеле ? "В моём деле ✓ · нажмите, чтобы убрать" : "Добавить в моё дело"}
         </button>
+        <Modes активный="home" />
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Modes from "./Modes";
 import { ViewTransition } from "react";
 import Link from "next/link";
 import { умныйПоиск, type Ответ } from "@/lib/api";
@@ -133,6 +134,7 @@ export default function Sieve({ начальный, закрыть }: { нача
           placeholder="Найти статью: опишите, что беспокоит" autoComplete="off" spellCheck={false} aria-label="Поиск" />
         <button type="button" onClick={закрыть}>Отмена</button>
       </form>
+      <div className="dock-modes"><Modes активный="home" /></div>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 import { useEffect } from "react";
+import Modes from "./Modes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { БУКВЫ, КАТ_ИМЯ } from "@/lib/категории";
@@ -40,6 +41,7 @@ export default function Area({ имя, строки }: { имя: string; стр�
           </Link>
         ))}
       </div>
+      <div className="dock-modes"><Modes активный="home" /></div>
     </div>
   );
 }
