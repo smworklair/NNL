@@ -153,13 +153,22 @@ def ключ_провайдера(провайдер):
     return _ключи().get(провайдер)
 
 
+def заголовки_ключа(cfg, ключ):
+    """Заголовки авторизации провайдера: Authorization: Bearer плюс то, что нужно именно ему (cfg["заголовки_доп"],
+    {ключ} подставляется). Например, Claude принимает x-api-key и anthropic-version."""
+    h = {"Authorization": "Bearer " + ключ}
+    for имя, знач in (cfg.get("заголовки_доп") or {}).items():
+        h[имя] = str(знач).replace("{ключ}", ключ)
+    return h
+
+
 def проверить_ключ(провайдер, ключ, таймаут=20):
     """Проверка чужого ключа без расхода токенов: список моделей провайдера (GET /models). Возвращает {"ок": bool, "модели": [...]} или {"ок": False, "ошибка": ...}.
     Ключ в ответ и в сообщения об ошибке не попадает."""
     cfg = конфиг_провайдера(провайдер)
     if cfg is None or cfg.get("подключён") is False or not cfg.get("base_url") or not cfg.get("авторизация"):
         return {"ок": False, "ошибка": "провайдер недоступен для подключения"}
-    req = urllib.request.Request(str(cfg["base_url"]).rstrip("/") + "/models", headers=dict(UA, Authorization="Bearer " + ключ))
+    req = urllib.request.Request(str(cfg["base_url"]).rstrip("/") + "/models", headers=dict(UA, **заголовки_ключа(cfg, ключ)))
     try:
         with urllib.request.urlopen(req, timeout=таймаут) as r:
             данные = json.load(r)
@@ -384,7 +393,7 @@ def спросить(провайдер, модель, система, исто�
             тело[k_д] = v_д
     заголовки = dict(UA, **{"Content-Type": "application/json"})
     if нужен_ключ:
-        заголовки["Authorization"] = "Bearer " + ключ
+        заголовки.update(заголовки_ключа(cfg, ключ))
     последняя = None
     ждать = 0.0
     t_всего, повторов = time.time(), 0
@@ -532,7 +541,7 @@ def _потоком(провайдер, модель, система, истор
             тело[k_д] = v_д
     заголовки = dict(UA, **{"Content-Type": "application/json", "Accept": "text/event-stream"})
     if нужен_ключ:
-        заголовки["Authorization"] = "Bearer " + ключ
+        заголовки.update(заголовки_ключа(cfg, ключ))
     t0 = time.time()
     req = urllib.request.Request(url, data=json.dumps(тело, ensure_ascii=False).encode("utf-8"), headers=заголовки)
     куски, думы_ч, остановка, т_вх, т_вых, т_рас = [], [], None, 0, 0, None

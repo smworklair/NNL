@@ -13,7 +13,11 @@
       "с_размышлением": "medium",
       "условие_в_имени": "gpt-oss"
     },
-    "модели": ["openai/gpt-oss-120b", "qwen/qwen3-32b", "qwen/qwen3.8-27b"]
+    "модели": [
+      "openai/gpt-oss-120b",
+      "qwen/qwen3-32b",
+      "qwen/qwen3.8-27b"
+    ]
   },
   "gemini": {
     "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
@@ -23,17 +27,28 @@
     "подключён": true,
     "документация": "https://ai.google.dev/gemini-api/docs/openai",
     "пояснение": "Бесплатные квоты часто кончаются с ошибкой превышения лимита, ответы идут от четырёх до сорока секунд. Мысли модели через этот адрес приходят только по просьбе (extra_body_размышление), в тегах thought внутри текста",
-    "extra_body_размышление": {"extra_body": {"google": {"thinking_config": {"include_thoughts": true}}}},
-    "модели": ["gemini-2.5-flash", "gemini-3.8-flash"]
+    "extra_body_размышление": {
+      "extra_body": {
+        "google": {
+          "thinking_config": {
+            "include_thoughts": true
+          }
+        }
+      }
+    },
+    "модели": [
+      "gemini-2.5-flash",
+      "gemini-3.8-flash"
+    ]
   },
   "mistral": {
     "base_url": "https://api.mistral.ai/v1",
     "ключ_метка": "MISTRAL",
     "ключ_env": "MISTRAL_API_KEY",
     "авторизация": "Bearer",
-    "подключён": false,
+    "подключён": true,
     "документация": "https://docs.mistral.ai/resources/migration-guides",
-    "пояснение": "Запись зарезервирована, ключ пока отсутствует, поэтому вызовы отклоняются до подключения",
+    "пояснение": "Mistral, интерфейс совместим с OpenAI. Ключ человека, список моделей берётся у провайдера.",
     "модели": []
   },
   "alibaba": {
@@ -45,9 +60,19 @@
     "документация": "https://docs.modelstudio.console.alibabacloud.com/en/model-studio/compatibility-of-openai-with-dashscope",
     "документация_дополнительно": "https://docs.litellm.ai/docs/providers/dashscope",
     "пояснение": "Международный режим совместимости, международный режим, ключ под заголовком QWEN, проверено: /models отвечает, регионы cn и us ключ отвергают",
-    "extra_body": {"enable_thinking": false},
-    "extra_body_размышление": {"enable_thinking": true},
-    "модели": ["qwen3.8-flash", "qwen3.8-27b", "qwen3.8-max", "qwen3.8-2.4t-a95b", "qwen3.7-max"]
+    "extra_body": {
+      "enable_thinking": false
+    },
+    "extra_body_размышление": {
+      "enable_thinking": true
+    },
+    "модели": [
+      "qwen3.8-flash",
+      "qwen3.8-27b",
+      "qwen3.8-max",
+      "qwen3.8-2.4t-a95b",
+      "qwen3.7-max"
+    ]
   },
   "ollama": {
     "base_url": "http://localhost:11434/v1",
@@ -57,6 +82,100 @@
     "подключён": false,
     "документация": "https://docs.ollama.com/api/openai-compatibility.md",
     "пояснение": "Локальный сервер, ключ не требуется, запись зарезервирована без моделей до подключения",
+    "модели": []
+  },
+  "openai": {
+    "base_url": "https://api.openai.com/v1",
+    "ключ_метка": null,
+    "ключ_env": "OPENAI_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://platform.openai.com/docs/api-reference",
+    "пояснение": "ChatGPT через API. Ключ человека, список моделей берётся у провайдера (GET /models).",
+    "модели": []
+  },
+  "anthropic": {
+    "base_url": "https://api.anthropic.com/v1",
+    "ключ_метка": null,
+    "ключ_env": "ANTHROPIC_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "заголовки_доп": {
+      "x-api-key": "{ключ}",
+      "anthropic-version": "2023-06-01"
+    },
+    "документация": "https://docs.anthropic.com/en/api/openai-sdk",
+    "пояснение": "Claude через слой совместимости с OpenAI. Для списка моделей добавляются заголовки x-api-key и anthropic-version.",
+    "модели": []
+  },
+  "xai": {
+    "base_url": "https://api.x.ai/v1",
+    "ключ_метка": null,
+    "ключ_env": "XAI_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://docs.x.ai/docs/api-reference",
+    "пояснение": "Grok от xAI, интерфейс совместим с OpenAI.",
+    "модели": []
+  },
+  "deepseek": {
+    "base_url": "https://api.deepseek.com/v1",
+    "ключ_метка": null,
+    "ключ_env": "DEEPSEEK_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://api-docs.deepseek.com/",
+    "пояснение": "DeepSeek, интерфейс совместим с OpenAI.",
+    "модели": []
+  },
+  "openrouter": {
+    "base_url": "https://openrouter.ai/api/v1",
+    "ключ_метка": null,
+    "ключ_env": "OPENROUTER_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://openrouter.ai/docs/api-reference/overview",
+    "пояснение": "Один ключ даёт сотни моделей разных компаний (в том числе все перечисленные). Имена моделей вида компания/модель.",
+    "модели": []
+  },
+  "together": {
+    "base_url": "https://api.together.xyz/v1",
+    "ключ_метка": null,
+    "ключ_env": "TOGETHER_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://docs.together.ai/docs/openai-api-compatibility",
+    "пояснение": "Открытые модели на Together AI.",
+    "модели": []
+  },
+  "cerebras": {
+    "base_url": "https://api.cerebras.ai/v1",
+    "ключ_метка": null,
+    "ключ_env": "CEREBRAS_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://inference-docs.cerebras.ai/resources/openai",
+    "пояснение": "Очень быстрый вывод открытых моделей.",
+    "модели": []
+  },
+  "fireworks": {
+    "base_url": "https://api.fireworks.ai/inference/v1",
+    "ключ_метка": null,
+    "ключ_env": "FIREWORKS_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://docs.fireworks.ai/tools-sdks/openai-compatibility",
+    "пояснение": "Открытые модели на Fireworks AI.",
+    "модели": []
+  },
+  "moonshot": {
+    "base_url": "https://api.moonshot.ai/v1",
+    "ключ_метка": null,
+    "ключ_env": "MOONSHOT_API_KEY",
+    "авторизация": "Bearer",
+    "подключён": true,
+    "документация": "https://platform.moonshot.ai/docs/api/chat",
+    "пояснение": "Kimi от Moonshot AI, интерфейс совместим с OpenAI.",
     "модели": []
   }
 }
