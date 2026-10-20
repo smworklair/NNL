@@ -473,3 +473,7 @@ a.q{display:inline-block}
 .add{box-shadow:none}
 .add.done{border-color:var(--line2)}
 .artbar{background:linear-gradient(var(--bg),transparent)}
+
+/* сито: нижний отступ только один (у панели режимов), иначе между поиском и панелью дыра */
+.sieve-bar{padding-bottom:6px}
+.sieve-bar + .dock-modes{padding-top:0}
