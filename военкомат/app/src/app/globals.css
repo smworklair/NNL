@@ -424,3 +424,13 @@ a.q{display:inline-block}
 .app > .dock .add{height:46px;font-size:15px}
 .app > .dock .modes{margin-top:8px}
 .app > .scroll.art:has(~ .dock){padding-bottom:calc(140px + env(safe-area-inset-bottom))}
+
+/* iPhone: скрываем только левую «Назад» (есть нативная), кнопка «Новый» остаётся; панель режимов прячется под клавиатурой */
+.in-tg .artbar .back{visibility:visible}
+.in-tg .artbar > .back:first-child{visibility:hidden}
+.newchat{border:1px solid var(--line2);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font-size:13.5px;font-weight:700}
+.hide-kb{display:none;flex:none;width:44px;height:44px;border:1px solid var(--line2)!important;border-radius:50%!important;background:var(--surface)!important;font-size:22px!important;line-height:1;place-items:center;color:var(--ink)}
+.kb .hide-kb{display:grid}
+.kb .dock-modes{display:none}
+.chat-bar .hide-kb{width:48px;height:48px}
+.chat-bar .hide-kb,.sieve-bar .hide-kb{color:var(--ink)}

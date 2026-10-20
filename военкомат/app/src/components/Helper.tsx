@@ -137,7 +137,7 @@ export default function Helper() {
       <header className="artbar">
         <button className="back" onClick={() => назадРеф.current()} aria-label="Назад">‹ Назад</button>
         <span>{экран === "история" ? "История" : экран === "ключ" ? "Подключение" : <>Помощник <em className="alpha">α</em></>}</span>
-        <button className="back" style={{ textAlign: "right", width: "auto" }} onClick={новыйЧат} aria-label="Новый чат">＋ Новый</button>
+        <button className="newchat" onClick={новыйЧат} aria-label="Новый чат">＋ Новый</button>
       </header>
 
       <div className="tools">
@@ -248,8 +248,9 @@ export default function Helper() {
             {ждём ? <div className="msg bot"><div className="bub dots-load">Разбираю…</div></div> : null}
             <div ref={конец} />
           </div>
-          <form className="chat-bar" onSubmit={(е) => { е.preventDefault(); отправить(); }}>
+          <form className="chat-bar" onSubmit={(е) => { е.preventDefault(); отправить(); (document.activeElement as HTMLElement | null)?.blur(); }}>
             <input value={текст} onChange={(е) => setТекст(е.target.value)} placeholder="Опишите, что беспокоит" autoComplete="off" enterKeyHint="send" aria-label="Сообщение" />
+            <button type="button" className="hide-kb" onClick={() => (document.activeElement as HTMLElement | null)?.blur()} aria-label="Скрыть клавиатуру">⌄</button>
             <button type="submit" disabled={ждём || !текст.trim()} aria-label="Отправить">↑</button>
           </form>
         </>

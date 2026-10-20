@@ -129,9 +129,10 @@ export default function Sieve({ начальный, закрыть }: { нача
             </>
           ))}
       </div>
-      <form className="sieve-bar" onSubmit={(е) => е.preventDefault()}>
+      <form className="sieve-bar" onSubmit={(е) => { е.preventDefault(); (document.activeElement as HTMLElement | null)?.blur(); }}>
         <input ref={ввод} value={q} onChange={(е) => setQ(е.target.value)} enterKeyHint="search"
           placeholder="Найти статью: опишите, что беспокоит" autoComplete="off" spellCheck={false} aria-label="Поиск" />
+        <button type="button" className="hide-kb" onClick={() => (document.activeElement as HTMLElement | null)?.blur()} aria-label="Скрыть клавиатуру">⌄</button>
         <button type="button" onClick={закрыть}>Отмена</button>
       </form>
       <div className="dock-modes"><Modes активный="home" /></div>
