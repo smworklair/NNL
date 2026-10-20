@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import type { Карточка, Статья } from "@/lib/карточка";
 import { категорияПризыва } from "@/lib/карточка";
 import { БУКВЫ, КАТ_ИМЯ, КАТ_СМЫСЛ, буква } from "@/lib/категории";
-import { добавитьВДело, естьВДеле } from "@/lib/дело";
+import { добавитьВДело, естьВДеле, убратьИзДела } from "@/lib/дело";
 import CardView from "./Card";
 import { Calculator, Myopia, type Подсветка } from "./Calculator";
 
@@ -69,8 +69,8 @@ export default function Article({ статья, карточка }: { стать
         ) : null}
       </div>
       <div className="dock">
-        <button className={`add ${вДеле ? "done" : ""}`} onClick={() => { добавитьВДело(статья.ид); setВДеле(true); }}>
-          {вДеле ? "В моём деле ✓" : "Добавить в моё дело"}
+        <button className={`add ${вДеле ? "done" : ""}`} onClick={() => { if (вДеле) { убратьИзДела(статья.ид); setВДеле(false); } else { добавитьВДело(статья.ид); setВДеле(true); } }}>
+          {вДеле ? "В моём деле ✓ · нажмите, чтобы убрать" : "Добавить в моё дело"}
         </button>
       </div>
     </div>

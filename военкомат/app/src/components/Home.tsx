@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import Sieve from "./Sieve";
+import Modes from "./Modes";
 import Link from "next/link";
 import { СВОДКА, ПРОВЕРКИ, ГЛАВЫ } from "@/data/главная";
 import законы from "@/data/законы.json";
@@ -59,10 +60,7 @@ export default function Home() {
       </div>
       <div className="dock">
         <button className="search" onClick={() => setПоиск("")}>Жалобы своими словами: колет сердце, минус 7…</button>
-        <div className="modes" role="group" aria-label="Режим">
-          <button className="mode on">Расследование</button>
-          <Link href="/helper" className="mode">Помощник<em>α</em></Link>
-        </div>
+        <Modes активный="home" />
       </div>
       {поиск !== null ? <Sieve начальный={поиск} закрыть={() => setПоиск(null)} /> : null}
     </div>

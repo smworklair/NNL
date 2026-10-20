@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Modes from "./Modes";
 import { useRouter } from "next/navigation";
 import {
   забытьКлюч, записатьНастройку, настройкаПоУмолчанию, проверитьКлюч, списокПровайдеров, ход, читатьНастройку,
@@ -138,6 +139,7 @@ export default function Helper() {
             <input value={текст} onChange={(е) => setТекст(е.target.value)} placeholder="Опишите, что беспокоит" autoComplete="off" enterKeyHint="send" aria-label="Сообщение" />
             <button type="submit" disabled={ждём || !текст.trim()} aria-label="Отправить">↑</button>
           </form>
+          <div className="dock-modes"><Modes активный="helper" /></div>
         </>
       )}
     </div>

@@ -354,3 +354,17 @@ select{width:100%;border:1px solid var(--line2);border-radius:12px;background:va
 .rm{min-width:44px;min-height:40px;display:grid;place-items:center;font-size:18px}
 .row-wrap{display:flex;align-items:center;border-bottom:1px solid var(--line)}
 .row-wrap .row{flex:1;border-bottom:0}
+
+/* нижняя панель компактнее: поиск 44, переключатель 38, «Помощник α» в одну строку */
+.dock{padding:14px 12px calc(8px + env(safe-area-inset-bottom))}
+.search{height:44px;font-size:15px;padding:0 16px}
+.modes{margin-top:6px;padding:3px}
+.mode{padding:8px 6px;font-size:13px;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:4px}
+.mode em{margin-left:0}
+.dock-modes{flex:none;padding:0 12px calc(8px + env(safe-area-inset-bottom))}
+.dock-modes .modes{margin-top:0}
+.chat-bar{padding-bottom:6px}
+.scroll{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
+.chat.scroll{padding-bottom:12px}
+/* внутри Telegram есть своя кнопка «Назад»: нашу прячем, место оставляем */
+.in-tg .artbar .back{visibility:hidden}
