@@ -501,3 +501,14 @@ a.q{display:inline-block}
 }
 .kb .sieve-body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
 .kb .app > .scroll.art.chat{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
+
+/* ===== плотнее: текст под панелями не должен читаться сквозь них ===== */
+:root{--veil:linear-gradient(to bottom,transparent 0,color-mix(in srgb,var(--bg) 93%,transparent) 30px);--tabbg:rgba(52,52,50,.88);--pill:color-mix(in srgb,var(--bg) 80%,transparent)}
+@media (prefers-color-scheme:light){:root{--tabbg:rgba(255,255,255,.9)}}
+.dock,.glass-bottom,.app > .dock-modes{background:var(--veil)}
+.sieve .tabs{background:linear-gradient(to bottom,color-mix(in srgb,var(--bg) 96%,transparent) 65%,transparent)}
+.sieve .tab{background:var(--tabbg)}
+.sieve .tab.on{background:var(--ink);color:var(--bg)}
+.search,.modes,.add,.sieve-bar input,.inv-form input{background:var(--pill)}
+.chat-bar input{background:color-mix(in srgb,var(--bg) 62%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4)}
+@media (prefers-color-scheme:light){.search,.modes,.add,.sieve-bar input,.inv-form input{background:rgba(255,255,255,.82)}.chat-bar input{background:rgba(255,255,255,.66)}}
