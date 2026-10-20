@@ -512,3 +512,10 @@ a.q{display:inline-block}
 .search,.modes,.add,.sieve-bar input,.inv-form input{background:var(--pill)}
 .chat-bar input{background:color-mix(in srgb,var(--bg) 62%,transparent);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4)}
 @media (prefers-color-scheme:light){.search,.modes,.add,.sieve-bar input,.inv-form input{background:rgba(255,255,255,.82)}.chat-bar input{background:rgba(255,255,255,.66)}}
+
+/* фон строго нейтральный: без жёлтого и синего оттенка */
+.app{background:
+  radial-gradient(120% 55% at 15% -5%,rgba(255,255,255,.06),transparent 62%),
+  radial-gradient(100% 45% at 100% 100%,rgba(255,255,255,.03),transparent 60%),
+  var(--bg)}
+@media (prefers-color-scheme:light){.app{background:radial-gradient(120% 55% at 15% -5%,rgba(255,255,255,.9),transparent 62%),var(--bg)}}
