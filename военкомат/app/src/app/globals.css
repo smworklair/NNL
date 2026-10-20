@@ -234,3 +234,52 @@ input{font:inherit}
 .stat{border:1px solid var(--line2);background:none;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;color:var(--quiet)}
 .stat.ok{border-color:var(--ok);color:var(--ok)}
 .rm{border:0;background:none;color:var(--quieter);font-size:16px;padding:4px 6px}
+
+/* рисунки */
+.свод-арт .сетка line{stroke:var(--ink);stroke-width:.5;opacity:.09}
+.арт-кардио .линия{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linejoin:round;stroke-linecap:round;will-change:transform;}
+.арт-кардио .эхо{opacity:.18;stroke-width:2.4;}
+.арт-часы .риски line{stroke:var(--quieter);stroke-width:.9;opacity:.7}
+.арт-часы .дуга{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:butt}
+.арт-часы .крупно{fill:var(--ink);font:500 13px ui-monospace,Consolas,monospace;letter-spacing:.06em}
+.арт-чип .пины polyline,.арт-чип .пины line{fill:none;stroke:var(--quieter);stroke-width:1;opacity:.6}
+.арт-чип .пины .п0,.арт-чип .пины .п2,.арт-чип .пины .п3,.арт-чип .пины .п5{stroke:var(--ink);opacity:.95;stroke-dasharray:4 3;}
+.арт-чип .корпус{fill:#0b0b0b;stroke:var(--ink);stroke-width:1.2}
+.арт-чип .кристалл{fill:none;stroke:var(--quieter);stroke-width:.8}
+.арт-чип .надп{fill:var(--ink);font:600 11px ui-monospace,Consolas,monospace}
+.арт-чип .надп.м{fill:var(--quieter);font-size:7.5px;letter-spacing:.2em}
+.арт-ава .орбита circle{fill:none;stroke:var(--quieter);stroke-width:.8;opacity:.6}
+.арт-ава .круг1{stroke-dasharray:1.5 5}
+.арт-ава .сердце{fill:var(--ink);stroke:none}
+.арт-ава img{position:absolute;left:50%;top:50%;width:88px;height:88px;margin:-44px 0 0 -44px;border-radius:50%;object-fit:cover;border:1px solid var(--line2);filter:grayscale(.2)}
+.арт-терминал .терм text{fill:var(--quieter);font:12px ui-monospace,Consolas,monospace}
+.арт-терминал .терм .яр{fill:var(--ink);font-size:15px}
+.арт-терминал .курсор{fill:var(--ink);}
+
+
+
+
+.арт-птица{display:grid;place-items:center}
+.арт-птица img{height:118px;width:auto;display:block;}
+.арт-монолит img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;display:block;-webkit-user-drag:none}
+.арт-купюра .лист-к{fill:#121212;stroke:var(--ink);stroke-width:1.2;stroke-opacity:.7}
+.арт-купюра .рамка{fill:none;stroke:var(--ink);stroke-width:.6;stroke-opacity:.35}
+.арт-купюра .узор path{fill:none;stroke:var(--ink);stroke-width:.5;opacity:.22}
+.арт-купюра .круги circle{fill:none;stroke:var(--ink);stroke-width:.5;opacity:.25}
+.арт-купюра .кольцо{fill:none;stroke:var(--ink);stroke-width:1.2;opacity:.85}
+.арт-купюра .слово{fill:var(--ink);font:700 25px Georgia,"Times New Roman",serif;letter-spacing:.06em}
+.арт-купюра .мелко{fill:var(--quieter);font:600 7px ui-monospace,Consolas,monospace;letter-spacing:.22em}
+.арт-купюра .угол{fill:var(--quieter);font:600 9px Georgia,serif;opacity:.8}
+
+/* сводка: плакаты с рисунками (из старого сайта, без анимаций) */
+.card.poster{padding:0;gap:0;overflow:hidden;min-height:0}
+.свод-арт{position:relative;flex:0 0 150px;display:block;background:#0b0b0b;border-bottom:1px solid var(--line2);overflow:hidden;height:150px}
+.свод-арт svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.poster .pbody{display:flex;flex-direction:column;gap:7px;padding:14px 16px;flex:1}
+.poster .ptop{display:flex;align-items:baseline}
+.poster .ptop .num{margin-left:auto;font:10px ui-monospace,Consolas,monospace;color:var(--quieter);opacity:.7}
+.poster h3{font-size:21px;line-height:1.12}
+.poster p{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px;color:var(--quieter)}
+.poster a{border-bottom:1px solid var(--line2);padding-bottom:2px;align-self:flex-start;color:var(--ink)}
+.poster.help a{font:600 14px ui-monospace,Consolas,monospace;border-bottom:0}
+.poster.donate a{padding:7px 14px;border:0;border-radius:7px;background:var(--ink);color:var(--bg)}

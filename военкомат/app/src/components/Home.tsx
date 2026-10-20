@@ -4,6 +4,7 @@ import Sieve from "./Sieve";
 import Link from "next/link";
 import { СВОДКА, ПРОВЕРКИ, ГЛАВЫ } from "@/data/главная";
 import законы from "@/data/законы.json";
+import арт from "@/data/арт.json";
 
 const ПРИМЕРЫ: Record<string, string> = {
   "34": "зрение минус 5", "68": "плоскостопие", "43": "давление 160 на 100", "66": "болит спина",
@@ -26,12 +27,15 @@ export default function Home() {
           ))}
         </div>
         <div className="carousel" aria-label="Сводка">
-          {СВОДКА.map((к) => (
-            <article key={к.заг} className={`card ${к.вид === "важно" ? "important" : ""}`}>
-              <span className="kind">{к.метка}</span>
-              <h3>{к.заг}</h3>
-              <p>{к.текст}</p>
-              {к.ссылка ? <a href={к.ссылка} target={к.ссылка.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">{к.действие}</a> : null}
+          {СВОДКА.map((к, i) => (
+            <article key={к.заг} className={`card poster ${к.вид === "помощь" ? "help" : ""} ${к.вид === "донат" ? "donate" : ""} ${к.вид === "важно" ? "important" : ""}`}>
+              {к.арт ? <span className={`свод-арт арт-${к.арт}`} aria-hidden="true" dangerouslySetInnerHTML={{ __html: (арт as Record<string, string>)[к.арт] }} /> : null}
+              <div className="pbody">
+                <div className="ptop"><span className="kind">{к.метка}</span><span className="num">{i + 1}/{СВОДКА.length}</span></div>
+                <h3>{к.заг}</h3>
+                <p>{к.текст}</p>
+                {к.ссылка ? <a href={к.ссылка} target={к.ссылка.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">{к.действие}</a> : null}
+              </div>
             </article>
           ))}
         </div>
